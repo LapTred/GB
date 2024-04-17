@@ -1,4 +1,4 @@
-import "./sidebar.scss";
+import "./SidebarAuditado.scss";
 import Logo from "./logo-transparente.png";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";

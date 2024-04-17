@@ -4,20 +4,21 @@
   background-color: white;
   padding: 0;
   border: 0;
+  display: flex;
+  flex-direction: column;
 
   .top {
-    height: 50px; /* Altura fija del contenedor */
+    height: 100px; /* Altura fija del contenedor */
     display: flex;
     align-items: center;
-    justify-content: center;
-    overflow: hidden; /* Para recortar el contenido que se desborda */
-  
+    padding-left: 20px;
+    border-bottom: 1px solid #ccc;
+
     .logo {
       width: auto;
-      height: 100%; /* Ajusta automáticamente la altura para mantener la proporción */
+      height: 50%; /* Ajusta automáticamente la altura para mantener la proporción */
     }
   }
-  
 
   hr {
     height: 0;
@@ -25,58 +26,71 @@
   }
 
   .center {
-    padding-left: 10px;
     display: flex;
     flex-direction: column;
-    height: 100%; /* Asegura que la barra lateral tenga una altura del 100% */
-  
+    border-right: 1px solid #ccc;
+    flex-grow: 1; /* Abarca todo el espacio restante */
+
     ul {
       list-style: none;
       margin: 0;
-      padding: 0;
+      padding-left: 20px;
+      width: 97%;
 
       .title {
-        font-size: 30px;
+        font-size: 1.5em; /* Cambiado a unidad em */
         font-weight: bold;
-        color: #999;
+        color: #828282;
         margin-top: 15px;
         margin-bottom: 5px;
       }
-  
+
       li {
         display: flex;
         align-items: center;
         padding: 5px;
         cursor: pointer;
         transition: all 0.3s;
-  
+
         &:hover {
           background-color: #ece8ff;
           transform: translateX(10px);
           width: 100%;
         }
-  
+
         .icon {
-          font-size: 32px;
-          color: #389890;
+          font-size: 1.6em; /* Cambiado a unidad em */
+          color: #828282;
         }
-  
+
         span {
-          font-size: 32px; /* Ajusta el tamaño de fuente según tus necesidades */
+          font-size: 1.6em; /* Cambiado a unidad em */
           font-weight: 600;
-          color: #888;
+          color: #828282;
           margin-left: 10px;
         }
-      }
-
-      &.general {
-        flex-grow: 1; /* Hace que esta sección ocupe todo el espacio restante */
       }
     }
 
     .linea {
       border-top: 1px solid #ccc; /* Cambia el color de la línea según tus preferencias */
-      margin-top: 30px; /* Ajusta el margen superior e inferior de la línea */
+      margin-top: 150px; /* Ajusta el margen superior e inferior de la línea */
+    }
+  }  
+
+  @media (max-width: 1080px) {
+    .center ul .title,
+    .center ul li .icon,
+    .center ul li span {
+      font-size: 1.2em; /* Ajusta el tamaño de la letra para resoluciones menores o iguales a 768px */
+    }
+
+    .center ul {
+      padding-left: 0; /* Ajusta el padding-left a 0 para resoluciones menores o iguales a 768px */
+    }
+
+    .center .linea{
+      margin-top: 0; /* Ajusta el margin-top a 0 para resoluciones menores o iguales a 1024px */
     }
   }
 }

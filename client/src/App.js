@@ -12,7 +12,6 @@ import UsuarioUpdate from "./pages/usuarioUpdate/usuarioUpdate"
 import AsignacionFormulario from "./pages/asignacionFormulario/asignacionFormulario"
 import AsignacionesJefa from "./pages/asignacionesJefa/asignacionesJefa"
 import AsignacionUpdate from "./pages/asignacionUpdate/asignacionUpdate"
-import Reportes from "./pages/reportes/reportes"
 import HistorialesJefa from "./pages/historialesJefa/historialesJefa"
 import HistorialesJefa2 from "./pages/historialesJefa2/historialesJefa2"
 import Asignacion from "./pages/asignacion/asignacion"
@@ -95,7 +94,6 @@ function App() {
             <Route path="asignacionUpdate/:id" element ={<PrivateRoute element={AsignacionUpdate}/>}/>
             <Route path="historialesJefa" element ={<PrivateRoute element={HistorialesJefa}/>}/>
             <Route path="historialesJefa2" element ={<PrivateRoute element={HistorialesJefa2}/>}/>
-            <Route path="reportes" element ={<PrivateRoute element={Reportes}/>}/>
             <Route path="home" element={<PrivateRoute element={Home}/>}/>
 
             {/* Auditor */}

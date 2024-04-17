@@ -1,4 +1,4 @@
-import "./sidebar.scss";
+import "./sidebarAuditor.scss";
 import Logo from "./logo-transparente.png";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';

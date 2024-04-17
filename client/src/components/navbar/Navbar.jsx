@@ -9,7 +9,6 @@ import ListOutlinedIcon from "@mui/icons-material/ListOutlined";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext, useState } from "react";
 import { Link } from 'react-router-dom';
-import DropDownProfile from "../DropDownProfile/DropDownProfile";
 import Single from "../../pages/single/Single";
 
 
@@ -43,7 +42,6 @@ const Navbar = () => {
                 className="avatar"
                 onClick={handleProfileClick}
               />
-              {openProfile && <DropDownProfile />}
             </div>
         </div>
       </div>

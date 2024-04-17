@@ -1,16 +1,17 @@
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import AutoAwesomeMotionIcon from '@mui/icons-material/AutoAwesomeMotion';
+import PetsIcon from '@mui/icons-material/Pets';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AssessmentIcon from '@mui/icons-material/Assessment';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+
+
 import { Link } from "react-router-dom";
-import { DarkModeContext } from "../../context/darkModeContext";
-import { useContext } from "react";
 import logoImage from './logo.jpg';
 import './sidebar.scss';
 
-const Sidebar = () => {
-  const { dispatch } = useContext(DarkModeContext);
-  
+
+const Sidebar = () => {  
   return (
     <div className="sidebar">
       <div className="top">
@@ -27,13 +28,13 @@ const Sidebar = () => {
           </Link>
           <Link to="/usuario" style={{ textDecoration: "none" }}>
             <li>
-              <PersonOutlineIcon className="icon" />
+              <PetsIcon className="icon" />
               <span>Pacientes</span>
             </li>
           </Link>
           <Link to="/asignacionesJefa" style={{ textDecoration: "none" }}>
             <li>
-              <AutoAwesomeMotionIcon className="icon" />
+              <CalendarTodayIcon className="icon" />
               <span>Citas</span>
             </li>
           </Link>
@@ -41,9 +42,9 @@ const Sidebar = () => {
         <hr className="linea" />
         <ul className="general">
           <p className="title">General</p>          
-          <Link to="/reportes" style={{ textDecoration: "none" }}>
+          <Link to="/ajustes" style={{ textDecoration: "none" }}>
             <li>
-              <AssessmentIcon className="icon" />
+              <SettingsIcon className="icon" />
               <span>Ajustes</span>
             </li>
           </Link>
