@@ -1,74 +1,103 @@
 import "./widget.scss";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
-import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import PeopleIcon from '@mui/icons-material/People';
+import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-const Widget = ({ type }) => {
+const Widget = ({ type, descripcion, onClick }) => {
   let data;
-
   //temporary
   const amount = 100;
-  const diff = 20;
 
-  switch (type) {
-    case "user":
+  switch (type) {    
+    case "citas":
       data = {
-        title: "USERS",
-        isMoney: false,
-        link: "See all users",
+        title: "Citas del día",
+        link: "Ver todo",
         icon: (
-          <PersonOutlinedIcon
+          <ChevronRightIcon
             className="icon"
             style={{
-              color: "crimson",
-              backgroundColor: "rgba(255, 0, 0, 0.2)",
+              backgroundColor: "rgba(0, 128, 0, 0.2)"
             }}
           />
         ),
       };
-      break;
-    case "order":
+    break;
+    case "pacientes":
       data = {
-        title: "ORDERS",
-        isMoney: false,
-        link: "View all orders",
+        title: "Pacientes",
+        link: "Ver todo",
         icon: (
-          <ShoppingCartOutlinedIcon
+          <ChevronRightIcon
             className="icon"
-            style={{
-              backgroundColor: "rgba(218, 165, 32, 0.2)",
-              color: "goldenrod",
-            }}
+            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)"
+          }}
           />
         ),
       };
-      break;
-    case "earning":
+    break;
+    case "consultorios":
       data = {
-        title: "EARNINGS",
-        isMoney: true,
-        link: "View net earnings",
-        icon: (
-          <MonetizationOnOutlinedIcon
+        title: "Consultorios",        
+        ajustes : true,
+        link: "Ver todo",
+        iconConsultorio:(
+          <MeetingRoomIcon
             className="icon"
-            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)", color: "green" }}
+          />
+        ),
+        icon: (
+          <ChevronRightIcon
+            className="icon"
           />
         ),
       };
-      break;
-    case "balance":
+    break;
+    case "usuarios":
       data = {
-        title: "BALANCE",
-        isMoney: true,
-        link: "See details",
+        ajustes:true,
+        title: "Usuarios",
+        link: "Ver todo",
+        iconConsultorio:(<PeopleIcon
+          className="icon"
+        />),
         icon: (
-          <AccountBalanceWalletOutlinedIcon
+          <ChevronRightIcon
+            className="icon"            
+          />
+        ),
+      };
+    break;
+    case "ajustes":
+      data = {
+        title: "--",
+        link: "Ver todo",
+        icon: (
+          <ChevronRightIcon
+            className="icon"
+            style={{ backgroundColor: "rgba(0, 128, 0, 0.2)"
+          }}
+          />
+        ),
+      };
+    break;
+    case "ajustestitulo":
+      data = {
+        title: "Ajustes",
+        isTitle : true,
+      };
+    break;
+    case "agenda":
+      data = {
+        title: "Agenda",
+        link: "Ver todo",
+        icon: (
+          <ChevronRightIcon
             className="icon"
             style={{
-              backgroundColor: "rgba(128, 0, 128, 0.2)",
-              color: "purple",
+              backgroundColor: "rgba(0, 128, 0, 0.2)"
             }}
           />
         ),
@@ -79,20 +108,26 @@ const Widget = ({ type }) => {
   }
 
   return (
-    <div className="widget">
-      <div className="left">
-        <span className="title">{data.title}</span>
-        <span className="counter">
-          {data.isMoney && "$"} {amount}
-        </span>
-        <span className="link">{data.link}</span>
+    <div className="widget" onClick={onClick}>
+      <div className="left">               
+        {data.ajustes && 
+          <div className="icon">        
+            {data.iconConsultorio}
+          </div> 
+        }
+        <div className="lefts">        
+          <span className="title">{data.title}</span>
+          <span className="counter">            
+            {!data.isTitle && descripcion}
+          </span>
+        </div>         
       </div>
-      <div className="right">
-        <div className="percentage positive">
-          <KeyboardArrowUpIcon />
-          {diff} %
-        </div>
-        {data.icon}
+      <div className="right">      
+        {!data.isTitle && <span className="link">{data.link}</span> && 
+          <div className="icon">        
+            {data.icon}
+          </div> 
+        }                  
       </div>
     </div>
   );

@@ -1,0 +1,120 @@
+.ajustes {
+    display: flex;
+  
+    .ajustesContainer {
+      width: 85%;
+      background-color: #F9F9F9; //Need to Fix
+      .containers{
+        height: 90%;
+        display: flex;
+        .containerL{
+          width: 50%;
+          padding: 30px;
+          height: 100%; 
+          .containersL{
+            height: 100%; 
+            .widgetsT{
+              height: 15%;          
+              flex-direction: column;
+              display: flex;                     
+              gap: 20px;
+              .widget{
+                height: 90%;
+                align-items: center;
+              }
+              .widget:hover{
+                transform: scale(1);
+              }
+            }    
+            .widgetsB{
+              height: 85%;          
+              flex-direction: column;
+              display: flex;      
+              gap: 20px;
+              .widget{
+                height: 30%;
+                .left{
+                  align-items: center;
+                }
+                .right{
+                  align-items: center; 
+                  .icon{
+                    display: flex; /* Añadir esta línea */
+                    justify-content: flex-end; /* Añadir esta línea */
+                    font-size:50px;
+                    align-items: center;
+                  }                 
+                }
+              }
+            }
+          }                
+        }
+        .containerR{
+          width: 50%;
+          padding: 30px;
+          .ajustestituloR{
+            height: 15%;          
+            flex-direction: column;
+            display: flex;  
+              
+            .ajustestitulo{ 
+              justify-content: space-between; 
+              display: flex;
+              -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+              box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+              border-radius: 10px;
+              background-color: white;
+              align-items: center;
+              padding-left: 15px;
+              height: 90%;
+              .iconR{
+                margin-right: 20px;
+                display: flex; /* Añadir esta línea */
+                justify-content: flex-end; /* Añadir esta línea */
+              }
+              h2{
+                font-size: 32px;
+              }
+            }
+          }    
+          .ajustesR{            
+            display: flex;
+            padding: 15px;
+            -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+            box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+            border-radius: 10px;
+            background-color: white;
+            height: 85%;          
+            flex-direction: column;
+            display: flex;    
+            align-items: center;
+            .consultoriosContainer{   
+              width: 85%;           
+              text-align: center;
+              .consultorio {
+                border: 2px solid #ccc; // Define el borde y su grosor
+                border-radius: 10px; // Define el radio de los bordes para que se vean redondeados
+                padding: 10px; // Añade espacio interno para que el contenido no esté pegado al borde
+                margin-bottom: 20px; // Añade margen en la parte inferior
+                .actions{
+                  display: flex; /* Establece el contenedor como flexbox */
+                  justify-content: flex-end; /* Alinea los elementos al final del eje principal (horizontal) */
+                  border-top: 2px solid #ccc;
+                  button{
+                    margin: 10px;
+                    padding: 10px;
+                    margin-bottom: 0;
+                    margin-right: 0;
+                  }
+                }
+              }
+            }            
+          }      
+        }
+      }    
+    }    
+}
+  
+  
+  
+  

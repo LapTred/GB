@@ -1,4 +1,5 @@
 import Home from "./pages/home/Home";
+import Ajustes from "./pages/ajustes/Ajustes";
 import Login from "./pages/login/Login";
 import Single from "./pages/single/Single";
 import Capacitacion from "./pages/capacitacion/capacitacion";
@@ -95,6 +96,7 @@ function App() {
             <Route path="historialesJefa" element ={<PrivateRoute element={HistorialesJefa}/>}/>
             <Route path="historialesJefa2" element ={<PrivateRoute element={HistorialesJefa2}/>}/>
             <Route path="home" element={<PrivateRoute element={Home}/>}/>
+            <Route path="ajustes" element={<PrivateRoute element={Ajustes}/>}/>
 
             {/* Auditor */}
             <Route path="/capacitacion" element={<PrivateRoute2 element={Capacitacion} />} />

@@ -3,7 +3,6 @@ import PetsIcon from '@mui/icons-material/Pets';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import SettingsIcon from '@mui/icons-material/Settings';
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 
 
 import { Link } from "react-router-dom";
@@ -16,6 +15,7 @@ const Sidebar = () => {
     <div className="sidebar">
       <div className="top">
         <img src={logoImage} alt="Logo" className="logo"/>
+        <span className="vet-text">GB</span> {/* Texto "VET" al lado del logo */}
       </div>
       <div className="center">
         <ul>

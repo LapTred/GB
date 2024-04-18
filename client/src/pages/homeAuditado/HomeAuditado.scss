@@ -46,33 +46,3 @@
 .home .homeContainer .listContainer:hover{
   box-shadow: 2px 4px 10px 7px rgba(201, 201, 201, 0.47);
 }
-
-@media screen and (max-width: 1500px) {
-  .home .homeContainer .widgets {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-
-  .home .homeContainer .widgets .widget {
-    flex: 0 0 calc(50% - 30px); 
-  }
-
-  .home .homeContainer .charts{
-    display: flex;
-    flex-direction: column;
-  }
-}
-
-@media screen and (max-width: 1000px) {
-
-  .home .homeContainer .widgets .widget {
-    flex: 0 0 calc(100% - 30px); 
-  }
-  
-  .home .homeContainer .container .charts {
-    display: flex;
-    flex-direction: column;
-    width: auto;
-  }
-}
