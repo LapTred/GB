@@ -21,7 +21,7 @@
       margin-right: 10px;
     }
     .vet-text {
-      font-size: 50px; /* Ajusta el tamaño del texto "VET" */
+      font-size: 3vw; /* Ajusta el tamaño del texto "VET" */
       color: #57CC99; /* Cambia el color del texto según tus preferencias */
     }
   }
@@ -44,7 +44,7 @@
       width: 97%;
 
       .title {
-        font-size: 1.5em; /* Cambiado a unidad em */
+        font-size: 1.5vw; /* Cambiado a unidad em */
         font-weight: bold;
         color: #36BDB2;
         margin-top: 15px;
@@ -65,12 +65,12 @@
         }
 
         .icon {
-          font-size: 1.6em; /* Cambiado a unidad em */
+          font-size: 1.6vw; /* Cambiado a unidad em */
           color: #828282;
         }
 
         span {
-          font-size: 1.6em; /* Cambiado a unidad em */
+          font-size: 1.6vw; /* Cambiado a unidad em */
           font-weight: 600;
           color: #828282;
           margin-left: 10px;
@@ -88,11 +88,15 @@
     .center ul .title,
     .center ul li .icon,
     .center ul li span {
-      font-size: 1.2em; /* Ajusta el tamaño de la letra para resoluciones menores o iguales a 768px */
+      font-size: 2vw; /* Ajusta el tamaño de la letra para resoluciones menores o iguales a 768px */
+    }
+    .top{
+      
+      padding-left: 2vw;
     }
 
     .center ul {
-      padding-left: 0; /* Ajusta el padding-left a 0 para resoluciones menores o iguales a 768px */
+      padding-left: 1px; /* Ajusta el padding-left a 0 para resoluciones menores o iguales a 768px */
     }
 
     .center .linea{

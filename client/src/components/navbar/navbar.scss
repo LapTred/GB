@@ -1,5 +1,5 @@
 .navbar {
-  height: 10%;
+  height: 10vh; /* Utiliza unidades de medida relativas para establecer la altura */
   border-bottom: 1px solid #ccc;
   background-color: white;
   display: flex;
@@ -8,13 +8,14 @@
     width: 100%;
     display: flex;
     align-items: center; /* Centra verticalmente los elementos dentro de .wrapper */
+    
 
     .center-text {
       justify-content: center;
       text-align: center;
       margin-left: auto;
-      margin-right: 30px;
-      font-size: 22px;
+      margin-right: 2vw; /* Utiliza unidades de medida relativas para establecer el margen derecho */
+      font-size: 1.2vw; /* Utiliza unidades de medida relativas para el tamaño de fuente */
     }
     .nombre{
       font-weight: bold;
@@ -23,18 +24,23 @@
     .items {
       display: flex;
       align-items: center;
-      margin-right: 20px;
+      margin-right: 2vw; /* Utiliza unidades de medida relativas para establecer el margen derecho */
 
       .item {
         display: flex;
         position: relative;
         transition: all 0.3s;
-        padding: 5px;
+        padding: 0.5vw; /* Utiliza unidades de medida relativas para el padding */
 
         .avatar {
-          width: 40px;
-          height: 50px;
+          width: 2.5vw; /* Utiliza unidades de medida relativas para el ancho */
+          height: auto; /* Utiliza unidades de medida relativas para la altura */
         }
+      }
+      .item .avatar:hover {
+        border-radius: 0.5vw;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Define el sombreado con una sombra suave */
+        transform: scale(1.1);
       }
     }
   }

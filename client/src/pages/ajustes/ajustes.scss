@@ -1,15 +1,16 @@
 .ajustes {
     display: flex;
+    height: 100vh;
   
     .ajustesContainer {
       width: 85%;
       background-color: #F9F9F9; //Need to Fix
       .containers{
-        height: 90%;
+        height: 90vh;
         display: flex;
         .containerL{
           width: 50%;
-          padding: 30px;
+          padding: 1vw;
           height: 100%; 
           .containersL{
             height: 100%; 
@@ -19,18 +20,20 @@
               display: flex;                     
               gap: 20px;
               .widget{
-                height: 90%;
+                height: 85%;
                 align-items: center;
+                box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
               }
               .widget:hover{
-                transform: scale(1);
+                transform: scale(1);                
+                box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
               }
             }    
             .widgetsB{
               height: 85%;          
               flex-direction: column;
               display: flex;      
-              gap: 20px;
+              gap: 1vw;
               .widget{
                 height: 30%;
                 .left{
@@ -41,7 +44,7 @@
                   .icon{
                     display: flex; /* Añadir esta línea */
                     justify-content: flex-end; /* Añadir esta línea */
-                    font-size:50px;
+                    font-size:3vw;
                     align-items: center;
                   }                 
                 }
@@ -51,44 +54,46 @@
         }
         .containerR{
           width: 50%;
-          padding: 30px;
+          padding: 1vw;          
           .ajustestituloR{
             height: 15%;          
             flex-direction: column;
-            display: flex;  
+            display: flex;              
               
-            .ajustestitulo{ 
-              justify-content: space-between; 
+            .ajustestitulo {
+              justify-content: space-between;
               display: flex;
-              -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-              box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-              border-radius: 10px;
+              box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47); // Aplicar la sombra directamente aquí
+              border-radius: 1vw;
               background-color: white;
               align-items: center;
-              padding-left: 15px;
-              height: 90%;
-              .iconR{
-                margin-right: 20px;
-                display: flex; /* Añadir esta línea */
-                justify-content: flex-end; /* Añadir esta línea */
+              padding-left: 1.5vw;
+              height: 85%;
+              
+              .iconR {
+                margin-right: 2vw;
+                display: flex;
+                justify-content: flex-end;
               }
-              h2{
-                font-size: 32px;
+            
+              h2 {
+                font-size: 2vw;
               }
-            }
+            }            
           }    
           .ajustesR{            
             display: flex;
             padding: 15px;
-            -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-            box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-            border-radius: 10px;
+            box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+            border-radius: 1vw;
             background-color: white;
-            height: 85%;          
+            height: 85%;
             flex-direction: column;
-            display: flex;    
+            display: flex;
             align-items: center;
-            .consultoriosContainer{   
+            
+            overflow-y: auto; // Agregar desplazamiento vertical
+            .consultoriosContainer{ 
               width: 85%;           
               text-align: center;
               .consultorio {
@@ -96,20 +101,40 @@
                 border-radius: 10px; // Define el radio de los bordes para que se vean redondeados
                 padding: 10px; // Añade espacio interno para que el contenido no esté pegado al borde
                 margin-bottom: 20px; // Añade margen en la parte inferior
+                h3{
+                  font-size: 1.1vw;
+                }
+                span{
+                  font-size: 1vw;
+                }
+                p{
+                  font-size: 1vw;
+                }
                 .actions{
+                  align-items: center;
                   display: flex; /* Establece el contenedor como flexbox */
                   justify-content: flex-end; /* Alinea los elementos al final del eje principal (horizontal) */
                   border-top: 2px solid #ccc;
-                  button{
-                    margin: 10px;
-                    padding: 10px;
+                  button{                    
+                    font-weight: 600;
+                    font-size:0.9vw;
+                    margin: 0.5vw;
+                    padding: 0.5vw;
                     margin-bottom: 0;
                     margin-right: 0;
+                  }
+                  p{
+                    font-size: 1vw;
                   }
                 }
               }
             }            
-          }      
+          }     
+          .ajustesR.centered {               
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+          } 
         }
       }    
     }    

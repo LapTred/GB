@@ -7,6 +7,7 @@ const { login } = require('../controllers/loginController');
 const Consultorio = require('../controllers/consultorioController');
 const Usuario = require('../controllers/usuarioController');
 
+
 const { rhistorial } = require('../controllers/rhistorialController');
 const { preguntas } = require('../controllers/preguntasController');
 const { ppreguntas} = require('../controllers/ppreguntasController');    
@@ -21,8 +22,20 @@ const Usuarios = require('../controllers/usuariosController');
 const Formulario = require('../controllers/formularioController'); 
 
 router.post('/login', login);
+
+
 router.get('/consultorios', Consultorio.getAll)
+router.put('/consultorios/:idConsultorio', Consultorio.updateById);
+router.delete('/consultorio/delete/:id', Consultorio.delete);
+
 router.get('/usuarios', Usuario.getAll);
+router.put('/usuario/:idUsuario', Usuario.updateById);
+router.put('/usuario/delete/:id', Usuario.delete);
+
+
+
+
+
 
 
 router.get('/rhistorial', rhistorial);  
