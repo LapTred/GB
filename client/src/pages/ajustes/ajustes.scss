@@ -18,7 +18,7 @@
               height: 15%;          
               flex-direction: column;
               display: flex;                     
-              gap: 20px;
+              gap: 1.8vw;
               .widget{
                 height: 85%;
                 align-items: center;
@@ -63,7 +63,7 @@
             .ajustestitulo {
               justify-content: space-between;
               display: flex;
-              box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47); // Aplicar la sombra directamente aquí
+              box-shadow: 0.2vw 0.3vw 0.7vw 0.01vw rgba(0, 0, 0, 0.47); // Aplicar la sombra directamente aquí
               border-radius: 1vw;
               background-color: white;
               align-items: center;
@@ -77,13 +77,13 @@
               }
             
               h2 {
-                font-size: 2vw;
+                font-size: 1.5vw;
               }
             }            
           }    
           .ajustesR{            
             display: flex;
-            padding: 15px;
+            padding: 1.1vw;
             box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
             border-radius: 1vw;
             background-color: white;
@@ -97,10 +97,9 @@
               width: 85%;           
               text-align: center;
               .consultorio {
-                border: 2px solid #ccc; // Define el borde y su grosor
-                border-radius: 10px; // Define el radio de los bordes para que se vean redondeados
-                padding: 10px; // Añade espacio interno para que el contenido no esté pegado al borde
-                margin-bottom: 20px; // Añade margen en la parte inferior
+                border: 0.2vw solid #ccc; // Define el borde y su grosor
+                padding: 0.5vw; // Añade espacio interno para que el contenido no esté pegado al borde
+                margin-bottom: 2vw; // Añade margen en la parte inferior
                 h3{
                   font-size: 1.1vw;
                 }
@@ -114,7 +113,7 @@
                   align-items: center;
                   display: flex; /* Establece el contenedor como flexbox */
                   justify-content: flex-end; /* Alinea los elementos al final del eje principal (horizontal) */
-                  border-top: 2px solid #ccc;
+                  border-top: 0.2vw solid #ccc;
                   button{                    
                     font-weight: 600;
                     font-size:0.9vw;

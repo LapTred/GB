@@ -15,7 +15,7 @@
     }
     .title {
       font-weight: bold;
-      font-size: 2vw; // Utilizar unidades de medida relativas para el tamaño del título
+      font-size: 1.5vw; // Utilizar unidades de medida relativas para el tamaño del título
       color: black;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -25,11 +25,11 @@
       padding: 0.5vw;
       align-items: center;
       display: flex;
-      font-size: 5vw; // Utilizar unidades de medida relativas para el tamaño del icono
+      font-size: 4vw; // Utilizar unidades de medida relativas para el tamaño del icono
     }
 
     .counter {
-      font-size: 1.5vw; // Utilizar unidades de medida relativas para el tamaño de la descripción
+      font-size: 1.3vw; // Utilizar unidades de medida relativas para el tamaño de la descripción
       font-weight: 300;
       overflow: hidden;
       text-overflow: ellipsis;

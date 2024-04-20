@@ -7,6 +7,8 @@ import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import PeopleIcon from '@mui/icons-material/People';
 import "./ajustes.scss";
 import ModifyUserComponent from "../../components/ModifyUserComponent/ModifyUserComponent";
+import CreateUserComponent from "../../components/CreateUserComponent/CreateUserComponent"; 
+import CreateRoomComponent from "../../components/CreateRoomComponent/CreateRoomComponent"; 
 import ModifyRoomComponent from "../../components/ModifyRoomComponent/ModifyRoomComponent";
 import { red } from '@mui/material/colors';
 
@@ -15,11 +17,13 @@ const Ajustes = () => {
   const [dataType, setDataType] = useState('consultorios');
   const [selectedItem, setSelectedItem] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [deleteConfirmations, setDeleteConfirmations] = useState({});
 
   useEffect(() => {
     setDeleteConfirmations({});
     setIsEditing(false);
+    setIsCreating(false);
     fetchData(dataType);
   }, [dataType]); 
 
@@ -40,16 +44,19 @@ const Ajustes = () => {
   const handleModifyItem = (item) => {
     setSelectedItem(item);
     setIsEditing(true);
+    setIsCreating(false);
   };
 
   const handleCancelModification = () => {
     setSelectedItem(null);
     setIsEditing(false);
+    setIsCreating(false);
   };
 
   const handleSaveModification = (modifiedItem) => {
     setSelectedItem(null);
     setIsEditing(false);
+    setIsCreating(false);
     fetchData(dataType);
   };
 
@@ -84,7 +91,6 @@ const Ajustes = () => {
       .then(response => response.json())
       .then(data => {
         console.log('Consultorio eliminado:', data);
-        // Establecer deleteConfirmations[id] en false después de eliminar el consultorio
         setDeleteConfirmations(prevState => ({
           ...prevState,
           [id]: false
@@ -93,12 +99,15 @@ const Ajustes = () => {
       })
       .catch(error => console.error('Error al eliminar el consultorio:', error));
     } else {
-      // Solo establecer deleteConfirmations[id] en true si no hay confirmación previa
       setDeleteConfirmations(prevState => ({
         ...prevState,
         [id]: true
       }));
     }
+  };
+
+  const handleShowCreateUser = () => {
+    setIsCreating(true);
   };
 
   return (
@@ -122,27 +131,39 @@ const Ajustes = () => {
             <div className="ajustestituloR">
               <div className="ajustestitulo">
                 <h2>{dataType === 'consultorios' ? 'Consultorios' : 'Usuarios'}</h2>
-                <div className="iconR">
-                  <AddIcon style={{ fontSize: '3vw', border: '0.2vw solid black', borderRadius: '30%', borderColor: '#E0E0E0'}} /> 
-                </div>
+                {!isEditing && !isCreating && (
+                  <div className="iconR">
+                    <AddIcon style={{ fontSize: '3vw', border: '0.2vw solid black', borderRadius: '30%', borderColor: '#E0E0E0'}} onClick={handleShowCreateUser} /> 
+                  </div>
+                )}
               </div>              
             </div>
-            <div className={`ajustesR ${isEditing ? 'centered' : ''}`}>
-              {isEditing ? (
-                dataType === 'usuarios' ? (
-                  <ModifyUserComponent 
-                    user={selectedItem} 
-                    onCancel={handleCancelModification} 
-                    onSave={handleSaveModification} 
-                  />
-                ) : (
-                  <ModifyRoomComponent 
-                    room={selectedItem} 
-                    onCancel={handleCancelModification} 
-                    onSave={handleSaveModification} 
-                  />
-                )
-              ) : (
+            <div className={`ajustesR ${isEditing || isCreating ? 'centered' : ''}`}>
+              {isCreating && dataType === 'usuarios' && 
+                <CreateUserComponent 
+                  onCancel={handleCancelModification}                  
+                  onSave={handleSaveModification} 
+                />} 
+              {isCreating && dataType === 'consultorios' && 
+                <CreateRoomComponent 
+                  onCancel={handleCancelModification}                  
+                  onSave={handleSaveModification}               
+                />} 
+              {isEditing && dataType === 'usuarios' && (
+                <ModifyUserComponent 
+                  user={selectedItem} 
+                  onCancel={handleCancelModification} 
+                  onSave={handleSaveModification} 
+                />
+              )}
+              {isEditing && dataType === 'consultorios' && (
+                <ModifyRoomComponent 
+                  room={selectedItem} 
+                  onCancel={handleCancelModification} 
+                  onSave={handleSaveModification} 
+                />
+              )}
+              {!isCreating && !isEditing && (
                 <div className="consultoriosContainer">
                   {dataType === 'consultorios' && (
                     <div className="icono">
@@ -178,13 +199,13 @@ const Ajustes = () => {
                               </em>
                             </p>
                             <button 
-                              style={{ backgroundColor: '#ce796b', color: 'black', marginRight: '0px', border: 'none', padding: '10px 20px', borderRadius: '10px', cursor: 'pointer' }}
+                              style={{ backgroundColor: '#ce796b', color: 'black', marginRight: '0px', border: '0.2vw solid #ce796b', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
                               onClick={() => dataType === 'consultorios' ? handleDeleteRoom(item.id) : handleDeleteUser(item.id)}
                            >
                               Confirmar
                             </button>   
                             <button 
-                              style={{ color: 'black', marginRight: '10px', border: 'none', padding: '10px 20px', borderRadius: '10px', cursor: 'pointer' }}
+                              style={{ backgroundColor: '#f2f2f2', color: 'black', marginRight: '0.5vw', border: '0.2vw solid #f2f2f2', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
                               onClick={() => setDeleteConfirmations(prevState => ({ ...prevState, [item.id]: false }))}
                             >
                               Cancelar
@@ -192,14 +213,14 @@ const Ajustes = () => {
                           </>
                         ) : (
                           <button 
-                            style={{ backgroundColor: '#ce796b', color: 'black', marginRight: '1vw', border: 'none', padding: '1vw 2vw', borderRadius: '1vw', cursor: 'pointer' }}
+                            style={{ backgroundColor: 'white', color: 'black', marginRight: '1vw', border: '0.2vw solid #ce796b', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
                             onClick={() => setDeleteConfirmations(prevState => ({ ...prevState, [item.id]: true }))}
                           >
                             Eliminar
                           </button>
                         )}
                         <button 
-                          style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: 'none', padding: '1vw 2vw', borderRadius: '1vw', cursor: 'pointer' }} 
+                          style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }} 
                           onClick={() => handleModifyItem(item)}
                         >
                           Modificar

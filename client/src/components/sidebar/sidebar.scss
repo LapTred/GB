@@ -18,7 +18,7 @@
     .logo {
       width: auto;
       height: 50%; /* Ajusta automáticamente la altura para mantener la proporción */
-      margin-right: 10px;
+      margin-right: 1vw;
     }
     .vet-text {
       font-size: 3vw; /* Ajusta el tamaño del texto "VET" */
@@ -40,27 +40,27 @@
     ul {
       list-style: none;
       margin: 0;
-      padding-left: 20px;
+      padding-left: 1.5vw;
       width: 97%;
 
       .title {
         font-size: 1.5vw; /* Cambiado a unidad em */
         font-weight: bold;
         color: #36BDB2;
-        margin-top: 15px;
-        margin-bottom: 5px;
+        margin-top: 1.2vw;
+        margin-bottom: 0.5vw;
       }
 
       li {
         display: flex;
         align-items: center;
-        padding: 5px;
+        padding: 0.5vw;
         cursor: pointer;
         transition: all 0.3s;
 
         &:hover {
           background-color: #ece8ff;
-          transform: translateX(10px);
+          transform: translateX(0.5vw);
           width: 100%;
         }
 
@@ -73,14 +73,14 @@
           font-size: 1.6vw; /* Cambiado a unidad em */
           font-weight: 600;
           color: #828282;
-          margin-left: 10px;
+          margin-left: 0.5vw;
         }
       }
     }
 
     .linea {
       border-top: 1px solid #ccc; /* Cambia el color de la línea según tus preferencias */
-      margin-top: 150px; /* Ajusta el margen superior e inferior de la línea */
+      margin-top: 10vw; /* Ajusta el margen superior e inferior de la línea */
     }
   }  
 

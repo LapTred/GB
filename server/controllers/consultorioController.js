@@ -9,8 +9,19 @@ Consultorio.getAll = (req, res) => {
             res.status(500).json({ error: "Error al obtener los consultorios" });
             return;
         }
-        console.log("Consultorios encontrados: ", result);
         res.json(result);
+    });
+};
+
+Consultorio.checkRoomname = (req, res) => {
+    const { nombreConsultorio, idConsultorio } = req.params;
+    db.query("SELECT COUNT(*) AS count FROM Consultorio WHERE nombreConsultorio = ? AND id != ?", [nombreConsultorio, idConsultorio], (err, result) => {
+        if (err) {
+            console.error("Error al verificar el nombre del consultorio:", err);
+            res.status(500).json({ error: "Error al verificar el nombre del consultorio" });
+            return;
+        }
+        res.json({ exists: result[0].count > 0 });
     });
 };
 
@@ -50,16 +61,47 @@ Consultorio.delete = (req, res) => {
 Consultorio.updateById = (req, res) => {
     const { idConsultorio } = req.params;
     const { nombreConsultorio, Descripcion, horarioInicio, horarioFinal } = req.body;
+
+    // Ejecutar la consulta SQL para cancelar las citas que no están dentro del rango de horario especificado
     db.query(
-        "UPDATE Consultorio SET nombreConsultorio = ?, Descripcion = ?, horarioInicio = ?, horarioFinal = ? WHERE id = ?",
-        [nombreConsultorio, Descripcion, horarioInicio, horarioFinal, idConsultorio],
+        "UPDATE Citas SET Estado = 'CANCELADA' WHERE idConsultorio = ? AND (Hora < ? OR Hora > ?) AND Estado != 'COMPLETADA'",
+        [idConsultorio, horarioInicio, horarioFinal],
         (err, result) => {
             if (err) {
-                console.error("Error al actualizar el consultorio: ", err);
-                res.status(500).json({ error: "Error al actualizar el consultorio" });
+                console.error("Error al cancelar las citas fuera del rango de horario: ", err);
+                res.status(500).json({ error: "Error al cancelar las citas fuera del rango de horario" });
                 return;
             }
-            console.log("Consultorio actualizado: ", result);
+
+            // Si la cancelación de las citas se realizó con éxito, proceder con la actualización del consultorio
+            db.query(
+                "UPDATE Consultorio SET nombreConsultorio = ?, Descripcion = ?, horarioInicio = ?, horarioFinal = ? WHERE id = ?",
+                [nombreConsultorio, Descripcion, horarioInicio, horarioFinal, idConsultorio],
+                (err, result) => {
+                    if (err) {
+                        console.error("Error al actualizar el consultorio: ", err);
+                        res.status(500).json({ error: "Error al actualizar el consultorio" });
+                        return;
+                    }
+                    res.json(result);
+                }
+            );
+        }
+    );
+};
+
+Consultorio.create = (req, res) => {
+    const { nombreConsultorio, Descripcion, horarioInicio, horarioFinal } = req.body;
+    db.query(
+        "INSERT INTO Consultorio (nombreConsultorio, Descripcion, horarioInicio, horarioFinal) VALUES (?, ?, ?, ?)",
+        [nombreConsultorio, Descripcion, horarioInicio, horarioFinal],
+        (err, result) => {
+            if (err) {
+                console.error("Error al crear el consultorio: ", err);
+                res.status(500).json({ error: "Error al crear el consultorio" });
+                return;
+            }
+            console.log("Consultorio creado: ", result);
             res.json(result);
         }
     );

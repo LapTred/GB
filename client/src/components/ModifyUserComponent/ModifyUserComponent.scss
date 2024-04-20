@@ -58,9 +58,12 @@
             display: flex;
             padding-top: 1vw;
             justify-content: space-between;
-            button{
+            button{                    
+                font-weight: 600;
+                font-size:1vw;
                 padding: 1vw;
-                font-size: 1vw;
+                margin-bottom: 0;
+                margin-right: 0;
             }
         }
     }      

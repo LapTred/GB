@@ -1,35 +1,46 @@
-import React, { useState } from 'react';
-import "./ModifyRoomComponent.scss";
+import React, { useState, useEffect } from 'react';
+import "./CreateRoomComponent.scss";
 
-const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
-  const [modifiedRoom, setModifiedRoom] = useState({ ...room });
-  const [roomNameExistsError, setRoomNameExistsError] = useState(false); // Nuevo estado para el error de nombre de consultorio existente
-  
+const CreateRoomComponent = ({ onCancel, onSave }) => {
+  const initialRoom = { nombreConsultorio: "", Descripcion: "", horarioInicio: "", horarioFinal: "" };
+  const [modifiedRoom, setModifiedRoom] = useState(initialRoom);
+  const [roomNameExistsError, setRoomNameExistsError] = useState(false);
   const [startTimeError, setStartTimeError] = useState(false);
   const [endTimeError, setEndTimeError] = useState(false);
+  const [roomNameError, setRoomNameError] = useState(false); // Nuevo estado para el error de nombre de consultorio vacío
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setModifiedRoom({ ...modifiedRoom, [name]: value });
+
+    if (name === "nombreConsultorio") {
+      setRoomNameError(false);
+    }
   };
 
   const handleSave = () => {
+    if (modifiedRoom.nombreConsultorio.trim() === '') {
+      setRoomNameError(true); // Establecer el estado de error si el nombre está vacío
+      return;
+    }    
 
     if (modifiedRoom.horarioInicio >= modifiedRoom.horarioFinal) {
       setStartTimeError(true);
       setEndTimeError(true);
       return;
     }
-    // Verificar si el nombre del consultorio ya existe exceptuando el consultorio actual
-    fetch(`http://localhost:3001/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/${modifiedRoom.id}`)
+
+    // Verificar si el nombre del consultorio ya existe
+    fetch(`http://localhost:3001/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/null`)
       .then(response => response.json())
       .then(data => {
         if (data.exists) {
           setRoomNameExistsError(true); // Establecer el estado de error de nombre de consultorio existente
         } else {
-          // Si el nombre del consultorio no existe, continuar con la modificación del consultorio
-          fetch(`http://localhost:3001/consultorio/${modifiedRoom.id}`, {
-            method: 'PUT',
+          // Si el nombre del consultorio no existe, continuar con la creación del consultorio
+          fetch('http://localhost:3001/consultorio/create', {
+            method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
@@ -38,30 +49,30 @@ const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
             .then(response => response.json())
             .then(data => {
               onSave(data);
+              setModifiedRoom(initialRoom); // Resetear el formulario después de guardar con éxito
             })
-            .catch(error => console.error('Error saving room:', error));
+            .catch(error => console.error('Error creating room:', error));
         }
       })
       .catch(error => console.error('Error checking room name:', error));
   };
 
   return (
-    <div className="modify-room">
-      <h2>Modificar Consultorio</h2>
+    <div className="create-room">
+      <h2>Crear Consultorio</h2>
       <div className="container">
         <label htmlFor="nombreConsultorio">Nombre del Consultorio:</label>
         <input type="text" name="nombreConsultorio" value={modifiedRoom.nombreConsultorio} onChange={handleInputChange} />
+        {roomNameError && <span style={{ color: 'red' }}>Ingrese un nombre</span>} {/* Mensaje de error */}        
         {roomNameExistsError && <span style={{ color: 'red' }}>El nombre del consultorio ya está en uso. Por favor, elija otro.</span>}
         <label htmlFor="descripcion">Descripción:</label>
         <input type="text" name="Descripcion" value={modifiedRoom.Descripcion} onChange={handleInputChange} />
         <label htmlFor="horarioInicio">Horario de Inicio:</label>
         <input type="time" name="horarioInicio" value={modifiedRoom.horarioInicio} onChange={handleInputChange} />
         {startTimeError && <span style={{ color: 'red' }}>La hora de inicio debe ser menor que la hora de cierre.</span>}
-        
         <label htmlFor="horarioFinal">Horario de Cierre:</label>
         <input type="time" name="horarioFinal" value={modifiedRoom.horarioFinal} onChange={handleInputChange} />
         {endTimeError && <span style={{ color: 'red' }}>La hora de cierre debe ser mayor que la hora de inicio.</span>}
-        
         <div className="actions">
           <button 
             style={{ backgroundColor: '#f2f2f2', color: 'black', marginRight: '0.5vw', border: '0.2vw solid #f2f2f2', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}                              
@@ -79,4 +90,4 @@ const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
   );
 };
 
-export default ModifyRoomComponent;
+export default CreateRoomComponent;

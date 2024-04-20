@@ -52,4 +52,40 @@ Usuario.delete = (req, res) => {
     );
 };
 
+// Método para crear un nuevo usuario
+Usuario.create = (req, res) => {
+    const { Nombre, nombreUsuario, Clave, Acceso } = req.body;
+    db.query(
+        "INSERT INTO Usuario (Nombre, nombreUsuario, Clave, Acceso) VALUES (?, ?, ?, ?)",
+        [Nombre, nombreUsuario, Clave, Acceso],
+        (err, result) => {
+            if (err) {
+                console.error("Error al crear el usuario: ", err);
+                res.status(500).json({ error: "Error al crear el usuario" });
+                return;
+            }
+            console.log("Usuario creado: ", result);
+            res.json(result);
+        }
+    );
+};
+
+// Método para verificar si un nombre de usuario ya existe
+Usuario.checkUsername = (req, res) => {
+    const { nombreUsuario } = req.params;
+    db.query(
+        "SELECT COUNT(*) AS count FROM Usuario WHERE nombreUsuario = ?",
+        [nombreUsuario],
+        (err, result) => {
+            if (err) {
+                console.error("Error al verificar el nombre de usuario: ", err);
+                res.status(500).json({ error: "Error al verificar el nombre de usuario" });
+                return;
+            }
+            const exists = result[0].count > 0;
+            res.json({ exists });
+        }
+    );
+};
+
 module.exports = Usuario;

@@ -23,15 +23,25 @@ const Formulario = require('../controllers/formularioController');
 
 router.post('/login', login);
 
-
+/////////////////////////////////////Consultorios/////////////////////////////////////
 router.get('/consultorios', Consultorio.getAll)
-router.put('/consultorios/:idConsultorio', Consultorio.updateById);
+// Ruta para actualizar un consultorio por su id
+router.put('/consultorio/:idConsultorio', Consultorio.updateById);
 router.delete('/consultorio/delete/:id', Consultorio.delete);
+// Ruta para verificar si un nombre de consultorio ya existe
+router.get('/consultorio/check-roomname/:nombreConsultorio/:idConsultorio', Consultorio.checkRoomname);
+router.post('/consultorio/create', Consultorio.create);
 
+//////////////////////////////////////Usuarios////////////////////////////////////////
+// Ruta para obtener todos los usuarios
 router.get('/usuarios', Usuario.getAll);
+// Ruta para actualizar un usuario por su id
 router.put('/usuario/:idUsuario', Usuario.updateById);
+// Ruta para cambiar el acceso de un usuario a 'INACTIVO' por su id
 router.put('/usuario/delete/:id', Usuario.delete);
-
+// Ruta para verificar si un nombre de usuario ya existe
+router.get('/usuario/check-username/:nombreUsuario', Usuario.checkUsername);
+router.post('/usuario/create', Usuario.create);
 
 
 
