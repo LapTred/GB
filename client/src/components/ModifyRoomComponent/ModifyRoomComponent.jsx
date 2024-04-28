@@ -14,12 +14,6 @@ const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
   };
 
   const handleSave = () => {
-
-    if (modifiedRoom.horarioInicio >= modifiedRoom.horarioFinal) {
-      setStartTimeError(true);
-      setEndTimeError(true);
-      return;
-    }
     // Verificar si el nombre del consultorio ya existe exceptuando el consultorio actual
     fetch(`http://localhost:3001/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/${modifiedRoom.id}`)
       .then(response => response.json())
@@ -54,13 +48,6 @@ const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
         {roomNameExistsError && <span style={{ color: 'red' }}>El nombre del consultorio ya está en uso. Por favor, elija otro.</span>}
         <label htmlFor="descripcion">Descripción:</label>
         <input type="text" name="Descripcion" value={modifiedRoom.Descripcion} onChange={handleInputChange} />
-        <label htmlFor="horarioInicio">Horario de Inicio:</label>
-        <input type="time" name="horarioInicio" value={modifiedRoom.horarioInicio} onChange={handleInputChange} />
-        {startTimeError && <span style={{ color: 'red' }}>La hora de inicio debe ser menor que la hora de cierre.</span>}
-        
-        <label htmlFor="horarioFinal">Horario de Cierre:</label>
-        <input type="time" name="horarioFinal" value={modifiedRoom.horarioFinal} onChange={handleInputChange} />
-        {endTimeError && <span style={{ color: 'red' }}>La hora de cierre debe ser mayor que la hora de inicio.</span>}
         
         <div className="actions">
           <button 

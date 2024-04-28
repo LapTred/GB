@@ -3,9 +3,9 @@ const router = express.Router();
 
 //Iniciar sesión
 const { login } = require('../controllers/loginController');
-
 const Consultorio = require('../controllers/consultorioController');
 const Usuario = require('../controllers/usuarioController');
+const Clinica = require('../controllers/clinicaController');
 
 
 const { rhistorial } = require('../controllers/rhistorialController');
@@ -16,10 +16,10 @@ const { vigencias } = require('../controllers/vigenciasController');
 const { inconformidades } = require('../controllers/inconformidadesController');    
 const Asignacion = require('../controllers/asignacionController');
 const Departamento = require('../controllers/departamentosController');
-
 const Usuarios = require('../controllers/usuariosController');
-
 const Formulario = require('../controllers/formularioController'); 
+
+
 
 router.post('/login', login);
 
@@ -31,6 +31,9 @@ router.delete('/consultorio/delete/:id', Consultorio.delete);
 // Ruta para verificar si un nombre de consultorio ya existe
 router.get('/consultorio/check-roomname/:nombreConsultorio/:idConsultorio', Consultorio.checkRoomname);
 router.post('/consultorio/create', Consultorio.create);
+router.get('/clinica', Clinica.getAll);
+router.put('/clinica/update', Clinica.update);
+
 
 //////////////////////////////////////Usuarios////////////////////////////////////////
 // Ruta para obtener todos los usuarios

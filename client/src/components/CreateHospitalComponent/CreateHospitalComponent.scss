@@ -1,0 +1,62 @@
+.create-hospital{ 
+    h2 {
+        font-size: 1.5vw;
+    }
+    display: flex;    
+    flex-direction: column; 
+    align-items: center;     
+    width: 85%; 
+    .container{        
+        font-size: 1.2vw;    
+        width: 100%;  
+        flex-direction: column;
+        display: flex; 
+        table{
+            width: 100%;
+            thead{
+                width: 100%;
+            }
+            tbody{
+                width: 100%;
+                tr{                    
+                    td{
+                        input[type="checkbox"] {
+                            width: 100%; /* Ajusta el tamaño del checkbox */
+                            height: 1.2vw; /* Ajusta el tamaño del checkbox */
+                        }
+                        input[type="time"] {
+                            padding: 0.1vw;
+                            font-size: 0.8vw;
+                            width: 100%; /* Ajusta el tamaño del checkbox */
+                            height: 2.2vw; /* Ajusta el tamaño del checkbox */
+                        }
+                    }
+                }
+            }
+        }
+        
+                
+        label{
+            margin-top: 0.5vw;
+            font-size: 1.2vw;
+        }
+        select{
+            border: 1px solid #ccc; /* Añade un borde */
+            padding-left: 0.5vw;   
+            font-size: 1.2vw;
+        }
+        .actions{
+            display: flex;
+            padding: 0.5vw;
+            justify-content: center;
+            align-items: center;
+            button{                    
+                font-weight: 600;
+                font-size:1vw;
+                padding: 1vw;
+                margin-bottom: 0;
+                margin-right: 0;
+            }
+        }
+    }      
+}

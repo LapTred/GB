@@ -10,7 +10,7 @@ import ModifyUserComponent from "../../components/ModifyUserComponent/ModifyUser
 import CreateUserComponent from "../../components/CreateUserComponent/CreateUserComponent"; 
 import CreateRoomComponent from "../../components/CreateRoomComponent/CreateRoomComponent"; 
 import ModifyRoomComponent from "../../components/ModifyRoomComponent/ModifyRoomComponent";
-import { red } from '@mui/material/colors';
+import CreateHospitalComponent from "../../components/CreateHospitalComponent/CreateHospitalComponent"
 
 const Ajustes = () => {
   const [data, setData] = useState([]);
@@ -19,6 +19,7 @@ const Ajustes = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
   const [deleteConfirmations, setDeleteConfirmations] = useState({});
+  const [clinicaData, setClinicaData] = useState(null);
 
   useEffect(() => {
     setDeleteConfirmations({});
@@ -33,11 +34,19 @@ const Ajustes = () => {
       url = 'http://localhost:3001/consultorios';
     } else if (type === 'usuarios') {
       url = 'http://localhost:3001/usuarios';
+    } else if (type === 'clinica') {
+      url = 'http://localhost:3001/clinica';
     }
 
     fetch(url)
       .then(response => response.json())
-      .then(data => setData(data))
+      .then(data => {
+        if (type === 'clinica') {
+          setClinicaData(data);
+        } else {
+          setData(data);
+        }
+      })
       .catch(error => console.error(`Error fetching ${type}:`, error));
   };
 
@@ -124,14 +133,15 @@ const Ajustes = () => {
               <div className="widgetsB">              
                 <Widget className="widget" type="consultorios" descripcion="Administrar consultorios" onClick={() => setDataType('consultorios')} />
                 <Widget className="widget" type="usuarios" descripcion="Administrar usuarios" onClick={() => setDataType('usuarios')} />
+                <Widget className="widget" type="horario" descripcion="Administrar clínica" onClick={() => setDataType('clinica')} />
               </div>
             </div>            
           </div>
           <div className="containerR">
             <div className="ajustestituloR">
               <div className="ajustestitulo">
-                <h2>{dataType === 'consultorios' ? 'Consultorios' : 'Usuarios'}</h2>
-                {!isEditing && !isCreating && (
+                <h2>{dataType === 'consultorios' ? 'Consultorios' : dataType === 'usuarios' ? 'Usuarios' : 'Clínica'}</h2>
+                {!isEditing && !isCreating && dataType !== 'clinica' && (
                   <div className="iconR">
                     <AddIcon style={{ fontSize: '3vw', border: '0.2vw solid black', borderRadius: '30%', borderColor: '#E0E0E0'}} onClick={handleShowCreateUser} /> 
                   </div>
@@ -163,7 +173,7 @@ const Ajustes = () => {
                   onSave={handleSaveModification} 
                 />
               )}
-              {!isCreating && !isEditing && (
+              {!isCreating && !isEditing && dataType !== 'clinica' && (
                 <div className="consultoriosContainer">
                   {dataType === 'consultorios' && (
                     <div className="icono">
@@ -174,7 +184,7 @@ const Ajustes = () => {
                     <div className="icono">
                       <PeopleIcon style={{ fontSize: '4.5vw'}} /> 
                     </div>
-                  )}
+                  )}                  
                   {data.map(item => (
                     <div key={item.id} className="consultorio">
                       <h3>{dataType === 'consultorios' ? item.nombreConsultorio : item.Nombre}</h3>
@@ -229,6 +239,12 @@ const Ajustes = () => {
                     </div>
                   ))}
                 </div>
+              )}
+              {dataType === 'clinica' && (
+                <CreateHospitalComponent clinicaData={clinicaData}  // Pasar los datos de la clínica como prop
+                  onCancel={handleCancelModification} 
+                  onSave={handleSaveModification} 
+                />
               )}
             </div>
           </div>

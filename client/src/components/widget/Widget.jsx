@@ -1,9 +1,8 @@
 import "./widget.scss";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import PeopleIcon from '@mui/icons-material/People';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import HealthAndSafetyIcon from '@mui/icons-material/HealthAndSafety';
 
 const Widget = ({ type, descripcion, onClick }) => {
   let data;
@@ -61,6 +60,21 @@ const Widget = ({ type, descripcion, onClick }) => {
         title: "Usuarios",
         link: "Ver todo",
         iconConsultorio:(<PeopleIcon
+          className="icon"
+        />),
+        icon: (
+          <ChevronRightIcon
+            className="icon"            
+          />
+        ),
+      };
+    break;
+    case "horario":
+      data = {
+        ajustes:true,
+        title: "Clínica",
+        link: "Ver todo",
+        iconConsultorio:(<HealthAndSafetyIcon
           className="icon"
         />),
         icon: (
