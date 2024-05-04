@@ -54,7 +54,7 @@
         }
         .containerR{
           width: 50%;
-          padding: 1vw;          
+          padding: 1vw;         
           .ajustestituloR{
             height: 15%;          
             flex-direction: column;
@@ -97,8 +97,8 @@
               width: 85%;           
               text-align: center;
               .consultorio {
+                border-radius: 1vw;
                 border: 0.2vw solid #ccc; // Define el borde y su grosor
-                padding: 0.5vw; // Añade espacio interno para que el contenido no esté pegado al borde
                 margin-bottom: 2vw; // Añade margen en la parte inferior
                 h3{
                   font-size: 1.1vw;
@@ -114,13 +114,11 @@
                   display: flex; /* Establece el contenedor como flexbox */
                   justify-content: flex-end; /* Alinea los elementos al final del eje principal (horizontal) */
                   border-top: 0.2vw solid #ccc;
+                  padding: 1vw;
                   button{                    
                     font-weight: 600;
                     font-size:0.9vw;
-                    margin: 0.5vw;
                     padding: 0.5vw;
-                    margin-bottom: 0;
-                    margin-right: 0;
                   }
                   p{
                     font-size: 1vw;

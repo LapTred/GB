@@ -1,12 +1,29 @@
 import React, { useState, useEffect } from 'react';
+import Select from 'react-select';
 import "./CreateRoomComponent.scss";
 
 const CreateRoomComponent = ({ onCancel, onSave }) => {
-  const initialRoom = { nombreConsultorio: "", Descripcion: ""};
+  const initialRoom = { nombreConsultorio: "", Descripcion: "", servicios: []};
   const [modifiedRoom, setModifiedRoom] = useState(initialRoom);
   const [roomNameExistsError, setRoomNameExistsError] = useState(false);
-  const [roomNameError, setRoomNameError] = useState(false); // Nuevo estado para el error de nombre de consultorio vacío
+  const [roomNameError, setRoomNameError] = useState(false);
+  const [servicios, setServicios] = useState([]);
+  const [availableServices, setAvailableServices] = useState([]);
 
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+
+  const fetchServices = () => {
+    fetch('http://localhost:3001/servicios')
+      .then(response => response.json())
+      .then(data => {
+        setServicios(data.map(servicio => ({ value: servicio.id, label: servicio.Nombre })));
+        setAvailableServices(data.map(servicio => ({ value: servicio.id, label: servicio.Nombre })));
+      })
+      .catch(error => console.error('Error fetching services:', error));
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -17,20 +34,25 @@ const CreateRoomComponent = ({ onCancel, onSave }) => {
     }
   };
 
+  const handleServiceChange = (selectedOptions) => {
+    setModifiedRoom({ ...modifiedRoom, servicios: selectedOptions });
+    const selectedServiceValues = selectedOptions.map(option => option.value);
+    const updatedAvailableServices = servicios.filter(servicio => !selectedServiceValues.includes(servicio.value));
+    setAvailableServices(updatedAvailableServices);
+  };
+
   const handleSave = () => {
     if (modifiedRoom.nombreConsultorio.trim() === '') {
-      setRoomNameError(true); // Establecer el estado de error si el nombre está vacío
+      setRoomNameError(true);
       return;
-    }  
+    }
 
-    // Verificar si el nombre del consultorio ya existe
     fetch(`http://localhost:3001/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/null`)
       .then(response => response.json())
       .then(data => {
         if (data.exists) {
-          setRoomNameExistsError(true); // Establecer el estado de error de nombre de consultorio existente
+          setRoomNameExistsError(true);
         } else {
-          // Si el nombre del consultorio no existe, continuar con la creación del consultorio
           fetch('http://localhost:3001/consultorio/create', {
             method: 'POST',
             headers: {
@@ -41,7 +63,7 @@ const CreateRoomComponent = ({ onCancel, onSave }) => {
             .then(response => response.json())
             .then(data => {
               onSave(data);
-              setModifiedRoom(initialRoom); // Resetear el formulario después de guardar con éxito
+              setModifiedRoom(initialRoom);
             })
             .catch(error => console.error('Error creating room:', error));
         }
@@ -55,23 +77,36 @@ const CreateRoomComponent = ({ onCancel, onSave }) => {
       <div className="container">
         <label htmlFor="nombreConsultorio">Nombre del Consultorio:</label>
         <input type="text" name="nombreConsultorio" value={modifiedRoom.nombreConsultorio} onChange={handleInputChange} />
-        {roomNameError && <span style={{ color: 'red' }}>Ingrese un nombre</span>} {/* Mensaje de error */}        
+        {roomNameError && <span style={{ color: 'red' }}>Ingrese un nombre</span>}
         {roomNameExistsError && <span style={{ color: 'red' }}>El nombre del consultorio ya está en uso. Por favor, elija otro.</span>}
         <label htmlFor="descripcion">Descripción:</label>
-        <input type="text" name="Descripcion" value={modifiedRoom.Descripcion} onChange={handleInputChange} />        
+        <input type="text" name="Descripcion" value={modifiedRoom.Descripcion} onChange={handleInputChange} />
+
+        <label htmlFor="servicios">Seleccione los servicios:</label>
+        <Select
+          value={modifiedRoom.servicios}
+          onChange={handleServiceChange}
+          options={availableServices}
+          placeholder="Selecciona una sección"
+          isMulti
+
+        />
+
         <div className="actions">
-          <button 
-            style={{ backgroundColor: '#f2f2f2', color: 'black', marginRight: '0.5vw', border: '0.2vw solid #f2f2f2', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}                              
-            onClick={onCancel
-            }>Cancelar
+          <button
+            style={{ backgroundColor: '#f2f2f2', color: 'black', marginRight: '0.5vw', border: '0.2vw solid #f2f2f2', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+            onClick={onCancel}
+          >
+            Cancelar
           </button>
-          <button 
-            style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }} 
+          <button
+            style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
             onClick={handleSave}
-            >Guardar
+          >
+            Guardar
           </button>
         </div>
-      </div>      
+      </div>
     </div>
   );
 };

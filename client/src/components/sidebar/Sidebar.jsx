@@ -26,13 +26,13 @@ const Sidebar = () => {
               <span>Inicio</span>
             </li>
           </Link>
-          <Link to="/usuario" style={{ textDecoration: "none" }}>
+          <Link to="/pacientes" style={{ textDecoration: "none" }}>
             <li>
               <PetsIcon className="icon" />
               <span>Pacientes</span>
             </li>
           </Link>
-          <Link to="/asignacionesJefa" style={{ textDecoration: "none" }}>
+          <Link to="/citas" style={{ textDecoration: "none" }}>
             <li>
               <CalendarTodayIcon className="icon" />
               <span>Citas</span>

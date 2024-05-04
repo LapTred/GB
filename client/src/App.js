@@ -1,9 +1,12 @@
 import Home from "./pages/home/Home";
 import Ajustes from "./pages/ajustes/ajustes";
 import Login from "./pages/login/Login";
+import Pacientes from "./pages/pacientes/pacientes";
+import Citas from "./pages/citas/citas";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./style/dark.scss";
 import React,{ useContext } from "react";
+import formularioCita from "./pages/formularioCita/formularioCita";
 
 const PrivateRoute = ({ element: Element, ...rest }) => {
   const isAuthenticated = sessionStorage.getItem('token');
@@ -57,7 +60,11 @@ function App() {
 
             {/* Administrador */}
             <Route path="home" element={<PrivateRoute element={Home}/>}/>
-            <Route path="ajustes" element={<PrivateRoute element={Ajustes}/>}/>            
+            <Route path="ajustes" element={<PrivateRoute element={Ajustes}/>}/> 
+            <Route path="pacientes" element={<PrivateRoute element={Pacientes}/>}/>             
+            <Route path="citas" element={<PrivateRoute element={Citas}/>}/>      
+            <Route path="/cita/nueva" element={<PrivateRoute element={formularioCita}/>}/>       
+ 
           </Route>
           <Route path="*" element={<CatchAll />} />
         </Routes>

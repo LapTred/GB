@@ -1,39 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import Select from 'react-select';
 import "./ModifyRoomComponent.scss";
 
 const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
-  const [modifiedRoom, setModifiedRoom] = useState({ ...room });
-  const [roomNameExistsError, setRoomNameExistsError] = useState(false); // Nuevo estado para el error de nombre de consultorio existente
-  
-  const [startTimeError, setStartTimeError] = useState(false);
-  const [endTimeError, setEndTimeError] = useState(false);
+  const [modifiedRoom, setModifiedRoom] = useState({ ...room, servicios: [] });
+  const [roomNameExistsError, setRoomNameExistsError] = useState(false);
+  const [servicios, setServicios] = useState([]);
+  const [availableServices, setAvailableServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [isMounted, setIsMounted] = useState(true);
+
+  useEffect(() => {
+    fetchServices();
+
+    return () => {
+      setIsMounted(false); // Cuando el componente se desmonte, setIsMounted en false
+    };
+  }, []);
+
+  const fetchServices = () => {
+    fetch('http://localhost:3001/servicios')
+      .then(response => response.json())
+      .then(data => {
+        const allServices = data.map(servicio => ({ value: servicio.id, label: servicio.Nombre }));
+        if (isMounted) {          
+          setServicios(allServices);  
+          setAvailableServices(allServices);
+          fetch(`http://localhost:3001/consultorio-servicio/${room.id}`)
+          .then(response => response.json())
+          .then(data => {
+            const selectedServiceIds = data.map(servicio => servicio.idServicio);
+            const selectedServices = allServices.filter(servicio => selectedServiceIds.includes(servicio.value));
+            if (isMounted) setSelectedServices(selectedServices);
+          })
+          .catch(error => console.error('Error fetching room services:', error));
+        }
+      })
+      .catch(error => console.error('Error fetching services:', error));
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setModifiedRoom({ ...modifiedRoom, [name]: value });
   };
 
+  const handleServiceChange = (selectedOptions) => {
+    setSelectedServices(selectedOptions);
+    const selectedServiceValues = selectedOptions.map(option => option.value);
+    // Filtra los servicios disponibles basándote en todos los servicios y los servicios seleccionados actualmente
+    const updatedAvailableServices = servicios.filter(servicio => !selectedServiceValues.includes(servicio.value));
+    setAvailableServices(updatedAvailableServices);
+    setModifiedRoom({ ...modifiedRoom, servicios: selectedServiceValues }); // Actualiza modifiedRoom.servicios con los valores seleccionados
+  };
+  
   const handleSave = () => {
-    // Verificar si el nombre del consultorio ya existe exceptuando el consultorio actual
     fetch(`http://localhost:3001/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/${modifiedRoom.id}`)
       .then(response => response.json())
       .then(data => {
         if (data.exists) {
-          setRoomNameExistsError(true); // Establecer el estado de error de nombre de consultorio existente
+          setRoomNameExistsError(true);
         } else {
-          // Si el nombre del consultorio no existe, continuar con la modificación del consultorio
+          const modifiedData = {
+            ...modifiedRoom,
+            servicios: selectedServices.map(service => service.value) // Obtener solo los valores de los servicios seleccionados
+          };
+  
           fetch(`http://localhost:3001/consultorio/${modifiedRoom.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify(modifiedRoom),
+            body: JSON.stringify(modifiedData), // Enviar los datos modificados, incluidos los servicios seleccionados
           })
             .then(response => response.json())
             .then(data => {
               onSave(data);
             })
-            .catch(error => console.error('Error saving room:', error));
+            .catch(error => console.error(modifiedRoom.id, 'Error saving room:', error));
         }
       })
       .catch(error => console.error('Error checking room name:', error));
@@ -48,20 +91,31 @@ const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
         {roomNameExistsError && <span style={{ color: 'red' }}>El nombre del consultorio ya está en uso. Por favor, elija otro.</span>}
         <label htmlFor="descripcion">Descripción:</label>
         <input type="text" name="Descripcion" value={modifiedRoom.Descripcion} onChange={handleInputChange} />
-        
+
+        <label htmlFor="servicios">Seleccione los servicios:</label>
+        <Select
+          value={selectedServices}
+          onChange={handleServiceChange}
+          options={availableServices}
+          placeholder="Selecciona una sección"
+          isMulti
+        />
+
         <div className="actions">
-          <button 
-            style={{ backgroundColor: '#f2f2f2', color: 'black', marginRight: '0.5vw', border: '0.2vw solid #f2f2f2', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}                              
-            onClick={onCancel
-            }>Cancelar
+          <button
+            style={{ backgroundColor: '#f2f2f2', color: 'black', marginRight: '0.5vw', border: '0.2vw solid #f2f2f2', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+            onClick={onCancel}
+          >
+            Cancelar
           </button>
-          <button 
-            style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }} 
+          <button
+            style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
             onClick={handleSave}
-            >Guardar
+          >
+            Guardar
           </button>
         </div>
-      </div>      
+      </div>
     </div>
   );
 };

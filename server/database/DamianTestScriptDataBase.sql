@@ -2,109 +2,125 @@ CREATE DATABASE IF NOT EXISTS Veterinaria;
 
 USE Veterinaria;
 
--- 1 Crear la tabla Propietario
+-- 1 Crear la tabla Propietario que puede tener varias mascotas
 CREATE TABLE IF NOT EXISTS Propietario (
-    idPropietario INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(255) NOT NULL,    
+    Telefono VARCHAR(20)
+);
+
+-- 2 Crear la tabla Paciente que pertenecen a un propietario
+CREATE TABLE IF NOT EXISTS Paciente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombrePaciente VARCHAR(128) NOT NULL,
+    idPropietario INT,
+    FOREIGN KEY (idPropietario) REFERENCES Propietario(id)
+);
+
+-- 3 Crear la tabla Servicio que almacena los diferentes servicios que tiene el consultorio
+CREATE TABLE IF NOT EXISTS Servicio (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     Nombre VARCHAR(255) NOT NULL
 );
 
--- 2 Crear la tabla Paciente
-CREATE TABLE IF NOT EXISTS Paciente (
-    idPaciente INT AUTO_INCREMENT PRIMARY KEY,
-    nombrePaciente VARCHAR(128) NOT NULL,
-    idPropietario INT,
-    Telefono VARCHAR(20),
-    FOREIGN KEY (idPropietario) REFERENCES Propietario(idPropietario)
+-- 4 Horario general que maneja la clínica veterinaria -- "UPDATE Citas SET Estado = 'CANCELADA' WHERE idConsultorio = ? AND (Hora < ? OR Hora > ?) AND Estado != 'COMPLETADA'"
+CREATE TABLE IF NOT EXISTS Horario (
+	id INT AUTO_INCREMENT PRIMARY KEY,    
+    nombreDias ENUM ('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'),    
+    horarioInicio TIME,
+    horarioFinal TIME,
+    estado BOOLEAN
 );
 
--- 3 Crear la tabla Expediente
+-- 5 Crear la tabla Consultorio
+CREATE TABLE IF NOT EXISTS Consultorio (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombreConsultorio VARCHAR(255),
+    Descripcion TEXT
+);
+
+-- 6 Crear la tabla ConsultorioServicio para saber que servicios tiene ese consultorio (para actualizar usa delete from where idConsultorio y después el put)
+CREATE TABLE IF NOT EXISTS ConsultorioServicio (
+	id INT AUTO_INCREMENT PRIMARY KEY,
+	idServicio INT,
+	idConsultorio INT,    
+    FOREIGN KEY (idConsultorio) REFERENCES Consultorio(id),    
+    FOREIGN KEY (idServicio) REFERENCES Servicio(id)
+);     
+
+-- 7 Crear la tabla Expediente
 CREATE TABLE IF NOT EXISTS Expediente (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     idPaciente INT,
-    idExpediente INT AUTO_INCREMENT PRIMARY KEY,
     fechaNacimiento DATE,
     Peso FLOAT,
     Sexo CHAR(1),
     Descripcion TEXT,
-    FOREIGN KEY (idPaciente) REFERENCES Paciente(idPaciente)
+    FOREIGN KEY (idPaciente) REFERENCES Paciente(id)
 );
 
--- 4 Crear la tabla Consultorio
-CREATE TABLE IF NOT EXISTS Consultorio (
-    idConsultorio INT AUTO_INCREMENT PRIMARY KEY,
-    nombreConsultorio VARCHAR(255),
-    Descripcion TEXT,
-    horarioInicio DATE,
-    horarioFinal DATE
-);
-
--- 5 Crear la tabla Usuario
+-- 8 Crear la tabla Usuario
 CREATE TABLE IF NOT EXISTS Usuario (
-	idUsuario INT AUTO_INCREMENT UNIQUE,
+	id INT AUTO_INCREMENT PRIMARY KEY,
     Nombre VARCHAR(255),
     nombreUsuario VARCHAR(128) NOT NULL,
     Clave VARCHAR(128) NOT NULL,    
-    PRIMARY KEY (nombreUsuario, Clave),
-    Acceso ENUM('Administrador', 'Veterinario', 'Recepcionista')   
+    Acceso ENUM('Administrador', 'Veterinario', 'Recepcionista', 'INACTIVO')   
 );
 
--- 6 Crear la tabla Servicio
-CREATE TABLE IF NOT EXISTS Servicio (
-    idServicio INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre VARCHAR(255) NOT NULL,
-    Duracion INT NOT NULL
-);
-
--- 7 Crear la tabla Citas
+-- 9 Crear la tabla Citas
 CREATE TABLE IF NOT EXISTS Citas (
-    idCita INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     idConsultorio INT,
     idPaciente INT,
     idUsuario INT,
-    fechaInicio DATETIME,
+    Fecha DATE,
+    Hora TIME,
     Duracion INT,
-    Estado ENUM('CANCELADA', 'PENDIENTE', 'FLEXIBLE', 'PROCESO', 'AGENDADA'),
-    FOREIGN KEY (idConsultorio) REFERENCES Consultorio(idConsultorio),
-    FOREIGN KEY (idPaciente) REFERENCES Paciente(idPaciente),
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+    Estado ENUM('CANCELADA', 'PENDIENTE', 'FLEXIBLE', 'PROCESO', 'AGENDADA', 'COMPLETADA'),
+    FOREIGN KEY (idConsultorio) REFERENCES Consultorio(id),
+    FOREIGN KEY (idPaciente) REFERENCES Paciente(id),
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
 );
 
--- 8 Crear la tabla ResumenCita
+-- 10 Crear la tabla ResumenCita
 CREATE TABLE IF NOT EXISTS ResumenCita (
     idCita INT,
-    IdresumenCita INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     idExpediente INT,
     idUsuario INT,
     Descripcion TEXT,
     Peso FLOAT,
-    FOREIGN KEY (idCita) REFERENCES Citas(idCita),
-    FOREIGN KEY (idExpediente) REFERENCES Expediente(idExpediente),
-    FOREIGN KEY (idUsuario) REFERENCES Usuario(idUsuario)
+    FOREIGN KEY (idCita) REFERENCES Citas(id),
+    FOREIGN KEY (idExpediente) REFERENCES Expediente(id),
+    FOREIGN KEY (idUsuario) REFERENCES Usuario(id)
 );
 
--- 9 Crear la tabla Medicamento
+-- 11 Crear la tabla Medicamento
 CREATE TABLE IF NOT EXISTS Medicamento (
-    idresumenCita INT,
-    idMedicamento INT AUTO_INCREMENT PRIMARY KEY,
+    idResumenCita INT,
+    id INT AUTO_INCREMENT PRIMARY KEY,
     nombreMedicamento VARCHAR(255),
     Descripcion TEXT,
-    FOREIGN KEY (idresumenCita) REFERENCES ResumenCita(idresumenCita)
+    FOREIGN KEY (idResumenCita) REFERENCES ResumenCita(id)
 );
 
--- 10 Crear la tabla Vacunas
+-- 12 Crear la tabla Vacunas
 CREATE TABLE IF NOT EXISTS Vacunas (
-    idresumenCita INT,
-    idVacuna INT AUTO_INCREMENT PRIMARY KEY,
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    idResumenCita INT,
     nombreVacuna VARCHAR(255),
+    dosis FLOAT,
     fechaVacuna DATE,
-    fechasiguienteVacuna DATE,
-    FOREIGN KEY (idresumenCita) REFERENCES ResumenCita(idresumenCita)
+    fechaSiguienteVacuna DATE,
+    FOREIGN KEY (idResumenCita) REFERENCES ResumenCita(id)
 );
 
--- 11 Crear la tabla CitaServicio
+-- 11 Crear la tabla CitaServicio donde almacena que servicio tendrá la cita
 CREATE TABLE IF NOT EXISTS CitaServicio (
     idServicio INT,
     idCita INT,
-    FOREIGN KEY (idServicio) REFERENCES Servicio(idServicio),
-    FOREIGN KEY (idCita) REFERENCES Citas(idCita),
+    FOREIGN KEY (idServicio) REFERENCES Servicio(id),
+    FOREIGN KEY (idCita) REFERENCES Citas(id),
     PRIMARY KEY (idServicio, idCita)
 );
