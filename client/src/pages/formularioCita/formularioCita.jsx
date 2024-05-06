@@ -31,15 +31,32 @@ const Formulario = () => {
       .then(response => response.json())
       .then(data => {
         setHorario(data);
-        // Encontrar la fecha más cercana disponible
-        const today = new Date();
-        const closestAvailableDate = data.find(day => new Date(day.horarioInicio) >= today && day.estado);
-        if (closestAvailableDate) {
-          setSelectedDate(new Date(closestAvailableDate.horarioInicio));
-        }
+        const today = new Date().getDay();
+        const isTodayAvailable = data.some(day => day.nombreDias === getDayName(today) && day.estado);
+        
+        if (isTodayAvailable) {
+          setSelectedDate(new Date());
+        } else {
+          let nextDayIndex = (today + 1) % 7;
+          let nextAvailableDay = null;
+          
+          while (!nextAvailableDay) {
+            const nextDay = data.find(day => day.nombreDias === getDayName(nextDayIndex) && day.estado);
+            if (nextDay) {
+              // Obtener la fecha del próximo día disponible
+              const nextDate = new Date();
+              nextDate.setDate(nextDate.getDate() + (nextDayIndex - today + 7) % 7);
+              nextAvailableDay = nextDate;
+            } else {
+              nextDayIndex = (nextDayIndex + 1) % 7;
+            }
+          }
+          setSelectedDate(nextAvailableDay); // Asignar solo si nextAvailableDay es válido
+        }   
       })
       .catch(error => console.error('Error fetching horario:', error));
-  };
+  }; 
+  
 
   // Function to check if a date is available in the schedule
   const isDateAvailable = (date) => {
@@ -71,6 +88,7 @@ const Formulario = () => {
               />
               <h2>Seleccionar Fecha</h2>
               <DatePicker
+                className='datePickerCitas'
                 selected={selectedDate}
                 onChange={date => setSelectedDate(date)}
                 dateFormat="dd/MM/yyyy" // Date format

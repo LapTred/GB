@@ -17,6 +17,18 @@
           flex-direction: column; 
           border-radius: 1vw;  
           margin-bottom: 4vh;
+          .containerA{
+            display: flex;
+            flex-direction: column;
+            padding: 2vw;
+            gap: 1vw;
+            
+          }
+          .datePickerCitas{
+            display: flex;
+            font-size: 1.2vw;
+            text-align: center;
+          }
         }    
       }    
     }
