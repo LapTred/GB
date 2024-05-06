@@ -15,7 +15,6 @@
             display: flex;
             align-items: center;
             font-size: 1.5vw;
-            
         }
 
         .iconContainer {
@@ -63,6 +62,18 @@
             th {
                 background-color: #f2f2f2;
             }
+        }
+        .pages{
+            display: flex;
+            justify-content: end;
+            span{
+                display: flex;
+                align-items: center;
+            }
+            
+        }
+        .pages button{
+            margin: 1vw;
         }
     }
 

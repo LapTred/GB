@@ -42,8 +42,8 @@
                 .right{
                   align-items: center; 
                   .icon{
-                    display: flex; /* Añadir esta línea */
-                    justify-content: flex-end; /* Añadir esta línea */
+                    display: flex;
+                    justify-content: flex-end;
                     font-size:3vw;
                     align-items: center;
                   }                 
@@ -63,7 +63,7 @@
             .ajustestitulo {
               justify-content: space-between;
               display: flex;
-              box-shadow: 0.2vw 0.3vw 0.7vw 0.01vw rgba(0, 0, 0, 0.47); // Aplicar la sombra directamente aquí
+              box-shadow: 0.2vw 0.3vw 0.7vw 0.01vw rgba(0, 0, 0, 0.47); 
               border-radius: 1vw;
               background-color: white;
               align-items: center;
@@ -99,7 +99,7 @@
               .consultorio {
                 border-radius: 1vw;
                 border: 0.2vw solid #ccc; // Define el borde y su grosor
-                margin-bottom: 2vw; // Añade margen en la parte inferior
+                margin-bottom: 2vw; 
                 h3{
                   font-size: 1.1vw;
                 }

@@ -63,10 +63,19 @@ const AppointmentComponent = () => {
         setFilteredEstado(estado);
     };
 
+    // Función para formatear la fecha en formato DD--MM--AA
+    const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const year = date.getFullYear().toString();
+    return `${day}-${month}-${year}`;
+    };
+
     return (
         <div className="appointmentComponent">
             <div className="containerT">
-                <h2>Total de citas</h2>
+                <h2>Total de citas ({citas.length})</h2>
                 <div className="iconContainer">
                     <FilterAltIcon className="filterIcon" onClick={handleFilterButtonClick} />
                     <SearchIcon className="searchIcon" />
@@ -99,7 +108,7 @@ const AppointmentComponent = () => {
                                     <td>{cita.nombre_dueño}</td>
                                     <td>{cita.nombre_consultorio}</td>
                                     <td>{cita.estado}</td>
-                                    <td>{cita.fecha}</td>
+                                    <td>{formatDate(cita.fecha)}</td>
                                     <td>{cita.hora}</td>
                                     <td>...</td> {/* Celda para las opciones, se pueden añadir botones u otros elementos según sea necesario */}
                                 </tr>
@@ -107,10 +116,16 @@ const AppointmentComponent = () => {
                     </tbody>
                 </table>
                 {/* Botones de paginación */}
-                <div>
-                    <button onClick={goToPreviousPage} disabled={currentPage === 1}>Anterior</button>
+                <div className="pages">
+                    <button 
+                        style={{ backgroundColor: 'lightgray', color: 'black', border: '0.1vw solid lightgray', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+                        onClick={goToPreviousPage} disabled={currentPage === 1}>Anterior
+                    </button>
                     <span>Página {currentPage}</span>
-                    <button onClick={goToNextPage} disabled={endIndex >= citas.length}>Siguiente</button>
+                    <button 
+                        style={{ backgroundColor: 'lightgray', color: 'black', marginLeft: '1vw', border: '0.1vw solid lightgray', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+                        onClick={goToNextPage} disabled={endIndex >= citas.length}>Siguiente
+                    </button>
                 </div>
             </div>
             {/* Modal de filtro */}

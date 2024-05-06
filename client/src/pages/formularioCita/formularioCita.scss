@@ -1,14 +1,23 @@
 .formulario-cita {
     display: flex;  
     height: 100vh;
-    .citasContainer {    
+    .formularioContainers {    
       width: 85%;
-      .containers{   
-        align-items: center;     
-        background-color: #F9F9F9; //Need to Fix
-        height: 90%;
+      .formularioContainer{ 
         display: flex;
-        flex-direction: column;        
+        height: 90%;
+        justify-content: center;            
+        background-color: #F9F9F9; //Need to Fix 
+        .formulario{          
+          margin-top: 4vh;
+          width: 85%; 
+          align-items: center;     
+          background-color: white;
+          display: flex;
+          flex-direction: column; 
+          border-radius: 1vw;  
+          margin-bottom: 4vh;
+        }    
       }    
     }
 }

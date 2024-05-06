@@ -6,11 +6,12 @@ const Consultorio = require('../controllers/consultorioController');
 const Usuario = require('../controllers/usuarioController');
 const Clinica = require('../controllers/clinicaController');
 const Cita = require('../controllers/citaController.js');
+const Paciente = require('../controllers/pacienteController.js');
 
-//Iniciar sesión
+///////////////////////////Iniciar sesión////////////////////////////////////
 router.post('/login', login);
 
-/////////////////////////////////////Consultorios/////////////////////////////////////
+///////////////////////////////Consultorios////////////////////////////
 router.get('/consultorios', Consultorio.getAll)
 router.put('/consultorio/:idConsultorio', Consultorio.updateById);
 router.delete('/consultorio/delete/:id', Consultorio.delete);
@@ -22,14 +23,17 @@ router.get('/servicios', Consultorio.service);
 router.get('/consultorio-servicio/:id', Consultorio.serviceById)
 
 
-//////////////////////////////////////Usuarios///////////////////////////////////////
+///////////////////////////////Usuarios//////////////////////////////
 router.get('/usuarios', Usuario.getAll);
 router.put('/usuario/:idUsuario', Usuario.updateById);
 router.put('/usuario/delete/:id', Usuario.delete);
 router.get('/usuario/check-username/:nombreUsuario', Usuario.checkUsername);
 router.post('/usuario/create', Usuario.create);
 
-/////////////////////////////////Citas/////////////////////////////////////
+///////////////////////////Citas/////////////////////////////////////
 router.get('/citas', Cita.getAll);
+
+///////////////////////Pacientes&Expedientes////////////////////////
+router.get('/pacientes', Paciente.getAll);
 
 module.exports = router;

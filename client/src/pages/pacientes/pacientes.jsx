@@ -1,6 +1,6 @@
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import Widget from "../../components/widget/Widget";
+import Patient from "../../components/patientComponent/patientComponent";
 import "./pacientes.scss";
 
 const Pacientes = () => {
@@ -10,17 +10,7 @@ const Pacientes = () => {
       <div className="pacientesContainer">
         <Navbar />
         <div className="containers">
-          <div className="containerL">
-            <div className="widgets">
-              <Widget className="widget" type="citas" />
-              <Widget className="widget" type="pacientes" />
-            </div>
-          </div>
-          <div className="containerR">
-            <div className="widgets">
-              <Widget className="widget" type="agenda" />
-            </div>
-          </div>
+          <Patient/>
         </div>        
       </div>
     </div>

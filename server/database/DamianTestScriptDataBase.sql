@@ -39,6 +39,8 @@ CREATE TABLE IF NOT EXISTS Consultorio (
     Descripcion TEXT
 );
 
+select * from Servicio;
+
 -- 6 Crear la tabla ConsultorioServicio para saber que servicios tiene ese consultorio (para actualizar usa delete from where idConsultorio y después el put)
 CREATE TABLE IF NOT EXISTS ConsultorioServicio (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,6 +49,8 @@ CREATE TABLE IF NOT EXISTS ConsultorioServicio (
     FOREIGN KEY (idConsultorio) REFERENCES Consultorio(id),    
     FOREIGN KEY (idServicio) REFERENCES Servicio(id)
 );     
+
+SELECT * FROM ConsultorioServicio;
 
 -- 7 Crear la tabla Expediente
 CREATE TABLE IF NOT EXISTS Expediente (
@@ -124,3 +128,67 @@ CREATE TABLE IF NOT EXISTS CitaServicio (
     FOREIGN KEY (idCita) REFERENCES Citas(id),
     PRIMARY KEY (idServicio, idCita)
 );
+
+-- Inserciones en la tabla Propietario
+INSERT INTO Propietario (Nombre, Telefono) VALUES ('María López', '987-654-3210');
+INSERT INTO Propietario (Nombre, Telefono) VALUES ('Pedro Martinez', '555-555-5555');
+INSERT INTO Propietario (Nombre, Telefono) VALUES ('Ana García', '123-456-7890');
+
+-- Inserciones en la tabla Paciente
+INSERT INTO Paciente (nombrePaciente, idPropietario) VALUES ('Max', 1);
+INSERT INTO Paciente (nombrePaciente, idPropietario) VALUES ('Luna', 2);
+INSERT INTO Paciente (nombrePaciente, idPropietario) VALUES ('Toby', 3);
+
+-- Inserciones en la tabla Servicio
+INSERT INTO Servicio (Nombre) VALUES ('Vacunación');
+INSERT INTO Servicio (Nombre) VALUES ('Consulta General');
+INSERT INTO Servicio (Nombre) VALUES ('Cirugía');
+
+-- Inserciones en la tabla Horario
+INSERT INTO Horario (nombreDias, horarioInicio, horarioFinal, estado) VALUES ('Lunes', '08:00:00', '17:00:00', 1);
+INSERT INTO Horario (nombreDias, horarioInicio, horarioFinal, estado) VALUES ('Martes', '08:00:00', '17:00:00', 1);
+INSERT INTO Horario (nombreDias, horarioInicio, horarioFinal, estado) VALUES ('Miércoles', '08:00:00', '17:00:00', 1);
+INSERT INTO Horario (nombreDias, horarioInicio, horarioFinal, estado) VALUES ('Jueves', '08:00:00', '17:00:00', 1);
+INSERT INTO Horario (nombreDias, horarioInicio, horarioFinal, estado) VALUES ('Viernes', '08:00:00', '17:00:00', 1);
+INSERT INTO Horario (nombreDias, horarioInicio, horarioFinal, estado) VALUES ('Sábado', '09:00:00', '14:00:00', 1);
+INSERT INTO Horario (nombreDias, horarioInicio, horarioFinal, estado) VALUES ('Domingo', '09:00:00', '14:00:00', 0);
+
+-- Inserciones en la tabla Consultorio
+INSERT INTO Consultorio (nombreConsultorio, Descripcion) VALUES ('Consultorio 1', 'Consultorio para consultas generales');
+INSERT INTO Consultorio (nombreConsultorio, Descripcion) VALUES ('Consultorio 2', 'Consultorio para cirugías');
+INSERT INTO Consultorio (nombreConsultorio, Descripcion) VALUES ('Consultorio 3', 'Consultorio para vacunaciones');
+
+-- Inserciones en la tabla ConsultorioServicio
+INSERT INTO ConsultorioServicio (idServicio, idConsultorio) VALUES (1, 3); -- Vacunación en Consultorio 3
+INSERT INTO ConsultorioServicio (idServicio, idConsultorio) VALUES (2, 1); -- Consulta General en Consultorio 1
+INSERT INTO ConsultorioServicio (idServicio, idConsultorio) VALUES (3, 2); -- Cirugía en Consultorio 2
+
+-- Inserciones en la tabla Expediente
+INSERT INTO Expediente (idPaciente, fechaNacimiento, Peso, Sexo, Descripcion) VALUES (1, '2019-05-20', 5.6, 'M', 'Historial médico de Max');
+INSERT INTO Expediente (idPaciente, fechaNacimiento, Peso, Sexo, Descripcion) VALUES (2, '2018-10-15', 4.2, 'F', 'Historial médico de Luna');
+INSERT INTO Expediente (idPaciente, fechaNacimiento, Peso, Sexo, Descripcion) VALUES (3, '2020-02-10', 7.1, 'M', 'Historial médico de Toby');
+
+-- Inserciones en la tabla Usuario
+INSERT INTO Usuario (Nombre, nombreUsuario, Clave, Acceso) VALUES ('Admin', 'admin', 'admin123', 'Administrador');
+INSERT INTO Usuario (Nombre, nombreUsuario, Clave, Acceso) VALUES ('Veterinario1', 'vet1', 'vet123', 'Veterinario');
+INSERT INTO Usuario (Nombre, nombreUsuario, Clave, Acceso) VALUES ('Recepcionista1', 'rec1', 'rec123', 'Recepcionista');
+
+-- Inserciones en la tabla Citas
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, Hora, Duracion, Estado) VALUES (1, 1, 2, '2024-05-10', '09:00:00', 30, 'AGENDADA');
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, Hora, Duracion, Estado) VALUES (2, 2, 3, '2024-05-12', '10:30:00', 60, 'PENDIENTE');
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, Hora, Duracion, Estado) VALUES (3, 3, 3, '2024-05-15', '14:00:00', 45, 'PENDIENTE');
+
+-- Inserciones en la tabla ResumenCita
+INSERT INTO ResumenCita (idCita, idExpediente, idUsuario, Descripcion, Peso) VALUES (1, 1, 2, 'Consulta de rutina', 5.6);
+INSERT INTO ResumenCita (idCita, idExpediente, idUsuario, Descripcion, Peso) VALUES (2, 2, 3, 'Cirugía de esterilización', 4.2);
+INSERT INTO ResumenCita (idCita, idExpediente, idUsuario, Descripcion, Peso) VALUES (3, 3, 3, 'Vacunación contra la rabia', 7.1);
+
+-- Inserciones en la tabla Medicamento
+INSERT INTO Medicamento (idResumenCita, nombreMedicamento, Descripcion) VALUES (1, 'Amoxicilina', 'Antibiótico para tratar infecciones');
+INSERT INTO Medicamento (idResumenCita, nombreMedicamento, Descripcion) VALUES (2, 'Meloxicam', 'Antiinflamatorio para aliviar el dolor');
+INSERT INTO Medicamento (idResumenCita, nombreMedicamento, Descripcion) VALUES (3, 'Vacuna antirrábica', 'Prevención contra la rabia');
+
+-- Inserciones en la tabla Vacunas
+INSERT INTO Vacunas (idResumenCita, nombreVacuna, dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (3, 'Rabia', 1.0, '2024-05-15', '2025-05-15');
+INSERT INTO Vacunas (idResumenCita, nombreVacuna, dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (3, 'Moquillo', 1.0, '2024-05-15', '2025-05-15');
+INSERT INTO Vacunas (idResumenCita, nombreVacuna, dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (3, 'Parvovirus', 1.0, '2024-05-15', '2025-05-15');

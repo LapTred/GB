@@ -31,8 +31,8 @@ Clinica.update = (req, res) => {
         const updatePromise = new Promise((resolve, reject) => {
             // Realizar la actualización en la base de datos
             db.query(
-                "UPDATE Horario SET horarioInicio = ?, horarioFinal = ? WHERE nombreDias = ?",
-                [updatedValues.horarioInicio, updatedValues.horarioFinal, day],
+                "UPDATE Horario SET horarioInicio = ?, horarioFinal = ?, estado = ? WHERE nombreDias = ?",
+                [updatedValues.horarioInicio, updatedValues.horarioFinal, updatedValues.estado, day],
                 (err, result) => {
                     if (err) {
                         console.error('Error al actualizar la clínica:', err);
