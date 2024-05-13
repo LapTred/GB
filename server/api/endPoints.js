@@ -21,6 +21,7 @@ router.get('/clinica', Clinica.getAll);
 router.put('/clinica/update', Clinica.update);
 router.get('/servicios', Consultorio.service);
 router.get('/consultorio-servicio/:id', Consultorio.serviceById)
+router.get('/consultorio/servicio/:id', Consultorio.serviceByRoom)
 
 
 ///////////////////////////////Usuarios//////////////////////////////
@@ -32,6 +33,7 @@ router.post('/usuario/create', Usuario.create);
 
 ///////////////////////////Citas/////////////////////////////////////
 router.get('/citas', Cita.getAll);
+router.get('/citas/horario', Cita.disponibilidad);
 
 ///////////////////////Pacientes&Expedientes////////////////////////
 router.get('/pacientes', Paciente.getAll);

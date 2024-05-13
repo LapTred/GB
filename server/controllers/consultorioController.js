@@ -238,4 +238,17 @@ Consultorio.serviceById = (req, res) => {
     });
 };
 
+//Obtener todos los consultorios que contengan un servicio solicitado
+Consultorio.serviceByRoom = (req, res) => {
+    const { id } = req.params;
+    db.query("SELECT c.nombreConsultorio, cs.id, cs.idServicio, cs.idConsultorio FROM ConsultorioServicio cs JOIN Consultorio c ON cs.idConsultorio = c.id WHERE cs.idServicio = ?", [id], (err, result) => {
+        if (err) {
+            console.error("Error al obtener los servicios del consultorio:", err);
+            res.status(500).json({ error: "Error al obtener los servicios del consultorio" });
+            return;
+        }
+        res.json(result);
+    });
+};
+
 module.exports = Consultorio;

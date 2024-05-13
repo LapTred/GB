@@ -9,7 +9,6 @@ Clinica.getAll = (req, res) => {
             res.status(500).json({ error: "Error al obtener el horario" });
             return;
         }
-        console.log(result);
         res.json(result);
     });
 }

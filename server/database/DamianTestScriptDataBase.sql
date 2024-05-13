@@ -39,8 +39,6 @@ CREATE TABLE IF NOT EXISTS Consultorio (
     Descripcion TEXT
 );
 
-select * from Servicio;
-
 -- 6 Crear la tabla ConsultorioServicio para saber que servicios tiene ese consultorio (para actualizar usa delete from where idConsultorio y después el put)
 CREATE TABLE IF NOT EXISTS ConsultorioServicio (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -79,7 +77,8 @@ CREATE TABLE IF NOT EXISTS Citas (
     idPaciente INT,
     idUsuario INT,
     Fecha DATE,
-    Hora TIME,
+    horaInicio TIME,
+    horaFinal TIME,
     Duracion INT,
     Estado ENUM('CANCELADA', 'PENDIENTE', 'FLEXIBLE', 'PROCESO', 'AGENDADA', 'COMPLETADA'),
     FOREIGN KEY (idConsultorio) REFERENCES Consultorio(id),
@@ -174,9 +173,9 @@ INSERT INTO Usuario (Nombre, nombreUsuario, Clave, Acceso) VALUES ('Veterinario1
 INSERT INTO Usuario (Nombre, nombreUsuario, Clave, Acceso) VALUES ('Recepcionista1', 'rec1', 'rec123', 'Recepcionista');
 
 -- Inserciones en la tabla Citas
-INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, Hora, Duracion, Estado) VALUES (1, 1, 2, '2024-05-10', '09:00:00', 30, 'AGENDADA');
-INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, Hora, Duracion, Estado) VALUES (2, 2, 3, '2024-05-12', '10:30:00', 60, 'PENDIENTE');
-INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, Hora, Duracion, Estado) VALUES (3, 3, 3, '2024-05-15', '14:00:00', 45, 'PENDIENTE');
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (1, 1, 2, '2024-05-10', '09:00:00', '09:30:00', 30, 'AGENDADA');
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (2, 2, 3, '2024-05-12', '10:30:00', '11:30:00', 60, 'PENDIENTE');
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (3, 3, 3, '2024-05-15', '14:00:00', '14:45:00', 45, 'PENDIENTE');
 
 -- Inserciones en la tabla ResumenCita
 INSERT INTO ResumenCita (idCita, idExpediente, idUsuario, Descripcion, Peso) VALUES (1, 1, 2, 'Consulta de rutina', 5.6);
