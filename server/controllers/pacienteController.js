@@ -24,4 +24,28 @@ Paciente.getAll = (req, res) => {
     });
 }
 
+Paciente.propietarios = (req, res) => {
+    db.query("Select * From Propietario", (err, result) => {
+        if (err) {
+            console.error("Error al obtener los propietarios: ", err);
+            res.status(500).json({ error: "Error al obtener los propietarios" });
+            return;
+        }
+        console.log(result);
+        res.json(result);
+    });
+}
+
+Paciente.pacientesById = (req, res) => {
+    const { id } = req.params;
+    db.query("SELECT * FROM Paciente WHERE idPropietario = ?", [id], (err, result) => {
+        if (err) {
+            console.error("Error al obtener los pacientes del propietario:", err);
+            res.status(500).json({ error: "Error al obtener los pacientes del propietario" });
+            return;
+        }
+        res.json(result);
+    });
+};
+
 module.exports = Paciente;

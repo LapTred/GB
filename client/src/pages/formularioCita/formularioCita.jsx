@@ -12,23 +12,39 @@ const Formulario = () => {
   const [horario, setHorario] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date()); // State for selected date, initialized with current date
   const [duracion, setDuracion] = useState(null);
-  const [consultorios, setConsultorios] = useState([]);
-
+  const [consultorios, setConsultorios] = useState([]);  
+  const [horasDisponibles, setHorasDisponibles] = useState([]);
+  const [consultoriosDisponibles, setConsultoriosDisponibles] = useState([]);
+  const [consultoriosFiltrados, setConsultoriosFiltrados] = useState([]); // Nuevo estado para consultorios filtrados por hora
+  const [selectedHora, setSelectedHora] = useState(null);
+  const [selectedConsultorio, setSelectedConsultorio] = useState(null);
+  const [propietarios, setPropietarios] = useState([]);
+  const [selectedPropietario, setSelectedPropietario] = useState(null);
+  
   useEffect(() => {
     fetchServices();
     fetchHorario();
+    fetchPropietarios();
   }, []);
 
-  useEffect(() => {
-    fetchHorarioCitas();
-  }, [selectedService, selectedDate, duracion, consultorios]);
 
   useEffect(() => {
     if (selectedService && selectedDate && duracion) {
-      const horarioSeleccionado = horarioFecha(selectedDate);
       fetchConsultorios();
     }
   }, [selectedService, selectedDate, duracion]);
+
+  useEffect(() => {
+    if (consultorios.length > 0 && selectedService && selectedDate && duracion) {
+      fetchHorarioCitas();
+    }
+  }, [consultorios, selectedService, selectedDate, duracion]);
+
+  useEffect(() => {
+    if (selectedHora) {
+      actualizarConsultoriosDisponibles(selectedHora);
+    }
+  }, [consultorios, selectedService, selectedDate, duracion, selectedHora]);
 
   const fetchServices = () => {
     fetch('http://localhost:3001/servicios')
@@ -70,42 +86,58 @@ const Formulario = () => {
   }; 
 
   const fetchHorarioCitas = () => {
-    if (selectedService && selectedDate && duracion && consultorios.length > 0) {
-      const horarioSeleccionado = horarioFecha(selectedDate);
-      const formData = {
-        fecha: selectedDate.toISOString(),
-        horarioInicio: horarioSeleccionado.horarioInicio,
-        horarioFinal: horarioSeleccionado.horarioFinal,
-        duracion: duracion.value,
-        consultorios: consultorios.map(consultorio => consultorio.value)
-      };
-  
-      // Elimina el cuerpo de la solicitud fetch
-      fetch(`http://localhost:3001/citas/horario?fecha=${formData.fecha}&horarioInicio=${formData.horarioInicio}&horarioFinal=${formData.horarioFinal}&duracion=${formData.duracion}&consultorios=${formData.consultorios.join(',')}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-      })
+    const horarioSeleccionado = horarioFecha(selectedDate);
+    if (!horarioSeleccionado) {
+      console.error('No se pudo determinar el horario seleccionado.');
+      return;
+    }
+
+    const formData = {
+      fecha: selectedDate.toISOString(),
+      horarioInicio: horarioSeleccionado.horarioInicio,
+      horarioFinal: horarioSeleccionado.horarioFinal,
+      duracion: duracion.value,
+      consultorios: consultorios.map(consultorio => consultorio.value)
+    };
+
+    console.log(selectedDate.toISOString());
+
+    fetch(`http://localhost:3001/citas/horario?fecha=${formData.fecha}&horarioInicio=${formData.horarioInicio}&horarioFinal=${formData.horarioFinal}&duracion=${formData.duracion}&consultorios=${formData.consultorios.join(',')}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
       .then(response => response.json())
       .then(data => {
-        // Manipular la respuesta del servidor aquí
-        console.log('Horas disponibles y consultorios:', data);
+        const availableHours = data.filter(item => item[2] === true); // Filtrar por disponibilidad true
+        const uniqueHours = [...new Set(availableHours.map(item => item[1]))]; // Extraer horas únicas
+        setHorasDisponibles(uniqueHours.map(hour => ({ value: hour, label: hour })));
+        setConsultoriosDisponibles(data);
       })
       .catch(error => console.error('Error fetching horario de citas:', error));
-    }
   };
-  
 
   const fetchConsultorios = () => {
-    // Replace ':id' with the actual id of the selected service
     fetch(`http://localhost:3001/consultorio/servicio/${selectedService.value}`)
       .then(response => response.json())
       .then(data => {
-        setConsultorios(data.map(consultorio => ({ value: consultorio.idConsultorio, label: consultorio.nombreConsultorio }))); 
-        console.log(consultorios);       
+        setConsultorios(data.map(consultorio => ({ value: consultorio.idConsultorio, label: consultorio.nombreConsultorio })));             
       })
       .catch(error => console.error('Error fetching consultorios:', error));
+  };
+
+  const fetchPropietarios = () => {
+    fetch('http://localhost:3001/propietarios')
+      .then(response => response.json())
+      .then(data => {
+        setPropietarios(data.map(propietario => ({ value: propietario.id, label: propietario.Nombre })));
+      })
+      .catch(error => console.error('Error fetching propietarios:', error));
+  };
+
+  const handlePropietarioChange = propietario => {
+    setSelectedPropietario(propietario);
   };
 
   const horarioFecha = (date) => {
@@ -124,6 +156,14 @@ const Formulario = () => {
     const dayOfWeek = date.getDay();
     const availableDay = horario.find(day => day.nombreDias === getDayName(dayOfWeek) && day.estado);
     return availableDay !== undefined;
+  };
+
+  const actualizarConsultoriosDisponibles = (hora) => {
+    const availableConsultorios = consultoriosDisponibles
+      .filter(item => item[1] === hora.value && item[2] === true)
+      .map(item => ({ value: item[0], label: `Consultorio ${item[0]}` }));
+    setSelectedConsultorio(null); // Reset selected consultorio
+    setConsultoriosFiltrados(availableConsultorios); // Actualizar el estado con los consultorios filtrados
   };
 
   const getDayName = (dayIndex) => {
@@ -160,23 +200,42 @@ const Formulario = () => {
                   { value: 15, label: '15 minutos' },
                   { value: 30, label: '30 minutos' },
                   { value: 45, label: '45 minutos' },
-                  { value: 60, label: '60 minutos' },
-                  { value: 90, label: '90 minutos' },
-                  { value: 120, label: '120 minutos' },
-                  { value: 'other', label: 'Seleccionar otra opción' }
+                  { value: 60, label: '1 hora' },
+                  { value: 90, label: '1 hora 30 minutos' },
+                  { value: 120, label: '2 horas' },
+                  { value: 150, label: '2 horas 30 minutos' },
+                  { value: 180, label: '3 horas' }
+                  
                 ]}
                 value={duracion}
                 onChange={setDuracion}
                 placeholder="Seleccione la duración..."
               />
-              {duracion && duracion.value === 'other' && (
-                <input
-                  type="number"
-                  min="1"
-                  placeholder="Ingrese los minutos"
-                  onChange={e => setDuracion({ value: parseInt(e.target.value), label: `${e.target.value} minutos` })}
-                />
+              <h2>Seleccionar Hora</h2>
+              <Select
+                options={horasDisponibles}
+                value={selectedHora}
+                onChange={setSelectedHora}
+                placeholder="Seleccione una hora..."
+              />
+               {selectedHora && (
+                <>
+                  <h2>Seleccionar Consultorio</h2>
+                  <Select
+                    options={consultoriosFiltrados}
+                    value={selectedConsultorio}
+                    onChange={setSelectedConsultorio}
+                    placeholder="Seleccione un consultorio..."
+                  />
+                </>
               )}
+              <h2>Seleccionar Propietario</h2>
+              <Select
+                options={propietarios}
+                value={selectedPropietario}
+                onChange={handlePropietarioChange}
+                placeholder="Seleccione un propietario..."
+              />
             </div>
             <div className="containerB">
               {/* Other elements related to the appointment form */}

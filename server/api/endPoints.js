@@ -37,5 +37,7 @@ router.get('/citas/horario', Cita.disponibilidad);
 
 ///////////////////////Pacientes&Expedientes////////////////////////
 router.get('/pacientes', Paciente.getAll);
+router.get('/propietarios', Paciente.propietarios);
+router.get('/paciente/:id', Paciente.pacientesById);
 
 module.exports = router;
