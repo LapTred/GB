@@ -32,74 +32,69 @@ Cita.getAll = (req, res) => {
         console.log(result);
         res.json(result);
     });
-}
+};
+
+const moment = require('moment');
+const util = require('util');
+
 Cita.disponibilidad = async (req, res) => {
     const { fecha, horarioInicio, horarioFinal, duracion, consultorios } = req.query;
 
     // Convertir fecha a formato YYYY-MM-DD
     const fechaFormato = new Date(fecha).toISOString().split('T')[0];
-  
-    // Convertir horarioInicio a objeto Time
-    const horarioInicioTime = new Date(`1970-01-01T${horarioInicio}`);
-
-    // Convertir horarioFinal a objeto Time
-    const horarioFinalTime = new Date(`1970-01-01T${horarioFinal}`);
+    
+    // Convertir horarioInicio y horarioFinal a objetos moment
+    const horarioInicioTime = moment(`1970-01-01T${horarioInicio}`);
+    const horarioFinalTime = moment(`1970-01-01T${horarioFinal}`);
 
     try {
         const disponibilidadPorConsultorio = [];
 
+        // Promisify db.query
+        const query = util.promisify(db.query).bind(db);
+        
         // Iterar sobre cada consultorio
         for (const consultorio of consultorios.split(',')) {
             const consultorioId = parseInt(consultorio);
 
             // Bucle para verificar la disponibilidad de cada hora en el rango de tiempo
-            for (let hora = horarioInicioTime; hora <= horarioFinalTime - duracion; hora += 15) {
+            for (let hora = horarioInicioTime.clone(); hora.isSameOrBefore(horarioFinalTime.clone().subtract(duracion, 'minutes')); hora.add(15, 'minutes')) {
                 let disponible = true;
 
-                // Obtener las partes de la hora
-                const horas = hora.getHours().toString().padStart(2, '0');
-                const minutos = hora.getMinutes().toString().padStart(2, '0');
-                const segundos = hora.getSeconds().toString().padStart(2, '0');
-
                 // Formatear la cadena del horario
-                const horarioFormateado = `${horas}:${minutos}:${segundos}`;
+                const horarioInicioFormat = hora.format('HH:mm:ss');
+                const horarioFinal = hora.clone().add(duracion, 'minutes');
+                const horarioFinalFormat = horarioFinal.format('HH:mm:ss');
 
                 // Consultar si existe alguna cita para el consultorio en la fecha, hora y duración especificadas
-                const result = await db.query(
-                    `SELECT COUNT(*) AS citas_programadas
-                    FROM Citas
-                    WHERE idConsultorio = ? 
-                    AND Fecha = ? 
-                    AND horaInicio <= ?
-                    AND horaFinal >= ADDTIME(?, SEC_TO_TIME(? * 60))`,
-                    [consultorioId, fechaFormato, horarioFormateado, horarioFormateado, duracion]
-                );                
-                console.log(consultorioId);
-                console.log(fechaFormato);
-                console.log(horarioFormateado);
-                console.log(duracion);
+                try {
+                    const result = await query(
+                        "SELECT COUNT(*) AS citas_programadas FROM Citas WHERE idConsultorio = ? AND Fecha = ? AND horaInicio <= ? AND horaFinal >= ?",
+                        [consultorioId, fechaFormato, horarioInicioFormat, horarioFinalFormat]
+                    );
 
-                if (Array.isArray(result) && result.length > 0) {
-                    // Acceder a la propiedad citas_programadas si existe
-                    if (result[0].citas_programadas > 0) {
+                    if (Array.isArray(result) && result.length > 0 && result[0].citas_programadas > 0) {
                         disponible = false;
                     }
-                } else {
-                    // Manejar el caso donde result no tiene resultados
-                    console.log('La consulta SQL no devolvió resultados.');
+
+                    // Guardar la disponibilidad para el consultorio actual y la hora actual
+                    disponibilidadPorConsultorio.push([consultorioId, horarioInicioFormat, disponible]);
+                } catch (err) {
+                    console.error("Error al obtener las citas: ", err);
+                    res.status(500).json({ error: "Error al obtener las citas" });
+                    return;
                 }
-                
-                // Guardar la disponibilidad para el consultorio actual y la hora actual
-                disponibilidadPorConsultorio.push([consultorioId, hora, disponible]);
             }
         }
+
+        console.log("resultado final");
+        console.log(disponibilidadPorConsultorio);
         res.json(disponibilidadPorConsultorio);
     } catch (error) {
         console.error('Error al verificar disponibilidad de citas:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-
   
 
 module.exports = Cita;
