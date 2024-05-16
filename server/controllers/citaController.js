@@ -95,6 +95,102 @@ Cita.disponibilidad = async (req, res) => {
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
-  
+
+// Método para crear una nueva cita
+
+Cita.create = (req, res) => {
+    try {
+        // Obtiene los datos del formulario
+        const { idServicio, fecha, duracion, hora, idConsultorio, propietario, telefono, paciente } = req.body;
+        
+        // Convertir fecha a formato YYYY-MM-DD
+        const fechaFormato = new Date(fecha).toISOString().split('T')[0];
+        
+
+        
+        const horarioFinalTime = moment(`1970-01-01T${hora}`);
+
+        const horarioFinal = horarioFinalTime.clone().add(duracion, 'minutes');
+        const horarioFinalFormat = horarioFinal.format('HH:mm:ss');
+
+        // Verifica si el propietario existe en la base de datos
+        let propietarioId;
+        db.query('SELECT id FROM Propietario WHERE Nombre = ?', [propietario], (error, results, fields) => {
+            if (error) {
+                console.error('Error al verificar el propietario:', error);
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+
+            // Si no existe, crea un nuevo propietario
+            if (results.length === 0) {
+                db.query('INSERT INTO Propietario (Nombre, Telefono) VALUES (?, ?)', [propietario, telefono], (error, results, fields) => {
+                    if (error) {
+                        console.error('Error al insertar el propietario:', error);
+                        return res.status(500).json({ error: 'Error interno del servidor' });
+                    }
+                    propietarioId = results.insertId;
+                    insertarCita(propietarioId);
+                });
+            } else {
+                propietarioId = results[0].id;
+                insertarCita(propietarioId);
+            }
+        });
+
+        // Función para insertar la cita una vez que se ha verificado el propietario
+        function insertarCita(propietarioId) {
+            // Verifica si el paciente existe para el propietario especificado
+            let pacienteId;
+            db.query('SELECT id FROM Paciente WHERE nombrePaciente = ? AND idPropietario = ?', [paciente, propietarioId], (error, results, fields) => {
+                if (error) {
+                    console.error('Error al verificar el paciente:', error);
+                    return res.status(500).json({ error: 'Error interno del servidor' });
+                }
+
+                // Si no existe, crea un nuevo paciente
+                if (results.length === 0) {
+                    db.query('INSERT INTO Paciente (nombrePaciente, idPropietario, Estado) VALUES (?, ?, "PENDIENTE")', [paciente, propietarioId], (error, results, fields) => {
+                        if (error) {
+                            console.error('Error al insertar el paciente:', error);
+                            return res.status(500).json({ error: 'Error interno del servidor' });
+                        }
+                        pacienteId = results.insertId;
+                        insertarCitaEnCitas(pacienteId);
+                    });
+                } else {
+                    pacienteId = results[0].id;
+                    insertarCitaEnCitas(pacienteId);
+                }
+            });
+        }
+
+        // Función para insertar la cita en la tabla Citas
+        function insertarCitaEnCitas(pacienteId) {
+            db.query('INSERT INTO Citas (idConsultorio, idPaciente, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (?, ?, ?, ?, ?, ?, "AGENDADA")', [idConsultorio, pacienteId, fechaFormato, hora, horarioFinalFormat, duracion], (error, results) => {
+                if (error) {
+                    console.error('Error al insertar la cita:', error);
+                    return res.status(500).json({ error: 'Error interno del servidor' });
+                }
+                const idCita = results.insertId; // Obtiene el ID de la cita recién creada
+                insertarCitaServicio(idServicio, idCita); // Llama a la función para insertar en CitaServicio
+            });
+        }
+
+        // Función para insertar en la tabla CitaServicio
+        function insertarCitaServicio(idServicio, idCita) {
+            db.query('INSERT INTO CitaServicio (idServicio, idCita) VALUES (?, ?)', [idServicio, idCita], (error) => {
+                if (error) {
+                    console.error('Error al insertar en CitaServicio:', error);
+                    return res.status(500).json({ error: 'Error interno del servidor' });
+                }
+                res.status(200).json({ message: 'Cita y CitaServicio creadas exitosamente' });
+            });
+        }
+    } catch (error) {
+        // Maneja el error
+        console.error('Error al crear la cita:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
 
 module.exports = Cita;

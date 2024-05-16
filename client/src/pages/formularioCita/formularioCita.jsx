@@ -5,8 +5,12 @@ import "./formularioCita.scss";
 import Select from 'react-select';
 import DatePicker from 'react-datepicker'; // Import DatePicker
 import 'react-datepicker/dist/react-datepicker.css'; // Import DatePicker CSS
+import Autosuggest from 'react-autosuggest';
+import { Link } from 'react-router-dom';
+import ErrorModal from "../../components/modal/ErrorModal"; // Asegúrate de tener la ruta correcta al componente
 
 const Formulario = () => {
+  const [modalOpen, setModalOpen] = useState(false);
   const [servicios, setServicios] = useState([]);
   const [selectedService, setSelectedService] = useState(null);
   const [horario, setHorario] = useState([]);
@@ -20,6 +24,17 @@ const Formulario = () => {
   const [selectedConsultorio, setSelectedConsultorio] = useState(null);
   const [propietarios, setPropietarios] = useState([]);
   const [selectedPropietario, setSelectedPropietario] = useState(null);
+  const [suggestions, setSuggestions] = useState([]); // Estado para las sugerencias de propietarios  
+  const [pacientes, setPacientes] = useState([]);
+  const [selectedPaciente, setSelectedPaciente] = useState(null); // Estado para el paciente seleccionado
+  const [showInput, setShowInput] = useState(false); // Estado para mostrar el input
+  const [showSelect, setShowSelect] = useState(true); // Estado para mostrar el Select
+  const [customHeader, setCustomHeader] = useState("");
+  const [customText, setCustomText] = useState("");
+  const [redirectToCitas, setRedirectToCitas] = useState(false); // Nuevo estado para la redirección
+  
+
+
   
   useEffect(() => {
     fetchServices();
@@ -100,8 +115,6 @@ const Formulario = () => {
       consultorios: consultorios.map(consultorio => consultorio.value)
     };
 
-    console.log(selectedDate.toISOString());
-
     fetch(`http://localhost:3001/citas/horario?fecha=${formData.fecha}&horarioInicio=${formData.horarioInicio}&horarioFinal=${formData.horarioFinal}&duracion=${formData.duracion}&consultorios=${formData.consultorios.join(',')}`, {
       method: 'GET',
       headers: {
@@ -131,14 +144,36 @@ const Formulario = () => {
     fetch('http://localhost:3001/propietarios')
       .then(response => response.json())
       .then(data => {
-        setPropietarios(data.map(propietario => ({ value: propietario.id, label: propietario.Nombre })));
+        setPropietarios(data); // Almacena todos los propietarios
       })
       .catch(error => console.error('Error fetching propietarios:', error));
   };
 
-  const handlePropietarioChange = propietario => {
-    setSelectedPropietario(propietario);
+  const handlePropietarioChange = (event, { newValue }) => {
+    setSelectedPropietario(newValue);
   };
+
+  const onSuggestionsFetchRequested = ({ value }) => {
+    setSuggestions(getSuggestions(value)); // Actualiza las sugerencias basadas en el valor del input
+  };
+
+  const onSuggestionsClearRequested = () => {
+    setSuggestions([]); // Borra las sugerencias cuando el input está vacío
+  };
+  const getSuggestions = (value) => {
+    console.log(value);
+    const inputValue = String(value).trim().toLowerCase();
+    const inputLength = inputValue.length;
+    return inputLength === 0 ? [] : propietarios.filter(propietario =>
+      propietario.Nombre.toLowerCase().slice(0, inputLength) === inputValue
+    );
+  };
+
+  const renderSuggestion = (suggestion) => (
+    <div>
+      {suggestion.Nombre}
+    </div>
+  );
 
   const horarioFecha = (date) => {
     const dayOfWeek = date.getDay();
@@ -171,6 +206,109 @@ const Formulario = () => {
     return days[dayIndex];
   };
 
+  const handleSearch = () => {
+    if (selectedPropietario) {
+      const propietarioEncontrado = propietarios.find(propietario => propietario.Nombre.toLowerCase() === selectedPropietario.toLowerCase());
+      if (propietarioEncontrado) {
+        document.getElementById('telefonoInput').disabled = true; // Bloquear el campo de teléfono
+        document.getElementById('telefonoInput').value = propietarioEncontrado.Telefono; // Establecer el valor del teléfono del propietario
+      }
+      else {
+        console.error('El propietario ingresado no existe.');
+        console.log("no encontrado");
+        document.getElementById('telefonoInput').disabled = false;
+        document.getElementById('telefonoInput').value = "";
+      }
+      fetch(`http://localhost:3001/propietario/pacientes?propietario=${selectedPropietario}`)
+        .then(response => response.json())
+        .then(data => {
+          setPacientes(data);
+        })
+        .catch(error => console.error('Error fetching pacientes:', error));
+    } else {
+      console.error('Debe seleccionar un propietario antes de buscar pacientes.');
+    }
+  };
+  
+
+  const handleAddButtonClick = () => {
+    setShowInput(true); // Mostrar el input cuando se hace clic en el botón "Añadir"
+    setShowSelect(false); // Ocultar el Select cuando se hace clic en el botón "Añadir"
+  };
+
+  const handleBackButtonClick = () => {
+    setShowInput(false); // Ocultar el input cuando se hace clic en el botón de retroceso
+    setShowSelect(true); // Mostrar el Select cuando se hace clic en el botón de retroceso
+  };
+
+  const handleGuardarClick = () => {
+    if (
+      selectedService &&
+      selectedDate &&
+      duracion &&
+      selectedHora &&
+      selectedConsultorio &&
+      selectedPropietario &&
+      document.getElementById('telefonoInput').value &&
+      selectedPaciente // Verificar si se ha seleccionado un paciente
+    ) {
+      console.log(selectedDate);
+      const formData = {
+        idServicio: selectedService.value,
+        fecha: selectedDate.toISOString(),
+        duracion: duracion.value,
+        hora: selectedHora.value,
+        idConsultorio: selectedConsultorio.value,
+        propietario: selectedPropietario,
+        telefono: document.getElementById('telefonoInput').value,
+        paciente: selectedPaciente.label 
+      };
+      console.log(formData.fecha);
+
+      fetch('http://localhost:3001/cita/create', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al crear la cita');
+          }
+          console.log("Cita creada con éxito");
+          setCustomHeader("Cita para " + formData.paciente +  " creada con éxito");
+          setCustomText("Clic en cerrar para continuar");
+          setModalOpen(true);
+                    
+          setRedirectToCitas(true); // Habilitar redirección
+        })
+        .catch(error => {
+          console.error('Error al crear la cita:', error);
+          // Abre el modal de error
+          
+          setCustomHeader("Error al guardar la cita");
+          setCustomText("Por favor complete todos los campos o verifique los datos antes de crear una cita.");
+          setModalOpen(true);
+          
+        });
+    } else {   
+      setCustomHeader("Error al guardar la cita");
+      setCustomText("Por favor complete todos los campos o verifique los datos antes de crear una cita.");
+      setModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    // Redirigir a /citas solo si redirectToCitas es verdadero
+    if (redirectToCitas) {
+      window.location.href = '/citas';
+    }
+  };
+
+  
+
   return (
     <div className="formulario-cita">
       <Sidebar />
@@ -179,14 +317,14 @@ const Formulario = () => {
         <div className="formularioContainer">
           <div className="formulario">
             <div className="containerA">
-              <h2>Seleccionar Servicio</h2>
+              <h2>Servicio</h2>
               <Select
                 options={servicios}
                 value={selectedService}
                 onChange={setSelectedService}
                 placeholder="Seleccione un servicio..."
               />
-              <h2>Seleccionar Fecha</h2>
+              <h2>Fecha</h2>
               <DatePicker
                 className='datePickerCitas'
                 selected={selectedDate}
@@ -194,7 +332,7 @@ const Formulario = () => {
                 dateFormat="dd/MM/yyyy" // Date format
                 filterDate={isDateAvailable} // Function to filter available dates
               />
-              <h2>Seleccionar Duración</h2>
+              <h2>Duración</h2>
               <Select
                 options={[
                   { value: 15, label: '15 minutos' },
@@ -211,7 +349,7 @@ const Formulario = () => {
                 onChange={setDuracion}
                 placeholder="Seleccione la duración..."
               />
-              <h2>Seleccionar Hora</h2>
+              <h2>Hora</h2>
               <Select
                 options={horasDisponibles}
                 value={selectedHora}
@@ -220,7 +358,7 @@ const Formulario = () => {
               />
                {selectedHora && (
                 <>
-                  <h2>Seleccionar Consultorio</h2>
+                  <h2>Consultorio</h2>
                   <Select
                     options={consultoriosFiltrados}
                     value={selectedConsultorio}
@@ -229,17 +367,89 @@ const Formulario = () => {
                   />
                 </>
               )}
-              <h2>Seleccionar Propietario</h2>
-              <Select
-                options={propietarios}
-                value={selectedPropietario}
-                onChange={handlePropietarioChange}
-                placeholder="Seleccione un propietario..."
-              />
+              
             </div>
             <div className="containerB">
-              {/* Other elements related to the appointment form */}
-            </div>
+              <h2>Propietario</h2>
+              <div className="containerBfirst">
+                <Autosuggest
+                  suggestions={suggestions}
+                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={onSuggestionsClearRequested}
+                  getSuggestionValue={(suggestion) => suggestion.Nombre}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={{
+                    placeholder: 'Ingrese un propietario',
+                    value: selectedPropietario || '',
+                    onChange: handlePropietarioChange,
+                    className: 'autosuggest-input' // Añade la clase para el input
+                  }}
+                  className="autosuggest-container" // Añade la clase para el contenedor              
+                  highlightFirstSuggestion={true} // Resaltar la primera sugerencia por defecto
+                />
+                <div>                  
+                  <button 
+                  style={{ backgroundColor: '#f2f2f2', color: 'black', border: '0.2vw solid #f2f2f2', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}                  
+                  className='containerBfirstButton' onClick={handleSearch}>Buscar</button>
+                </div>
+              </div>
+              <h2>Teléfono</h2>
+              <div className="containerBsecondOne">                
+                <input id="telefonoInput" className='inputPaciente' type="text" placeholder="Ingrese un número..." />             
+              </div>
+              <h2>Paciente</h2>
+              <div className="containerBsecond">
+              {showInput ? (
+                  <>
+                    <input
+                      className='inputPaciente'
+                      type="text"
+                      placeholder="Ingrese un paciente..."
+                      value={selectedPaciente ? selectedPaciente.label : ''}
+                      onChange={e => setSelectedPaciente({ value: '', label: e.target.value })}
+                    />
+                    <button 
+                    className='containerBsecondButton' 
+                    style={{ backgroundColor: '#f2f2f2', color: 'black', border: '0.2vw solid #f2f2f2', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+
+                    onClick={handleBackButtonClick}>Retroceder</button>
+                  </>
+                ) : showSelect ? (
+                  <div className="containerCitaPaciente">
+                    <Select
+                      options={pacientes.map(paciente => ({ value: paciente.id, label: paciente.nombrePaciente }))}
+                      value={selectedPaciente}
+                      onChange={setSelectedPaciente}
+                      placeholder="Seleccione un paciente..."
+                    />
+                    <button 
+                    className='containerBsecondButton' 
+                    style={{ backgroundColor: '#f2f2f2', color: 'black', border: '0.2vw solid #f2f2f2', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+
+                    onClick={handleAddButtonClick}>Añadir</button>
+                  </div>
+                ) : null}
+                
+              </div>
+              <div className="containerBsecond">
+              <Link to="/citas" style={{ textDecoration: 'none' }}>
+                <button                
+                  className='containerBsecondButtons'
+                  style={{ backgroundColor: '#f2f2f2', color: 'black', marginTop:'1.5vw',marginRight: '0.5vw', border: '0.2vw solid #f2f2f2', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+                >
+                  Cancelar
+                </button>
+              </Link>
+                <button
+                  className='containerBsecondButtons'
+                  style={{ backgroundColor: '#d8f3dc', color: 'black', marginTop:'1.5vw',marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+                  onClick={handleGuardarClick}
+                >
+                  Crear
+                </button>
+                <ErrorModal isOpen={modalOpen} onClose={handleCloseModal} header={customHeader} text={customText} />
+              </div>
+            </div>            
           </div>
         </div>
       </div>

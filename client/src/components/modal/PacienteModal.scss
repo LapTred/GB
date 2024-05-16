@@ -1,0 +1,52 @@
+.ModalPaciente{
+    text-align: center;
+    width: 90%;
+    .ModalPacienteDato{
+        display: flex;
+        justify-content:space-between;
+        font-size: 1.2vw;
+    }
+    .patientTable {
+        width: 100%;
+        border-collapse: separate; // Permite aplicar bordes redondeados
+        border-spacing: 0; // Elimina el espacio entre celdas
+        border: 1px solid #ccc; // Borde de la tabla
+        border-radius: 10px; // Borde redondeado de la tabla
+        overflow: hidden; // Asegura que las esquinas redondeadas se apliquen correctamente           
+
+        .tableHeader, .tableData {
+            padding: 0.5rem;
+            text-align: center; // Centramos los datos en la tabla
+            
+            border: 1px solid #ccc;
+            .containerButtons{
+                display: flex;
+                justify-content: space-evenly;
+                .buttonPatients{
+                    display: flex;
+                    .iconPatient{                            
+                        font-size: 1.5vw;
+                    }
+                }                
+            }
+        }
+        
+        .tableHeader {
+            font-weight: bold;
+            background-color: #f2f2f2;
+        }
+         // Bordes redondeados para las esquinas de la tabla
+         thead tr:first-child th:first-child {
+            border-top-left-radius: 10px;
+        }
+        thead tr:first-child th:last-child {
+            border-top-right-radius: 10px;
+        }
+        tbody tr:last-child td:first-child {
+            border-bottom-left-radius: 10px;
+        }
+        tbody tr:last-child td:last-child {
+            border-bottom-right-radius: 10px;
+        }
+    }
+}

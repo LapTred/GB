@@ -10,24 +10,95 @@
         background-color: #F9F9F9; //Need to Fix 
         .formulario{          
           margin-top: 4vh;
-          width: 85%; 
-          align-items: center;     
+          width: 85%;      
           background-color: white;
           display: flex;
-          flex-direction: column; 
           border-radius: 1vw;  
           margin-bottom: 4vh;
+          justify-content: center;
+          gap:2vw;
+          
+          overflow-y: auto;
           .containerA{
             display: flex;
             flex-direction: column;
             padding: 2vw;
             gap: 1vw;
+            h2{
+              display:flex;
+              justify-content: center;
+            }
+          }
+          .containerB{
+            display: flex;
+            flex-direction: column;
+            padding: 2vw;
+            gap: 1vw;
+            .containerBfirst{
+              display:flex;              
+              justify-content: space-between;
+              gap:1vw;
+              .containerBfirstButton{
+                display: flex;
+                align-items: center;
+                height: 2.2vw;
+                padding: 0.2vw;
+                font-size: 1.2vw;
+              }
+            }
+            .containerBsecondOne{
+              .inputPaciente{
+                width: 100%;
+                padding: 0.2vw;    
+                padding-left: 0.5vw;  
+                border: 1px solid #ccc;
+                font-size: 1vw;  
+                border-radius: 0.3vw;
+              }
+            }
+
+            .containerBsecond{
+              display:flex;
+              justify-content: space-between;
+              gap:1vw;
+              .inputPaciente{
+                padding: 0.2vw;    
+                padding-left: 0.5vw;  
+                border: 1px solid #ccc;
+                font-size: 1vw;  
+                border-radius: 0.3vw;
+              }
+              .containerCitaPaciente{
+                width: 100%;
+                display:flex;
+                justify-content: space-between;
+                gap:1vw;
+              }
+              .containerBsecondButton{
+                display: flex;
+                align-items: center;
+                height: 2.2vw;
+                font-size: 1.1vw;
+              }
+              .containerBsecondButtons{
+                           
+                font-weight: 600;
+                font-size:0.9vw;
+                padding: 0.5vw;
+              }
+            }
             
+            h2{
+              display:flex;
+              justify-content: center;
+            }
           }
           .datePickerCitas{
             display: flex;
             font-size: 1.2vw;
-            text-align: center;
+            text-align: center;            
+            border: 1px solid #ccc;            
+            border-radius: 0.3vw;
           }
         }    
       }    
@@ -35,5 +106,39 @@
 }
     
     
-    
-    
+/* Estilos para el contenedor del autosuggest */
+.autosuggest-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Estilos para el input del autosuggest */
+.autosuggest-input {
+  padding: 0.2vw;    
+  padding-left: 0.5vw;  
+  border: 1px solid #ccc;
+  font-size: 1vw;  
+  border-radius: 0.3vw;
+}
+
+/* Estilos personalizados para las sugerencias */
+.react-autosuggest__suggestions-container {
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.react-autosuggest__suggestions-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.react-autosuggest__suggestion {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.react-autosuggest__suggestion--highlighted {
+  background-color: #f0f0f0;
+}

@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import ErrorModal from "../../components/modal/ErrorModal"; 
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const AppointmentComponent = () => {
     const [citas, setCitas] = useState([]);
@@ -12,6 +15,13 @@ const AppointmentComponent = () => {
     const [showFilterModal, setShowFilterModal] = useState(false);
     const [filteredConsultorio, setFilteredConsultorio] = useState('');
     const [filteredEstado, setFilteredEstado] = useState('');
+    const [searchTerm, setSearchTerm] = useState(''); // Término de búsqueda
+    
+    const [selectedCitaIndex, setSelectedCitaIndex] = useState(null);    
+    const [modalOpen, setModalOpen] = useState(false);    
+    const [selectedCitaModalOpen, setSelectedCitaModalOpen] = useState(false);
+    const [customHeader, setCustomHeader] = useState("");
+    const [customText, setCustomText] = useState("");
 
     useEffect(() => {
         fetch('http://localhost:3001/citas')
@@ -53,32 +63,94 @@ const AppointmentComponent = () => {
         setShowFilterModal(false);
     };
 
-    // Función para manejar el cambio en la selección del consultorio
-    const handleConsultorioChange = (consultorio) => {
-        setFilteredConsultorio(consultorio);
+    const handleCloseModal = () => {
+        setModalOpen(false);  
+        setSelectedCitaModalOpen(false);      
     };
 
-    // Función para manejar el cambio en la selección del estado
-    const handleEstadoChange = (estado) => {
-        setFilteredEstado(estado);
+    const handleToggleOptions = (index) => {
+        setSelectedCitaIndex(index === selectedCitaIndex ? null : index);
+    };
+
+   // Función para manejar el cambio en la selección del consultorio
+const handleConsultorioChange = (consultorio) => {
+    setFilteredConsultorio(consultorio);
+};
+
+// Función para manejar el cambio en la selección del estado
+const handleEstadoChange = (estado) => {
+    setFilteredEstado(estado);
+};
+
+    const handleViewCita = () => {
+        //Manejar logica para vista de cita
     };
 
     // Función para formatear la fecha en formato DD--MM--AA
     const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear().toString();
-    return `${day}-${month}-${year}`;
+        const date = new Date(dateString);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
+        return `${day}-${month}-${year}`;
+    };
+
+    // Función para manejar el cambio en el campo de búsqueda
+    const handleSearchChange = (event) => {
+        setSearchTerm(event.target.value);
+    };
+
+    // Filtrar citas en función del término de búsqueda, consultorio y estado
+    const filteredCitas = citas
+    .filter(cita =>
+        (cita.nombre_paciente.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        cita.nombre_dueño.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (!filteredConsultorio || cita.nombre_consultorio === filteredConsultorio) &&
+        (!filteredEstado || cita.estado === filteredEstado)
+    );
+
+    const handleDeleteCita = (id, nombrePaciente) => {
+        // const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este paciente?");
+    
+        // if (confirmDelete) {
+        //     fetch(`http://localhost:3001/paciente/delete/${id}`, {
+        //         method: 'PUT' // Cambiar a PUT
+        //     })
+        //     .then(response => {
+        //         if (!response.ok) {
+        //             throw new Error('Error al eliminar el paciente');
+        //         }                
+        //         setCustomHeader(`El paciente ${nombrePaciente} ha sido eliminado.`);
+        //         setCustomText("Clic en cerrar para continuar");                
+        //         setModalOpen(true);
+
+        //         // Actualizar la lista de pacientes después de eliminar uno
+        //         setPacientes(prevPacientes => prevPacientes.filter(paciente => paciente.id !== id));
+                
+        //     })
+        //     .catch(error => {
+        //         console.error('Error:', error);
+        //     });
+        // }
     };
 
     return (
         <div className="appointmentComponent">
             <div className="containerT">
-                <h2>Total de citas ({citas.length})</h2>
+                <h2>Total de citas ({filteredCitas.length})</h2>
                 <div className="iconContainer">
+                    <div className="iconContainerSub">
+                        <input 
+                            type="text"
+                            placeholder="Buscar por paciente o dueño"
+                            value={searchTerm}
+                            onChange={handleSearchChange}
+                            className="searchInput"
+                        />                    
+                        <SearchIcon className="searchIcon" />
+                    </div>                    
                     <FilterAltIcon className="filterIcon" onClick={handleFilterButtonClick} />
-                    <SearchIcon className="searchIcon" />
+                    
                     <Link to="/cita/nueva">
                         <AddCircleOutlineIcon className="sumIcon" />
                     </Link>
@@ -86,31 +158,55 @@ const AppointmentComponent = () => {
             </div>
             <div className="containerB">
                 <h3>Citas</h3>
-                <table>
+                <table className="citasTable">
                     <thead>
                         <tr>
-                            <th>Nombre Paciente</th>
-                            <th>Nombre Dueño</th>
-                            <th>Nombre Consultorio</th>
-                            <th>Estado</th>
-                            <th>Fecha</th>
-                            <th>Hora</th>
-                            <th>Opciones</th> {/* Nueva columna para las opciones */}
+                            <th className="tableHeader">Nombre Paciente</th>
+                            <th className="tableHeader">Nombre Dueño</th>
+                            <th className="tableHeader">Nombre Consultorio</th>
+                            <th className="tableHeader">Estado</th>
+                            <th className="tableHeader">Fecha</th>
+                            <th className="tableHeader">Hora</th>
+                            <th className="tableHeader">Opciones</th> {/* Nueva columna para las opciones */}
                         </tr>
                     </thead>
                     <tbody>
-                        {citas
+                        {filteredCitas
                             .filter(cita => (!filteredConsultorio || cita.nombre_consultorio === filteredConsultorio) && (!filteredEstado || cita.estado === filteredEstado))
                             .slice(startIndex, endIndex)
-                            .map(cita => (
+                            .map((cita, index) => (
                                 <tr key={cita.id_cita}>
-                                    <td>{cita.nombre_paciente}</td>
-                                    <td>{cita.nombre_dueño}</td>
-                                    <td>{cita.nombre_consultorio}</td>
-                                    <td>{cita.estado}</td>
-                                    <td>{formatDate(cita.fecha)}</td>
-                                    <td>{cita.hora}</td>
-                                    <td>...</td> {/* Celda para las opciones, se pueden añadir botones u otros elementos según sea necesario */}
+                                    <td className="tableData">{cita.nombre_paciente}</td>
+                                    <td className="tableData">{cita.nombre_dueño}</td>
+                                    <td className="tableData">{cita.nombre_consultorio}</td>
+                                    <td className="tableData">{cita.estado}</td>
+                                    <td className="tableData">{formatDate(cita.fecha)}</td>
+                                    <td className="tableData">{cita.hora}</td>
+                                    <td className="tableData">
+                                        {selectedCitaIndex === index ? (
+                                            <>
+                                                <div className="containerButtons">                                                
+                                                    <button 
+                                                        style={{ backgroundColor: '#ce796b', color: 'black', border: '0.2vw solid #ce796b', padding: '0.2vw 0.2vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+                                                        className="buttonPatients" 
+                                                        onClick={() => handleDeleteCita(cita.id_cita, cita.nombre_dueño)}>
+                                                        <DeleteIcon className="iconPatient" />
+                                                    </button>
+                                                    <button 
+                                                            style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '0.2vw 0.2vw', borderRadius: '0.5vw', cursor: 'pointer' }} 
+                                                            className="buttonPatients" 
+                                                            onClick={() => handleViewCita()}>
+                                                            <VisibilityIcon className="iconPatient" />
+                                                    </button>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <button
+                                                style={{ backgroundColor: '#f2f2f2', color: 'black', marginLeft: '0vw', border: '0.2vw solid #f2f2f2', padding: '0.2vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}     
+                                                className="buttonPatients"
+                                                onClick={() => handleToggleOptions(index)}>...</button>
+                                        )}
+                                    </td> {/* Celda para las opciones, se pueden añadir botones u otros elementos según sea necesario */}
                                 </tr>
                             ))}
                     </tbody>
@@ -124,7 +220,7 @@ const AppointmentComponent = () => {
                     <span>Página {currentPage}</span>
                     <button 
                         style={{ backgroundColor: 'lightgray', color: 'black', marginLeft: '1vw', border: '0.1vw solid lightgray', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}
-                        onClick={goToNextPage} disabled={endIndex >= citas.length}>Siguiente
+                        onClick={goToNextPage} disabled={endIndex >= filteredCitas.length}>Siguiente
                     </button>
                 </div>
             </div>
@@ -133,26 +229,32 @@ const AppointmentComponent = () => {
                 <div className="filterModal">
                     <div className="modalContent">
                         {/* Contenido del modal */}
-                        <span className="closeButton" onClick={handleCloseFilterModal}>×</span>
-                        <h2>Filtro</h2>
-                        {/* Campo de selección para el nombre del consultorio */}
-                        <label htmlFor="consultorio">Seleccionar Consultorio:</label>
-                        <select id="consultorio" onChange={(e) => handleConsultorioChange(e.target.value)}>
-                            <option value="">Todos los consultorios</option>
-                            {/* Mapea sobre los consultorios únicos */}
-                            {Array.from(new Set(citas.map(cita => cita.nombre_consultorio))).map(consultorio => (
-                                <option key={consultorio} value={consultorio}>{consultorio}</option>
-                            ))}
-                        </select>
-                        {/* Campo de selección para el estado de la cita */}
-                        <label htmlFor="estado">Seleccionar Estado:</label>
-                        <select id="estado" onChange={(e) => handleEstadoChange(e.target.value)}>
-                            <option value="">Todos los estados</option>
-                            {/* Mapea sobre los estados únicos */}
-                            {['PENDIENTE', 'FLEXIBLE', 'PROCESO', 'AGENDADA', 'COMPLETADA'].map(estado => (
-                                <option key={estado} value={estado}>{estado}</option>
-                            ))}
-                        </select>
+                        <div className="modalContentFiltro">
+                            <h2>Filtro</h2>                        
+                            <span className="closeButtonCita" onClick={handleCloseFilterModal}>×</span> 
+                        </div>
+                        <div className="modalContentInfo">
+                            {/* Campo de selección para el nombre del consultorio */}
+                            <label htmlFor="consultorio">Seleccionar Consultorio:</label>
+                            <select className="SelectModal" id="consultorio" onChange={(e) => handleConsultorioChange(e.target.value)} value={filteredConsultorio}>
+                                <option value="">Todos los consultorios</option>
+                                {/* Mapea sobre los consultorios únicos */}
+                                {Array.from(new Set(citas.map(cita => cita.nombre_consultorio))).map(consultorio => (
+                                    <option key={consultorio} value={consultorio}>{consultorio}</option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="modalContentInfo">
+                            {/* Campo de selección para el estado de la cita */}
+                            <label htmlFor="estado">Seleccionar Estado:</label>
+                            <select className="SelectModal" id="estado" onChange={(e) => handleEstadoChange(e.target.value)} value={filteredEstado}>
+                                <option value="">Todos los estados</option>
+                                {/* Mapea sobre los estados únicos */}
+                                {['FLEXIBLE', 'AGENDADA', 'COMPLETADA'].map(estado => (
+                                    <option key={estado} value={estado}>{estado}</option>
+                                ))}
+                            </select>    
+                        </div>                      
                     </div>
                 </div>
             )}

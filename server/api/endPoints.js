@@ -34,10 +34,14 @@ router.post('/usuario/create', Usuario.create);
 ///////////////////////////Citas/////////////////////////////////////
 router.get('/citas', Cita.getAll);
 router.get('/citas/horario', Cita.disponibilidad);
+router.post('/cita/create', Cita.create);
 
 ///////////////////////Pacientes&Expedientes////////////////////////
 router.get('/pacientes', Paciente.getAll);
 router.get('/propietarios', Paciente.propietarios);
-router.get('/paciente/:id', Paciente.pacientesById);
+router.get('/propietario/pacientes', Paciente.pacientesByPropietario);
+router.put('/paciente/delete/:id', Paciente.delete);
+router.get('/paciente/:id', Paciente.getById);
+
 
 module.exports = router;

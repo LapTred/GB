@@ -19,25 +19,44 @@
         }
 
         .iconContainer {
+            width: 50%;
             display: flex;
             align-items: center;
             gap: 3vw;
 
             .filterIcon {
                 font-size: 2.5vw;
-                border: 1px solid #CCCCCC;
-                border-radius: 0.5vw;
+                color:black;
             }
+            .iconContainerSub{
+                width: 100%;
+                display: flex;
+                height: 100%;
+                .searchIcon {
+                    font-size: 2.5vw;
+                    color: gray;   
+                }
+    
+                .searchInput{
+                    display: flex;
+                    width: 100%;
+                    height: 100%;
+                    border: none;
+                    outline: none;
+                    padding: 0.5rem;
+                    font-size: 1rem;
+                    border-bottom: 1px solid lightgray; // Opcional, para un borde inferior
+                    background-color: transparent;
+                }
+    
 
-            .searchIcon {
-                font-size: 2.5vw;
-                border: 1px solid #CCCCCC;
-                border-radius: 0.5vw;
+
             }
-
+           
             .sumIcon {
                 display: flex;
                 font-size: 2.5vw;
+                color: black;   
                 
             }
         }
@@ -49,20 +68,62 @@
         border-radius: 1vw;
         background-color: white;
 
-        table {
+        .citasTable {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
+            border-collapse: separate; // Permite aplicar bordes redondeados
+            border-spacing: 0; // Elimina el espacio entre celdas
+            border: 1px solid #ccc; // Borde de la tabla
+            border-radius: 10px; // Borde redondeado de la tabla
+            overflow: hidden; // Asegura que las esquinas redondeadas se apliquen correctamente           
 
-            th, td {
-                border: 1px solid #ccc;
+            .tableHeader, .tableData {
                 padding: 0.5rem;
-                text-align: left;
+                text-align: center; // Centramos los datos en la tabla
+                
+                border: 1px solid #ccc;
+                .containerButtons{
+                    display: flex;
+                    justify-content: space-evenly;
+                    .buttonPatients{
+                        display: flex;
+                        .iconPatient{                            
+                            font-size: 1.5vw;
+                        }
+                    }
+                    
+                }
             }
-
-            th {
+            
+            .tableHeader {
+                font-weight: bold;
                 background-color: #f2f2f2;
             }
+             // Bordes redondeados para las esquinas de la tabla
+             thead tr:first-child th:first-child {
+                border-top-left-radius: 10px;
+            }
+            thead tr:first-child th:last-child {
+                border-top-right-radius: 10px;
+            }
+            tbody tr:last-child td:first-child {
+                border-bottom-left-radius: 10px;
+            }
+            tbody tr:last-child td:last-child {
+                border-bottom-right-radius: 10px;
+            }
+        }
+        
+        .pages{
+            display: flex;
+            justify-content: end;
+            span{
+                display: flex;
+                align-items: center;
+            }
+            
+        }
+        .pages button{
+            margin: 1vw;
         }
     }
 
@@ -77,6 +138,8 @@
         z-index: 1000; // Asegura que el modal esté por encima del resto del contenido
 
         .modalContent {
+            display:flex;
+            flex-direction: column;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -85,14 +148,36 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            h2{
+                display: flex;
+                justify-content: center;
+                font-size: 2.5vw;
+            }
+            .SelectModal{
+                font-size: 1.5vw;
+                text-align: center;
+            }
+            .modalContentInfo{
+                padding: 1vw;
+                display: flex;
+                gap:2vw;
+                justify-content: space-between;
+                font-size: 1.5vw;
+            }
+            .modalContentFiltro{
+                display: flex;                
+                margin-left: 1vw;
+                gap:2vw;
+                justify-content: space-between;
+                font-size: 1.5vw;
+                
+            }
 
             // Estilos para el botón de cerrar
-            .closeButton {
-                position: absolute;
-                top: 10px;
-                right: 10px;
+            .closeButtonCita {
+                display: flex;
                 cursor: pointer;
-                font-size: 20px;
+                font-size: 50px;
             }
         }
     }
