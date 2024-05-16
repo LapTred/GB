@@ -101,7 +101,7 @@ const handleEstadoChange = (estado) => {
     };
 
     // Filtrar citas en función del término de búsqueda, consultorio y estado
-    const filteredCitas = citas
+    const filteredCitas = citas 
     .filter(cita =>
         (cita.nombre_paciente.toLowerCase().includes(searchTerm.toLowerCase()) ||
         cita.nombre_dueño.toLowerCase().includes(searchTerm.toLowerCase())) &&
@@ -109,29 +109,29 @@ const handleEstadoChange = (estado) => {
         (!filteredEstado || cita.estado === filteredEstado)
     );
 
-    const handleDeleteCita = (id, nombrePaciente) => {
-        // const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este paciente?");
-    
-        // if (confirmDelete) {
-        //     fetch(`http://localhost:3001/paciente/delete/${id}`, {
-        //         method: 'PUT' // Cambiar a PUT
-        //     })
-        //     .then(response => {
-        //         if (!response.ok) {
-        //             throw new Error('Error al eliminar el paciente');
-        //         }                
-        //         setCustomHeader(`El paciente ${nombrePaciente} ha sido eliminado.`);
-        //         setCustomText("Clic en cerrar para continuar");                
-        //         setModalOpen(true);
+    const handleDeleteCita = (id_cita, nombre_dueño) => {
+        const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta cita?");
+        console.log(citas);
+        if (confirmDelete) {
+            fetch(`http://localhost:3001/cita/delete/${id_cita}`, {
+                method: 'PUT' // Cambiar a PUT
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al eliminar la cita');
+                }                
+                setCustomHeader(`La cita a nombre de ${nombre_dueño} ha sido eliminada.`);
+                setCustomText("Clic en cerrar para continuar");                
+                setModalOpen(true);
 
-        //         // Actualizar la lista de pacientes después de eliminar uno
-        //         setPacientes(prevPacientes => prevPacientes.filter(paciente => paciente.id !== id));
+                // Actualizar la lista de pacientes después de eliminar uno
+                setCitas(prevCitas => prevCitas.filter(cita => cita.id_cita !== id_cita));
                 
-        //     })
-        //     .catch(error => {
-        //         console.error('Error:', error);
-        //     });
-        // }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     };
 
     return (
@@ -157,6 +157,8 @@ const handleEstadoChange = (estado) => {
                 </div>
             </div>
             <div className="containerB">
+            {filteredCitas.length > 0 ? (
+                    <>
                 <h3>Citas</h3>
                 <table className="citasTable">
                     <thead>
@@ -223,7 +225,12 @@ const handleEstadoChange = (estado) => {
                         onClick={goToNextPage} disabled={endIndex >= filteredCitas.length}>Siguiente
                     </button>
                 </div>
+                </>
+                ) : (
+                    <h3>No se encontraron citas</h3>
+                )}
             </div>
+            
             {/* Modal de filtro */}
             {showFilterModal && (
                 <div className="filterModal">
@@ -235,7 +242,7 @@ const handleEstadoChange = (estado) => {
                         </div>
                         <div className="modalContentInfo">
                             {/* Campo de selección para el nombre del consultorio */}
-                            <label htmlFor="consultorio">Seleccionar Consultorio:</label>
+                            <label htmlFor="consultorio">Consultorio:</label>
                             <select className="SelectModal" id="consultorio" onChange={(e) => handleConsultorioChange(e.target.value)} value={filteredConsultorio}>
                                 <option value="">Todos los consultorios</option>
                                 {/* Mapea sobre los consultorios únicos */}
@@ -246,7 +253,7 @@ const handleEstadoChange = (estado) => {
                         </div>
                         <div className="modalContentInfo">
                             {/* Campo de selección para el estado de la cita */}
-                            <label htmlFor="estado">Seleccionar Estado:</label>
+                            <label htmlFor="estado">Estado de la cita:</label>
                             <select className="SelectModal" id="estado" onChange={(e) => handleEstadoChange(e.target.value)} value={filteredEstado}>
                                 <option value="">Todos los estados</option>
                                 {/* Mapea sobre los estados únicos */}
@@ -258,6 +265,8 @@ const handleEstadoChange = (estado) => {
                     </div>
                 </div>
             )}
+            <ErrorModal isOpen={modalOpen} onClose={handleCloseModal} header={customHeader} text={customText} />
+                
         </div>
     );
 };

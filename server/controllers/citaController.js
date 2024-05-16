@@ -11,6 +11,7 @@ Cita.getAll = (req, res) => {
             Pr.Nombre AS nombre_dueño,
             Co.id AS id_consultorio,
             Co.nombreConsultorio AS nombre_consultorio,
+            C.id AS id_cita,
             C.Estado AS estado,
             C.Fecha AS fecha,
             C.horaInicio AS hora
@@ -94,6 +95,23 @@ Cita.disponibilidad = async (req, res) => {
         console.error('Error al verificar disponibilidad de citas:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
+};
+
+Cita.delete = (req, res) => {
+    const { id } = req.params;
+    db.query(
+        "UPDATE Citas SET Estado = 'CANCELADA' WHERE id = ?",
+        [id],
+        (err, result) => {
+            if (err) {
+                console.error("Error al eliminar la cita: ", err);
+                res.status(500).json({ error: "Error al eliminar la cita" });
+                return;
+            }
+            console.log("Estado de cita cambiado a CANCELADA: ", result);
+            res.json(result);
+        }
+    );
 };
 
 // Método para crear una nueva cita

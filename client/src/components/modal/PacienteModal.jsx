@@ -56,7 +56,7 @@ const PacienteModal = ({ isOpen, onClose, pacienteDetails }) => {
               <p style={customStyles.text}>Teléfono: {pacienteDetails.paciente.telefonoPropietario}</p>
             </div>
             <h3 style={customStyles.header}>Citas Previas</h3>
-            {pacienteDetails.citas.filter(cita => cita.EstadoCita === 'AGENDADA').length > 0 ? (
+            {pacienteDetails.citas.filter(cita => cita.EstadoCita === 'COMPLETADA').length > 0 ? (
                 <table className="patientTable">
                     <thead>
                     <tr>
