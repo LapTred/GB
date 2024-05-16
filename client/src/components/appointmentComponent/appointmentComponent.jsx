@@ -149,7 +149,9 @@ const handleEstadoChange = (estado) => {
                         />                    
                         <SearchIcon className="searchIcon" />
                     </div>                    
-                    <FilterAltIcon className="filterIcon" onClick={handleFilterButtonClick} />
+                    <FilterAltIcon 
+                        style={{cursor: 'pointer' }}
+                        className="filterIcon" onClick={handleFilterButtonClick} />
                     
                     <Link to="/cita/nueva">
                         <AddCircleOutlineIcon className="sumIcon" />

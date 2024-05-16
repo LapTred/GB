@@ -13,8 +13,9 @@ CREATE TABLE IF NOT EXISTS Propietario (
 CREATE TABLE IF NOT EXISTS Paciente (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombrePaciente VARCHAR(128) NOT NULL,
-    idPropietario INT,
-    FOREIGN KEY (idPropietario) REFERENCES Propietario(id)
+    idPropietario INT,    
+    Estado ENUM('ELIMINADO', 'ACTIVO', 'PENDIENTE'),
+    FOREIGN KEY (idPropietario) REFERENCES Propietario(id)    
 );
 
 -- 3 Crear la tabla Servicio que almacena los diferentes servicios que tiene el consultorio
@@ -48,7 +49,6 @@ CREATE TABLE IF NOT EXISTS ConsultorioServicio (
     FOREIGN KEY (idServicio) REFERENCES Servicio(id)
 );     
 
-SELECT * FROM ConsultorioServicio;
 
 -- 7 Crear la tabla Expediente
 CREATE TABLE IF NOT EXISTS Expediente (
@@ -134,9 +134,9 @@ INSERT INTO Propietario (Nombre, Telefono) VALUES ('Pedro Martinez', '555-555-55
 INSERT INTO Propietario (Nombre, Telefono) VALUES ('Ana García', '123-456-7890');
 
 -- Inserciones en la tabla Paciente
-INSERT INTO Paciente (nombrePaciente, idPropietario) VALUES ('Max', 1);
-INSERT INTO Paciente (nombrePaciente, idPropietario) VALUES ('Luna', 2);
-INSERT INTO Paciente (nombrePaciente, idPropietario) VALUES ('Toby', 3);
+INSERT INTO Paciente (nombrePaciente, idPropietario, Estado) VALUES ('Max', 1, 'ACTIVO');
+INSERT INTO Paciente (nombrePaciente, idPropietario, Estado) VALUES ('Luna', 2, 'ACTIVO');
+INSERT INTO Paciente (nombrePaciente, idPropietario, Estado) VALUES ('Toby', 3, 'ACTIVO');
 
 -- Inserciones en la tabla Servicio
 INSERT INTO Servicio (Nombre) VALUES ('Vacunación');
@@ -173,9 +173,9 @@ INSERT INTO Usuario (Nombre, nombreUsuario, Clave, Acceso) VALUES ('Veterinario1
 INSERT INTO Usuario (Nombre, nombreUsuario, Clave, Acceso) VALUES ('Recepcionista1', 'rec1', 'rec123', 'Recepcionista');
 
 -- Inserciones en la tabla Citas
-INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (1, 1, 2, '2024-05-10', '09:00:00', '09:30:00', 30, 'AGENDADA');
-INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (2, 2, 3, '2024-05-12', '10:30:00', '11:30:00', 60, 'PENDIENTE');
-INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (3, 3, 3, '2024-05-15', '14:00:00', '14:45:00', 45, 'PENDIENTE');
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (1, 1, 2, '2024-05-16', '09:00:00', '09:30:00', 30, 'AGENDADA');
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (2, 2, 3, '2024-05-16', '10:30:00', '11:30:00', 60, 'COMPLETADA');
+INSERT INTO Citas (idConsultorio, idPaciente, idUsuario, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (3, 3, 3, '2024-05-16', '14:00:00', '14:45:00', 45, 'AGENDADA');
 
 -- Inserciones en la tabla ResumenCita
 INSERT INTO ResumenCita (idCita, idExpediente, idUsuario, Descripcion, Peso) VALUES (1, 1, 2, 'Consulta de rutina', 5.6);
@@ -189,5 +189,13 @@ INSERT INTO Medicamento (idResumenCita, nombreMedicamento, Descripcion) VALUES (
 
 -- Inserciones en la tabla Vacunas
 INSERT INTO Vacunas (idResumenCita, nombreVacuna, dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (3, 'Rabia', 1.0, '2024-05-15', '2025-05-15');
-INSERT INTO Vacunas (idResumenCita, nombreVacuna, dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (3, 'Moquillo', 1.0, '2024-05-15', '2025-05-15');
-INSERT INTO Vacunas (idResumenCita, nombreVacuna, dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (3, 'Parvovirus', 1.0, '2024-05-15', '2025-05-15');
+INSERT INTO Vacunas (idResumenCita, nombreVacuna, dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (2, 'Moquillo', 1.0, '2024-05-15', '2025-05-15');
+INSERT INTO Vacunas (idResumenCita, nombreVacuna, dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (1, 'Parvovirus', 1.0, '2024-05-15', '2025-05-15');
+
+-- Insertar datos en la tabla CitaServicio
+INSERT INTO CitaServicio (idServicio, idCita) VALUES 
+(3, 1),
+(2, 2),
+(1, 3);
+
+select * from Citas;

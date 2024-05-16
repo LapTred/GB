@@ -64,7 +64,9 @@ const Navbar = () => {
             <p>{formatDateTime(currentDateTime)}</p> {/* Muestra fecha y hora en formato personalizado */}
           </div>      
           <div className="item">
-            <LogoutIcon className="avatar" onClick={handleLogout} /> {/* Agrega el manejador de evento para cerrar sesión */}
+            <LogoutIcon 
+            style={{cursor: 'pointer' }}
+            className="avatar" onClick={handleLogout} /> {/* Agrega el manejador de evento para cerrar sesión */}
           </div>
         </div>
       </div>

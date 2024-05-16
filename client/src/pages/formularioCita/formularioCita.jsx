@@ -315,7 +315,12 @@ const Formulario = () => {
       <div className="formularioContainers">
         <Navbar />
         <div className="formularioContainer">
+          
           <div className="formulario">
+            <div className="tituloCitas"> 
+              <h2>Crear nueva cita</h2>
+            </div>  
+            <div className="cuerpoFormulario"> 
             <div className="containerA">
               <h2>Servicio</h2>
               <Select
@@ -449,7 +454,9 @@ const Formulario = () => {
                 </button>
                 <ErrorModal isOpen={modalOpen} onClose={handleCloseModal} header={customHeader} text={customText} />
               </div>
-            </div>            
+            </div> 
+            </div>  
+                       
           </div>
         </div>
       </div>

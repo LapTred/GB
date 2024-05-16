@@ -16,91 +16,102 @@
           border-radius: 1vw;  
           margin-bottom: 4vh;
           justify-content: center;
-          gap:2vw;
-          
+          flex-direction: column;
           overflow-y: auto;
-          .containerA{
-            display: flex;
-            flex-direction: column;
-            padding: 2vw;
-            gap: 1vw;
-            h2{
-              display:flex;
-              justify-content: center;
-            }
+          .tituloCitas{
+            display:flex;
+            justify-content: center;
+            font-size:1.5vw;
           }
-          .containerB{
+          .cuerpoFormulario{
             display: flex;
-            flex-direction: column;
-            padding: 2vw;
-            gap: 1vw;
-            .containerBfirst{
-              display:flex;              
-              justify-content: space-between;
-              gap:1vw;
-              .containerBfirstButton{
-                display: flex;
-                align-items: center;
-                height: 2.2vw;
-                padding: 0.2vw;
-                font-size: 1.2vw;
+            justify-content: center;
+            
+          overflow-y: auto;
+            .containerA{
+              display: flex;
+              flex-direction: column;
+              padding: 2vw;
+              gap: 1vw;
+              h2{
+                display:flex;
+                justify-content: center;
               }
             }
-            .containerBsecondOne{
-              .inputPaciente{
-                width: 100%;
-                padding: 0.2vw;    
-                padding-left: 0.5vw;  
-                border: 1px solid #ccc;
-                font-size: 1vw;  
-                border-radius: 0.3vw;
+            .containerB{
+              display: flex;
+              flex-direction: column;
+              padding: 2vw;
+              gap: 1vw;
+              .containerBfirst{
+                display:flex;              
+                justify-content: space-between;
+                gap:1vw;
+                .containerBfirstButton{
+                  display: flex;
+                  align-items: center;
+                  height: 2.2vw;
+                  padding: 0.2vw;
+                  font-size: 1.2vw;
+                }
               }
-            }
-
-            .containerBsecond{
-              display:flex;
-              justify-content: space-between;
-              gap:1vw;
-              .inputPaciente{
-                padding: 0.2vw;    
-                padding-left: 0.5vw;  
-                border: 1px solid #ccc;
-                font-size: 1vw;  
-                border-radius: 0.3vw;
+              .containerBsecondOne{
+                .inputPaciente{
+                  width: 100%;
+                  padding: 0.2vw;    
+                  padding-left: 0.5vw;  
+                  border: 1px solid #ccc;
+                  font-size: 1vw;  
+                  border-radius: 0.3vw;
+                }
               }
-              .containerCitaPaciente{
-                width: 100%;
+  
+              .containerBsecond{
                 display:flex;
                 justify-content: space-between;
                 gap:1vw;
+                .inputPaciente{
+                  padding: 0.2vw;    
+                  padding-left: 0.5vw;  
+                  border: 1px solid #ccc;
+                  font-size: 1vw;  
+                  border-radius: 0.3vw;
+                }
+                .containerCitaPaciente{
+                  width: 100%;
+                  display:flex;
+                  justify-content: space-between;
+                  gap:1vw;
+                }
+                .containerBsecondButton{
+                  display: flex;
+                  align-items: center;
+                  height: 2.2vw;
+                  font-size: 1.1vw;
+                }
+                .containerBsecondButtons{
+                             
+                  font-weight: 600;
+                  font-size:0.9vw;
+                  padding: 0.5vw;
+                }
               }
-              .containerBsecondButton{
-                display: flex;
-                align-items: center;
-                height: 2.2vw;
-                font-size: 1.1vw;
-              }
-              .containerBsecondButtons{
-                           
-                font-weight: 600;
-                font-size:0.9vw;
-                padding: 0.5vw;
+              
+              h2{
+                display:flex;
+                justify-content: center;
               }
             }
-            
-            h2{
-              display:flex;
-              justify-content: center;
+            .datePickerCitas{
+              display: flex;
+              font-size: 1.2vw;
+              text-align: center;            
+              border: 1px solid #ccc;            
+              border-radius: 0.3vw;
             }
+          }    
           }
-          .datePickerCitas{
-            display: flex;
-            font-size: 1.2vw;
-            text-align: center;            
-            border: 1px solid #ccc;            
-            border-radius: 0.3vw;
-          }
-        }    
+          
       }    
     }
 }

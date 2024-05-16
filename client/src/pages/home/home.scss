@@ -3,27 +3,120 @@
 
   .homeContainer {    
     width: 85%;
-    .containers{
-      
+    .containers{      
       background-color: #F9F9F9; //Need to Fix
       height: 90%;
       display: flex;
+      padding: 2vw;
       .containerL{
         width: 50%;
-        padding: 30px;
+        padding: 40px;
         height: 100%; 
         .containerLfirst{   
           display: flex;
-          padding: 1.1vw;
+          padding: 3vw;
           box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
           border-radius: 1vw;
           background-color: white;
-          height: 48%;
+          height: 100%;
           flex-direction: column;
-          display: flex;
-          align-items: center;          
+          display: flex;   
           overflow-y: auto; // Agregar desplazamiento vertical  
-          margin-bottom: 4%;
+          margin-bottom: 4%; 
+          
+          .containerLinsideOne{
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            padding-bottom: 2vw;
+            .AgendaTitulo{
+              width: 90%;
+              font-size:1.8vw;
+            }
+            .iconContainerCita{
+              width: 10%;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              
+                .filterIcon {
+                  display: flex;
+                  text-align: center;
+                  align-items: center;
+                  justify-content: center;
+                  font-size: 2.5vw;
+                  color:black;
+                }
+                           
+            }
+          }      
+          .containerLinsideTwo{
+              display: flex;
+              align-items: center;
+              
+              .citasTable {
+                width: 100%;
+                border-collapse: separate; // Permite aplicar bordes redondeados
+                border-spacing: 0; // Elimina el espacio entre celdas
+                border: 1px solid #ccc; // Borde de la tabla
+                border-radius: 10px; // Borde redondeado de la tabla
+                overflow: hidden; // Asegura que las esquinas redondeadas se apliquen correctamente           
+    
+                .tableHeader, .tableData {
+                    padding: 0.5rem;
+                    text-align: center; // Centramos los datos en la tabla
+                    font-size: 18px;
+                    .containerButtons{
+                        display: flex;
+                        justify-content: space-evenly;
+                        .buttonPatients{
+                            display: flex;
+                            .iconPatient{                            
+                                font-size: 1.5vw;
+                            }
+                        }
+                        
+                    }
+                }
+                
+                .tableHeader {
+                    font-weight: bold;
+                    background-color: #f2f2f2;
+                }
+                // Bordes redondeados para las esquinas de la tabla
+                thead tr:first-child th:first-child {
+                    border-top-left-radius: 10px;
+                }
+                thead tr:first-child th:last-child {
+                    border-top-right-radius: 10px;
+                }
+                tbody tr:last-child td:first-child {
+                    border-bottom-left-radius: 10px;
+                }
+                tbody tr:last-child td:last-child {
+                    border-bottom-right-radius: 10px;
+                }
+            }
+          } 
+          .containerLinsideThree{
+            display:flex;
+            height: 100%;
+            justify-content: flex-end;
+            align-items: flex-end;
+            .newCitaButton{
+              display: flex;
+              font-size:1vw;
+              color:black;
+              background-color: #87CEFA;
+              
+            }
+            .newCitaButton:hover {
+              background-color: #00BFFF; /* Azul más oscuro para el hover */
+            }
+            .newCitaLink {
+              text-decoration: none; /* Quita la línea de subrayado */
+            }
+          }
         }
         .containerLsecond{   
           display: flex;
@@ -95,6 +188,61 @@
 
 .home .homeContainer .listContainer:hover{
   box-shadow: 2px 4px 10px 7px rgba(201, 201, 201, 0.47);
+}
+
+// Estilos para el modal de filtro
+.filterModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); // Fondo semitransparente
+  z-index: 1000; // Asegura que el modal esté por encima del resto del contenido
+
+    .modalContent {
+        display:flex;
+        flex-direction: column;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        h2{
+            display: flex;
+            justify-content: center;
+            font-size: 2.5vw;
+        }
+        .SelectModal{
+            font-size: 1.5vw;
+            text-align: center;
+        }
+        .modalContentInfo{
+            padding: 1vw;
+            display: flex;
+            gap:2vw;
+            justify-content: space-between;
+            font-size: 1.5vw;
+        }
+        .modalContentFiltro{
+            display: flex;                
+            margin-left: 1vw;
+            gap:2vw;
+            justify-content: space-between;
+            font-size: 1.5vw;
+            
+        }
+
+        // Estilos para el botón de cerrar
+        .closeButtonCita {
+            display: flex;
+            cursor: pointer;
+            font-size: 50px;
+        }
+  }      
 }
 
 
