@@ -11,6 +11,7 @@ const Home = () => {
   const [showFilterModal, setShowFilterModal] = useState(false);
   const [filteredConsultorio, setFilteredConsultorio] = useState('');
   const [selectedCitaIndex, setSelectedCitaIndex] = useState(null);
+  const [selectedCitaData, setSelectedCitaData] = useState(null);
 
   useEffect(() => {
     fetch('http://localhost:3001/citas')
@@ -64,8 +65,20 @@ const Home = () => {
     )
     .slice(0, 5);
 
-  const handleViewCita = () => {
-    // Manejar lógica para vista de cita
+  const handleViewCita = (id) => {
+    fetch(`http://localhost:3001/cita/${id}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al obtener la cita');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setSelectedCitaData(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   };
 
   const handleCloseFilterModal = () => {
@@ -115,7 +128,7 @@ const Home = () => {
                                   <button 
                                     style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '0.2vw 0.2vw', borderRadius: '0.5vw', cursor: 'pointer' }} 
                                     className="buttonPatients" 
-                                    onClick={() => handleViewCita()}>
+                                    onClick={() => handleViewCita(cita.id_cita)}>
                                     <VisibilityIcon className="iconPatient" />
                                   </button>
                                 </div>
@@ -166,8 +179,73 @@ const Home = () => {
           </div>
           <div className="containerR">
             <div className="containerRfirst">
+            <h2>Información General</h2>
               <div className="containerRinside">
-                Datos de la Cita seleccionada
+                
+                {selectedCitaData ? (
+                  <div className="resumenCitacontainer">
+                    <div className="resumenCitaBfirst resumenCitaInfoBox">
+                      
+                      <div className="resumenCitaInfoSeparado">
+                        <div className="resumenCitaSeparado">
+                          <p>Paciente:</p>
+                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.paciente.nombre_paciente}</div>
+                        </div>
+                        <div className="resumenCitaSeparado">
+                          <p>Propietario:</p>
+                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.paciente.nombre_propietario}</div>
+                        </div>
+                        <div className="resumenCitaSeparado">
+                          <p>Teléfono:</p>
+                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.paciente.telefono_propietario}</div>
+                        </div>
+                        <div className="resumenCitaSeparado">
+                          <p>Consultorio:</p>
+                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.paciente.nombre_consultorio}</div>
+                        </div>
+                        <div className="resumenCitaSeparado">
+                          <p>Servicio:</p>
+                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.paciente.nombre_servicio}</div>
+                        </div>
+                        <div className="resumenCitaSeparado">
+                          <p>Horario:</p>
+                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.paciente.hora_inicio} - {selectedCitaData.paciente.hora_final}</div>
+                        </div>
+                    </div>
+                  </div>
+                  {selectedCitaData.paciente.estado_paciente === "ACTIVO" && (
+                    <div className="resumenCitaBsecond resumenCitaInfoBox">
+                      <h3 className="TituloPequeño">Detalles del Paciente</h3>
+                      <div className="resumenCitaInfoSeparado">
+                        <div className="resumenCitaSeparado">
+                          <p>Fecha de Nacimiento:</p>
+                          {selectedCitaData.fecha_nacimiento ? (
+                            <div className="resumenCitaSeparadoInfo">{formatDate(selectedCitaData.fecha_nacimiento)}</div>
+                          ) : (
+                            <div className="resumenCitaSeparadoInfo"></div>
+                          )}
+                        </div>              
+                        <div className="resumenCitaSeparado">
+                          <p>Sexo:</p>
+                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.sexo_paciente}</div>
+                        </div>
+                        <div className="resumenCitaSeparado">
+                          <p>Peso:</p>
+                          <div className="resumenCitaSeparadoInfo">
+                            {selectedCitaData.peso_resumen_cita !== null ? 
+                              selectedCitaData.peso_resumen_cita : (selectedCitaData.peso_paciente !== null ? 
+                                `Registro anterior: ${selectedCitaData.peso_paciente}` : 'Sin registro')}
+                          </div>               
+                          <p></p>
+                          <p>Kg.</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                ) : (
+                  <p>Selecciona una cita para ver los detalles</p>
+                )}
               </div>
             </div>
           </div>

@@ -1,5 +1,5 @@
 import "./appointmentComponent.scss";
-import { Link } from 'react-router-dom'; // Importa Link desde react-router-dom
+import { Link, useNavigate } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import SearchIcon from '@mui/icons-material/Search';
@@ -22,6 +22,7 @@ const AppointmentComponent = () => {
     const [selectedCitaModalOpen, setSelectedCitaModalOpen] = useState(false);
     const [customHeader, setCustomHeader] = useState("");
     const [customText, setCustomText] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch('http://localhost:3001/citas')
@@ -82,9 +83,10 @@ const handleEstadoChange = (estado) => {
     setFilteredEstado(estado);
 };
 
-    const handleViewCita = () => {
-        //Manejar logica para vista de cita
+    const handleViewCita = (id_cita, estado) => {
+        navigate(`/cita/${id_cita}?estado=${estado}`);
     };
+
 
     // Función para formatear la fecha en formato DD--MM--AA
     const formatDate = (dateString) => {
@@ -199,7 +201,7 @@ const handleEstadoChange = (estado) => {
                                                     <button 
                                                             style={{ backgroundColor: '#d8f3dc', color: 'black', marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '0.2vw 0.2vw', borderRadius: '0.5vw', cursor: 'pointer' }} 
                                                             className="buttonPatients" 
-                                                            onClick={() => handleViewCita()}>
+                                                            onClick={() => handleViewCita(cita.id_cita, cita.estado)}>                                                            
                                                             <VisibilityIcon className="iconPatient" />
                                                     </button>
                                                 </div>

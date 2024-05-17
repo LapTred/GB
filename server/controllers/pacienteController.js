@@ -52,8 +52,8 @@ Paciente.pacientesByPropietario = (req, res) => {
         JOIN 
             Propietario pro ON p.idPropietario = pro.id
         WHERE 
-            pro.Nombre = ? AND p.Estado = 'ACTIVO';
-    `, [propietario], (err, result) => {
+            pro.Nombre = ? AND p.Estado = 'ACTIVO' OR pro.Nombre = ? AND p.Estado = 'PENDIENTE';
+    `, [propietario,propietario], (err, result) => {
         if (err) {
             console.error("Error al obtener los pacientes del propietario:", err);
             res.status(500).json({ error: "Error al obtener los pacientes del propietario" });

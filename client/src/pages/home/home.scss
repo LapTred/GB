@@ -137,49 +137,33 @@
         height: 100%; 
         .containerRfirst{                 
           display: flex;
-          padding: 1.1vw;
+          padding: 2vw;
           box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
           border-radius: 1vw;
           background-color: white;
           height: 100%;
           flex-direction: column;
           display: flex;
-          align-items: center;
-          
+          align-items: center;          
           overflow-y: auto; // Agregar desplazamiento vertical
-          .containerRfirstinside{ 
-            width: 85%;           
-            text-align: center;
-            .consultorio {
-              border-radius: 1vw;
-              border: 0.2vw solid #ccc; // Define el borde y su grosor
-              margin-bottom: 2vw; 
-              h3{
-                font-size: 1.1vw;
-              }
-              span{
-                font-size: 1vw;
-              }
-              p{
-                font-size: 1vw;
-              }
-              .actions{
-                align-items: center;
-                display: flex; /* Establece el contenedor como flexbox */
-                justify-content: flex-end; /* Alinea los elementos al final del eje principal (horizontal) */
-                border-top: 0.2vw solid #ccc;
-                padding: 1vw;
-                button{                    
-                  font-weight: 600;
-                  font-size:0.9vw;
-                  padding: 0.5vw;
-                }
-                p{
-                  font-size: 1vw;
-                }
-              }
-            }
-          }            
+          h2 {
+            display: flex;
+            align-items: center;
+            font-size: 1.5vw;           
+          }
+          p {
+            display: flex;
+            align-items: center;
+            font-size: 1.2vw;            
+          }
+          .containerRinside{
+            display: flex;
+            height: 100%;
+            align-items: center;
+            width: 80%;
+            justify-content: center;
+          }
+                     
         }
       }
     }    

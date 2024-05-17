@@ -30,7 +30,6 @@ Cita.getAll = (req, res) => {
             res.status(500).json({ error: "Error al obtener las citas" });
             return;
         }
-        console.log(result);
         res.json(result);
     });
 };
@@ -115,7 +114,6 @@ Cita.delete = (req, res) => {
 };
 
 // Método para crear una nueva cita
-
 Cita.create = (req, res) => {
     try {
         // Obtiene los datos del formulario
@@ -174,10 +172,21 @@ Cita.create = (req, res) => {
                         }
                         pacienteId = results.insertId;
                         insertarCitaEnCitas(pacienteId);
+                        insertarExpediente(pacienteId); // Llama a la función para insertar en Expediente
                     });
                 } else {
                     pacienteId = results[0].id;
                     insertarCitaEnCitas(pacienteId);
+                }
+            });
+        }
+
+          // Función para insertar en la tabla Expediente
+          function insertarExpediente(pacienteId) {
+            db.query('INSERT INTO Expediente (idPaciente) VALUES (?)', [pacienteId], (error, results) => {
+                if (error) {
+                    console.error('Error al insertar en Expediente:', error);
+                    // No se necesita return res.status(500).json aquí porque solo queremos continuar con el flujo
                 }
             });
         }
@@ -209,6 +218,105 @@ Cita.create = (req, res) => {
         console.error('Error al crear la cita:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
+};
+
+Cita.getById = (req, res) => {
+    const { id } = req.params;
+    
+    // Consulta para obtener los datos del paciente y la cita
+    db.query(`
+        SELECT 
+            Citas.id AS cita_id,
+            Citas.Fecha AS fecha_cita,
+            Citas.horaInicio AS hora_inicio,
+            Citas.horaFinal AS hora_final,
+            Citas.Duracion AS duracion,
+            Citas.Estado AS estado_cita,
+            Propietario.Nombre AS nombre_propietario,
+            Propietario.Telefono AS telefono_propietario,
+            Paciente.nombrePaciente AS nombre_paciente,
+            Paciente.Estado AS estado_paciente,
+            Paciente.id AS id_Paciente,
+            Servicio.Nombre AS nombre_servicio,
+            Consultorio.nombreConsultorio AS nombre_consultorio,
+            Expediente.fechaNacimiento AS fecha_nacimiento,
+            Expediente.Peso AS peso_paciente,
+            Expediente.Sexo AS sexo_paciente,
+            Expediente.Descripcion AS descripcion_expediente,
+            ResumenCita.Descripcion AS descripcion_resumen_cita,
+            ResumenCita.Peso AS peso_resumen_cita
+        FROM Citas
+        LEFT JOIN Paciente ON Citas.idPaciente = Paciente.id        
+        LEFT JOIN Propietario ON Paciente.idPropietario = Propietario.id
+        LEFT JOIN Consultorio ON Citas.idConsultorio = Consultorio.id
+        LEFT JOIN Expediente ON Citas.idPaciente = Expediente.idPaciente
+        LEFT JOIN ResumenCita ON Citas.id = ResumenCita.idCita
+        LEFT JOIN CitaServicio ON Citas.id = CitaServicio.idCita
+        LEFT JOIN Servicio ON CitaServicio.idServicio = Servicio.id
+        WHERE Citas.id = ?;
+    `, [id], (err, pacienteResult) => {
+        if (err) {
+            console.error("Error al obtener los datos del paciente y cita: ", err);
+            res.status(500).json({ error: "Error al obtener los datos del paciente y cita" });
+            return;
+        }
+
+        // Consulta para obtener los datos de los medicamentos del paciente
+        db.query(`
+            SELECT 
+                m.id AS idMedicamento,
+                m.idResumenCita AS idResumenCita,
+                m.nombreMedicamento AS NombreMedicamento,
+                m.Descripcion AS DescripcionMedicamento
+            FROM 
+                Medicamento m
+            LEFT JOIN 
+                ResumenCita rc ON m.idResumenCita = rc.id
+            WHERE 
+                rc.idCita = ?;
+        `, [id], (err, medicamentosResult) => {
+            if (err) {
+                console.error("Error al obtener los medicamentos del paciente: ", err);
+                res.status(500).json({ error: "Error al obtener los medicamentos del paciente" });
+                return;
+            }
+
+            // Consulta para obtener los datos de las vacunas del paciente
+            db.query(`
+                SELECT 
+                    v.id AS idVacuna,
+                    v.idResumenCita AS idResumenCitaVacuna,
+                    v.nombreVacuna AS NombreVacuna,
+                    v.dosis AS DosisVacuna,
+                    v.fechaVacuna AS FechaVacuna,
+                    v.fechaSiguienteVacuna AS FechaSiguienteVacuna
+                FROM 
+                    Vacunas v
+                LEFT JOIN
+                    ResumenCita rc ON v.idResumenCita = rc.id
+                WHERE 
+                    rc.idCita = ?;
+            `, [id], (err, vacunasResult) => {
+                if (err) {
+                    console.error("Error al obtener las vacunas del paciente: ", err);
+                    res.status(500).json({ error: "Error al obtener las vacunas del paciente" });
+                    return;
+                }
+
+                // Construir el objeto de respuesta con todos los datos obtenidos
+                const citaData = {
+                    paciente: pacienteResult[0],
+                    medicamentos: medicamentosResult,
+                    vacunas: vacunasResult
+                };
+                console.log(id);
+                console.log(citaData);
+                // Enviar la respuesta JSON con todos los datos del paciente
+                res.json(citaData);
+            });
+        });
+        
+    });
 };
 
 module.exports = Cita;

@@ -1,0 +1,19 @@
+.citaDetalle {
+    display: flex;  
+    height: 100vh;
+    .citaDetalleContainer {    
+      width: 85%;
+      .citaDetallecontainers{   
+        align-items: center;     
+        background-color: #F9F9F9; //Need to Fix
+        height: 90%;
+        display: flex;
+        flex-direction: column;
+        
+      }    
+    }
+  }
+    
+    
+    
+    

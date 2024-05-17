@@ -1,0 +1,178 @@
+.resumenCitaComponent {
+    position: relative; // Asegura que el modal sea relativo a este contenedor
+    width: 85%;
+    justify-content: center;
+    height: 100%;
+
+    .resumenCitaContainerT {        
+        margin-top: 4vh;
+        display: flex;
+        padding: 1.5vw;
+        border-radius: 1vw;
+        background-color: white;
+        justify-content: space-between;
+        height: auto;
+
+        h2 {
+            display: flex;
+            align-items: center;
+            font-size: 1.5vw;           
+        }
+        h3 {
+            display: flex;
+            font-size: 1.2vw;
+            text-align: center;            
+        }
+        .resumenCitaInfoDatos{
+            display: flex;
+            align-items: end;
+            gap: 0.5vw;
+            justify-content: center;
+            
+        }
+    }
+
+    .resumenCitacontainerB {
+        margin-top: 4vh;
+        padding: 1.5vw;
+        border-radius: 1vw;
+        background-color: white;
+        height: 70%;
+        overflow-y: auto;
+        .resumenCitaContainerTitulo{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            .Titulo{
+                display: flex;
+                font-size: 1.5vw;
+                font-weight: 600;
+                justify-content: center;
+                padding: 1vw;
+            }
+            .newCitaButton{
+                display: flex;
+                font-size:1vw;
+                color:black;
+                background-color: #87CEFA;
+                
+              }
+              .newCitaButton:hover {
+                background-color: #00BFFF; /* Azul más oscuro para el hover */
+              }
+        }
+       
+        
+        
+        .resumenCitacontainer{
+            display: flex;
+            justify-content: space-evenly;
+            .resumenCitaBfirst{
+                display:flex;            
+                flex-direction: column;  
+                 
+                gap:1vw;
+                p {
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.2vw;
+                    
+                }
+            }                  
+            
+    
+            .resumenCitaBsecond{
+                display:flex;
+                
+                flex-direction: column;  
+                gap:1vw;
+                p {
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.2vw;                    
+                }                
+            }
+        }
+
+        
+        .resumenCitacontainerTable{
+            padding: 1.5vw;
+            border-radius: 1vw;
+            background-color: white;
+            .citasTable {
+                width: 100%;
+                border-collapse: separate; // Permite aplicar bordes redondeados
+                border-spacing: 0; // Elimina el espacio entre celdas
+                border: 1px solid #ccc; // Borde de la tabla
+                border-radius: 10px; // Borde redondeado de la tabla
+                overflow: hidden; // Asegura que las esquinas redondeadas se apliquen correctamente           
+
+                .tableHeader, .tableData {
+                    padding: 0.5rem;
+                    text-align: center; // Centramos los datos en la tabla
+                    font-size: 18px;
+                    //border: 1px solid #ccc; Por si quiero borde para las filas
+                    .containerButtons{
+                        display: flex;
+                        justify-content: space-evenly;
+                        .buttonPatients{
+                            display: flex;
+                            .iconPatient{                            
+                                font-size: 1.5vw;
+                            }
+                        }
+                        
+                    }
+                }
+                
+                .tableHeader {
+                    font-weight: bold;
+                    background-color: #f2f2f2;
+                }
+                // Bordes redondeados para las esquinas de la tabla
+                thead tr:first-child th:first-child {
+                    border-top-left-radius: 10px;
+                }
+                thead tr:first-child th:last-child {
+                    border-top-right-radius: 10px;
+                }
+                tbody tr:last-child td:first-child {
+                    border-bottom-left-radius: 10px;
+                }
+                tbody tr:last-child td:last-child {
+                    border-bottom-right-radius: 10px;
+                }
+            }      
+
+        }
+    }
+}
+
+.resumenCitaSeparado {
+    display: flex;
+    justify-content: space-between;
+}
+
+.resumenCitaInfoSeparado{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vw;
+}
+  
+  .resumenCitaSeparado p {
+    margin-right: 0.8vw;
+}
+  
+  .resumenCitaSeparadoInfo {
+    background-color: #f0f0f0;
+    padding: 0.4vw 0.7vw;
+    border-radius: 0.4vw;
+    font-size: 1vw;
+}
+
+
+.TituloPequeño{
+    display: flex;
+    
+    font-size: 1.2vw;
+}

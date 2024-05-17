@@ -223,6 +223,7 @@ const Formulario = () => {
         .then(response => response.json())
         .then(data => {
           setPacientes(data);
+          setSelectedPaciente(null); // Borrar la selección de paciente
         })
         .catch(error => console.error('Error fetching pacientes:', error));
     } else {
