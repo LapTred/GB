@@ -1,0 +1,280 @@
+.startCitaComponent {
+    position: relative; // Asegura que el modal sea relativo a este contenedor
+    width: 85%;
+    justify-content: center;
+    height: 100%;
+
+    .startCitaContainerT {        
+        margin-top: 4vh;
+        display: flex;
+        padding: 1.5vw;
+        border-radius: 1vw;
+        background-color: white;
+        justify-content: space-between;
+        height: auto;
+
+        h2 {
+            display: flex;
+            align-items: center;
+            font-size: 1.5vw;           
+        }
+        h3 {
+            display: flex;
+            font-size: 1.2vw;
+            text-align: center;            
+        }
+        .startCitaInfoDatos{
+            display: flex;
+            align-items: end;
+            gap: 0.5vw;
+            justify-content: center;
+            
+        }
+    }
+
+    .startCitacontainerB {
+        margin-top: 4vh;
+        padding: 1.5vw;
+        border-radius: 1vw;
+        background-color: white;
+        height: 70%;
+        overflow-y: auto;
+        .startCitaContainerTitulo{
+            display: flex;
+            justify-content: center;
+            gap:2vw;
+            align-items: center;
+            .Titulo{
+                display: flex;
+                font-size: 1.5vw;
+                font-weight: 600;
+                justify-content: center;
+                padding: 0.1vw;
+            }
+        }
+
+        .buttonsMedicamentos{            
+            display: flex;  
+            justify-content: space-between;
+            .newCitaButtonMedicamento{
+                font-size:1vw;
+                color:black;                    
+                
+                background-color: #ddd;   
+            }
+            
+            .newCitaButtonMedicamento:hover {
+                background-color: #CCC; /* Azul más oscuro para el hover */
+            }
+        }
+
+        .buttonsStartCita{            
+            display: flex;  
+            justify-content: flex-end;
+            .newCitaButtonPatient{
+                font-size:1vw;
+                color:black;                      
+                background-color: transparent;   
+            }
+            .newCitaButtonFinish{
+                font-size:1vw;
+                color:black;       
+                background-color: #87CEFA;    
+            }
+            
+            .newCitaButtonPatient:hover {
+                background-color: #CCC; /* Azul más oscuro para el hover */
+            }
+
+            .newCitaButtonFinish:hover {
+                background-color: #23A8FA; /* Azul más oscuro para el hover */
+            }
+        }
+        
+       
+        
+        
+        .startCitacontainer{
+            display: flex;
+            align-items: flex-start;
+            .startCitaBfirst{
+                display:flex;            
+                flex-direction: column;  
+                width: 50%;
+                gap:1vw;
+                justify-content: center;
+                
+                padding: 1vw;
+                p {
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.2vw;
+                    
+                }
+                .react-datepicker-wrapper{
+                    display: flex;
+                }
+                .datePickerCitas{
+                    display: flex;
+                    font-size: 1vw;
+                    text-align: center;            
+                    border: 0.1vw solid #ccc;            
+                    border-radius: 0.3vw;
+                    padding: 0.3vw;
+                }
+            }                  
+            
+    
+            .startCitaBsecond{
+                display:flex;
+                width: 50%;
+                flex-direction: column;  
+                gap:1vw;
+                padding: 1vw;
+                p {
+                    display: flex;
+                    align-items: center;
+                    font-size: 1.2vw;                    
+                }                
+            }
+        }
+
+        
+            .citasTable {
+                width: 100%;
+                border-collapse: separate; // Permite aplicar bordes redondeados
+                border-spacing: 0; // Elimina el espacio entre celdas
+                border: 0.1vw solid #ccc; // Borde de la tabla
+                border-radius: 10px; // Borde redondeado de la tabla
+                overflow: hidden; // Asegura que las esquinas redondeadas se apliquen correctamente           
+
+                .tableHeader, .tableData {
+                    padding: 0.5rem;
+                    text-align: center; // Centramos los datos en la tabla
+                    font-size: 18px;
+                    //border: 1px solid #ccc; Por si quiero borde para las filas
+                    .containerButtonsStart{
+                        display: flex;
+                        justify-content: center;
+                        .buttonDeleteCita{
+                            display: flex;
+                            .iconPatient{                            
+                                font-size: 1.5vw;
+                            }
+                        }
+                        
+                    }
+                }
+                
+                .tableHeader {
+                    font-weight: bold;
+                    background-color: #f2f2f2;
+                }
+                // Bordes redondeados para las esquinas de la tabla
+                thead tr:first-child th:first-child {
+                    border-top-left-radius: 10px;
+                }
+                thead tr:first-child th:last-child {
+                    border-top-right-radius: 10px;
+                }
+                tbody tr:last-child td:first-child {
+                    border-bottom-left-radius: 10px;
+                }
+                tbody tr:last-child td:last-child {
+                    border-bottom-right-radius: 10px;
+                }
+            }      
+
+        
+    }
+}
+
+.startCitaSeparado {
+    display: flex;    
+    width: 60%;
+    justify-content: space-between;
+    textarea {
+        resize: none;
+        width: 80%;
+        margin-left: 1vw;
+        padding: 0.1vw;
+        
+        font-size: 1vw;
+    }
+    .startCitaSeparadoInput{
+        justify-content: flex-end;
+        display: flex;
+        .startCitaInput{
+            display: flex;
+            width: 20%;
+            height: 100%;
+            outline: none;
+            padding: 0.4vw;
+            font-size: 1vw;
+            border: 0.1vw solid lightgray; // Opcional, para un borde inferior
+            background-color: transparent;
+            border-radius: 0.4vw;
+        }
+    }
+    
+    .inputRadioContainer{
+        display: flex;
+        justify-content: center;
+        gap:1vw;
+    }
+}
+
+.startCitaInfoSeparado{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5vw;
+    align-items: center;
+}
+  
+  .startCitaSeparado p {
+    margin-right: 0.8vw;
+}
+  
+  .startCitaSeparadoInfo {
+    background-color: #f0f0f0;
+    padding: 0.4vw 0.7vw;
+    border-radius: 0.4vw;
+    font-size: 1vw;
+}
+
+
+.TituloPequeñoStartCita{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    font-size: 1.2vw;
+}
+
+/* Estilo para las etiquetas de los botones de radio */
+.startCitaSeparado label {
+    align-items: center;
+    font-size: 1.2vw;
+    /* Estilo del contenedor del botón de radio */
+    display: inline-block;
+    width: 2vw; /* Ancho del contenedor */
+    height: 2vw; /* Altura del contenedor */
+    border: 0.1vw solid #ccc; /* Borde del contenedor */
+    border-radius: 0.4vw; /* Bordes redondeados para formar un círculo */
+    text-align: center; /* Centrar el contenido */
+    cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+    transition: background-color 0.3s, border-color 0.3s; /* Transición suave de los estilos */
+}
+  
+/* Estilo para las etiquetas de los botones de radio cuando están seleccionadas */
+.startCitaSeparado input[type="radio"]:checked + label {
+    background-color: #007bff; /* Cambiar el color de fondo cuando está seleccionado */
+    border-color: #007bff; /* Cambiar el color del borde cuando está seleccionado */
+    color: #fff; /* Cambiar el color del texto cuando está seleccionado */
+}
+
+.startCitaSeparado input[type="radio"] {
+    /* Ocultar los botones de radio */
+    display: none;
+    font-size: 1vw;
+}

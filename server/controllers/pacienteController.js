@@ -67,6 +67,9 @@ Paciente.pacientesByPropietario = (req, res) => {
 
 Paciente.delete = (req, res) => {
     const { id } = req.params;
+    // Primero, cancelamos todas las citas del paciente
+    cancelarCitasDelPaciente(id);
+    // Luego, actualizamos el estado del paciente a 'ELIMINADO'
     db.query(
         "UPDATE Paciente SET Estado = 'ELIMINADO' WHERE id = ?",
         [id],
@@ -78,6 +81,21 @@ Paciente.delete = (req, res) => {
             }
             console.log("Estado de paciente cambiado a Eliminado: ", result);
             res.json(result);
+        }
+    );
+};
+
+const cancelarCitasDelPaciente = (idPaciente) => {
+    db.query(
+        "UPDATE Citas SET Estado = 'CANCELADA' WHERE idPaciente = ?",
+        [idPaciente],
+        (err, result) => {
+            if (err) {
+                console.error("Error al cancelar citas del paciente: ", err);
+                // Manejo del error, por ejemplo, podrías enviar una respuesta de error al cliente
+                return;
+            }
+            console.log("Citas del paciente canceladas: ", result);
         }
     );
 };

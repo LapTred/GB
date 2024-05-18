@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
-import ResumenCita from "../../components/appointmentComponent/resumenCita";
-import VerCita from "../../components/appointmentComponent/verCita";
 import "./iniciarCita.scss";
+
+import StartCita from "../../components/appointmentComponent/startAppointmentComponent";
 
 const IniciarCita = () => {
   const { id } = useParams();
@@ -34,12 +34,14 @@ const IniciarCita = () => {
       <div className="citaDetalleContainer">
         <Navbar />
         <div className="citaDetallecontainers">
-          {/* Mostrar el componente adecuado basado en el estado
-          {cita && estado === "COMPLETADA" && cita.paciente.estado_cita === estado ? (
-            <ResumenCita id={id} />
+          
+          {cita && cita.paciente && cita.paciente.estado_cita === "AGENDADA" && cita.paciente.cita_id.toString() === id ? (
+            <StartCita id={id} />
           ) : (
-            <VerCita id={id} />
-          )} */}
+            <div className="citaDetalleContainer">
+              <p>Cargando o datos no disponible, intente más tarde...</p> {/* Mensaje de carga o error */}
+            </div>
+          )} 
         </div>
       </div>
     </div>

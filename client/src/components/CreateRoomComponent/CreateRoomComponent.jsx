@@ -87,7 +87,7 @@ const CreateRoomComponent = ({ onCancel, onSave }) => {
           value={modifiedRoom.servicios}
           onChange={handleServiceChange}
           options={availableServices}
-          placeholder="Selecciona una sección"
+          placeholder="Selecciona un servicio"
           isMulti
 
         />

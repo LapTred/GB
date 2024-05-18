@@ -162,6 +162,21 @@
             align-items: center;
             width: 80%;
             justify-content: center;
+            .resumenCitaSeparadoButton{
+              display: flex;
+              justify-content: center;
+              .newCitaButton{
+                display: flex;
+                font-size:1vw;
+                color:black;
+                background-color: #87CEFA;
+                
+              }
+              .newCitaButton:hover {
+                background-color: #00BFFF; /* Azul más oscuro para el hover */
+              }
+            }
+            
           }
                      
         }

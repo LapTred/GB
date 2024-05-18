@@ -44,16 +44,48 @@ const PacienteModal = ({ isOpen, onClose, pacienteDetails }) => {
           <>
             <h2 style={customStyles.header}>Detalles del Paciente</h2>
             <div className="ModalPacienteDato">
-              <p style={customStyles.text}>Nombre: {pacienteDetails.paciente.nombrePaciente}</p>
-              <p style={customStyles.text}>Fecha de nacimiento: {new Date(pacienteDetails.paciente.fechaNacimiento).toLocaleDateString()}</p>          
+              <div className="startCitaSeparado">
+                <p>Paciente:</p>
+                <div className="startCitaSeparadoInfo">{pacienteDetails.paciente.nombrePaciente}</div>
+              </div>
+              <div className="startCitaSeparado">
+                <p>Fecha de Nacimiento:</p>
+                {/* Renderiza la fecha de nacimiento si existe, de lo contrario, renderiza un div vacío */}
+                {pacienteDetails.paciente.fechaNacimiento ? (
+                  <div className="startCitaSeparadoInfo">{new Date(pacienteDetails.paciente.fechaNacimiento).toLocaleDateString()}</div>
+                ) : (
+                  <div className="startCitaSeparadoInfo"></div>
+                )}
+              </div>        
             </div>
             <div className="ModalPacienteDato">  
-              <p style={customStyles.text}>Peso: {pacienteDetails.paciente.peso}</p>
-              <p style={customStyles.text}>Sexo: {pacienteDetails.paciente.sexo}</p>
+              <div className="startCitaSeparadoPeso">
+                <p>Peso:</p>
+                <div className="startCitaSeparadoPesoEnd">
+                  <div className="startCitaSeparadoInfo">
+                    {pacienteDetails.paciente.peso !== null
+                      ? pacienteDetails.paciente.peso
+                      : (pacienteDetails.paciente.peso !== null
+                        ? `Registro anterior: ${pacienteDetails.paciente.peso}`
+                        : 'Sin registro')}                      
+                  </div>                
+                  <p>Kg.</p>
+                </div>                
+              </div>
+              <div className="startCitaSeparado">
+                <p>Sexo:</p>
+                <div className="startCitaSeparadoInfo">{pacienteDetails.paciente.sexo}</div>
+              </div>
             </div>               
             <div className="ModalPacienteDato">
-              <p style={customStyles.text}>Propietario: {pacienteDetails.paciente.nombrePropietario}</p>
-              <p style={customStyles.text}>Teléfono: {pacienteDetails.paciente.telefonoPropietario}</p>
+              <div className="startCitaSeparado">
+                <p>Propietario:</p>
+                <div className="startCitaSeparadoInfo">{pacienteDetails.paciente.nombrePropietario}</div>
+              </div>
+              <div className="startCitaSeparado">
+                <p>Teléfono:</p>
+                <div className="startCitaSeparadoInfo">{pacienteDetails.paciente.telefonoPropietario}</div>
+              </div>
             </div>
             <h3 style={customStyles.header}>Citas Previas</h3>
             {pacienteDetails.citas.filter(cita => cita.EstadoCita === 'COMPLETADA').length > 0 ? (
@@ -94,6 +126,7 @@ const PacienteModal = ({ isOpen, onClose, pacienteDetails }) => {
                                 <div key={index}>
                                 <p>Vacuna: {vacuna.NombreVacuna}</p>
                                 <p>Fecha próxima vacuna: {new Date(vacuna.FechaSiguienteVacuna).toLocaleDateString()}</p>
+                                <p>Dosis: {vacuna.DosisVacuna}</p>
                                 </div>
                             ))}
                         </td>

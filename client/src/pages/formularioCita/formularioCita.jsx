@@ -106,14 +106,26 @@ const Formulario = () => {
       console.error('No se pudo determinar el horario seleccionado.');
       return;
     }
+    // Extraer partes de la fecha local
+    const year = selectedDate.getFullYear();
+    const month = selectedDate.getMonth();
+    const day = selectedDate.getDate();
+    const hours = selectedDate.getHours();
+    const minutes = selectedDate.getMinutes();
+    const seconds = selectedDate.getSeconds();
+    
+    // Crear una nueva fecha en UTC
+    const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
 
     const formData = {
-      fecha: selectedDate.toISOString(),
+      fecha: utcDate.toISOString(),
       horarioInicio: horarioSeleccionado.horarioInicio,
       horarioFinal: horarioSeleccionado.horarioFinal,
       duracion: duracion.value,
       consultorios: consultorios.map(consultorio => consultorio.value)
     };
+
+    console.log(utcDate.toISOString());
 
     fetch(`http://localhost:3001/citas/horario?fecha=${formData.fecha}&horarioInicio=${formData.horarioInicio}&horarioFinal=${formData.horarioFinal}&duracion=${formData.duracion}&consultorios=${formData.consultorios.join(',')}`, {
       method: 'GET',
@@ -253,10 +265,20 @@ const Formulario = () => {
       document.getElementById('telefonoInput').value &&
       selectedPaciente // Verificar si se ha seleccionado un paciente
     ) {
-      console.log(selectedDate);
+        // Extraer partes de la fecha local
+      const year = selectedDate.getFullYear();
+      const month = selectedDate.getMonth();
+      const day = selectedDate.getDate();
+      const hours = selectedDate.getHours();
+      const minutes = selectedDate.getMinutes();
+      const seconds = selectedDate.getSeconds();
+      
+      // Crear una nueva fecha en UTC
+      const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+
       const formData = {
         idServicio: selectedService.value,
-        fecha: selectedDate.toISOString(),
+        fecha: utcDate.toISOString(),
         duracion: duracion.value,
         hora: selectedHora.value,
         idConsultorio: selectedConsultorio.value,
@@ -264,7 +286,6 @@ const Formulario = () => {
         telefono: document.getElementById('telefonoInput').value,
         paciente: selectedPaciente.label 
       };
-      console.log(formData.fecha);
 
       fetch('http://localhost:3001/cita/create', {
         method: 'POST',

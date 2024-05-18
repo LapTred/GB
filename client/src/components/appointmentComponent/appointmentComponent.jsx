@@ -14,7 +14,7 @@ const AppointmentComponent = () => {
     const [currentPage, setCurrentPage] = useState(1); // Página actual
     const [showFilterModal, setShowFilterModal] = useState(false);
     const [filteredConsultorio, setFilteredConsultorio] = useState('');
-    const [filteredEstado, setFilteredEstado] = useState('');
+    const [filteredEstado, setFilteredEstado] = useState('AGENDADA');
     const [searchTerm, setSearchTerm] = useState(''); // Término de búsqueda
     
     const [selectedCitaIndex, setSelectedCitaIndex] = useState(null);    
@@ -34,6 +34,7 @@ const AppointmentComponent = () => {
             })
             .then(data => {
                 setCitas(data);
+                console.log(data);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -103,14 +104,15 @@ const handleEstadoChange = (estado) => {
     };
 
     // Filtrar citas en función del término de búsqueda, consultorio y estado
-    const filteredCitas = citas 
+    const filteredCitas = citas
     .filter(cita =>
         (cita.nombre_paciente.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        cita.nombre_dueño.toLowerCase().includes(searchTerm.toLowerCase())) &&
+            cita.nombre_dueño.toLowerCase().includes(searchTerm.toLowerCase())) &&
         (!filteredConsultorio || cita.nombre_consultorio === filteredConsultorio) &&
         (!filteredEstado || cita.estado === filteredEstado)
-    );
-
+    )
+    .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+    
     const handleDeleteCita = (id_cita, nombre_dueño) => {
         const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta cita?");
         console.log(citas);

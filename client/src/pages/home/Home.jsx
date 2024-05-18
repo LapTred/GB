@@ -3,7 +3,7 @@ import Navbar from "../../components/navbar/Navbar";
 import React, { useState, useEffect } from 'react';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import "./home.scss";
 
 const Home = () => {  
@@ -12,6 +12,7 @@ const Home = () => {
   const [filteredConsultorio, setFilteredConsultorio] = useState('');
   const [selectedCitaIndex, setSelectedCitaIndex] = useState(null);
   const [selectedCitaData, setSelectedCitaData] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:3001/citas')
@@ -219,25 +220,33 @@ const Home = () => {
                       <div className="resumenCitaInfoSeparado">
                         <div className="resumenCitaSeparado">
                           <p>Fecha de Nacimiento:</p>
-                          {selectedCitaData.fecha_nacimiento ? (
-                            <div className="resumenCitaSeparadoInfo">{formatDate(selectedCitaData.fecha_nacimiento)}</div>
+                          {selectedCitaData.paciente.fecha_nacimiento ? (
+                            <div className="resumenCitaSeparadoInfo">{formatDate(selectedCitaData.paciente.fecha_nacimiento)}</div>
                           ) : (
                             <div className="resumenCitaSeparadoInfo"></div>
                           )}
                         </div>              
                         <div className="resumenCitaSeparado">
                           <p>Sexo:</p>
-                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.sexo_paciente}</div>
+                          <div className="resumenCitaSeparadoInfo">{selectedCitaData.paciente.sexo_paciente}</div>
                         </div>
                         <div className="resumenCitaSeparado">
                           <p>Peso:</p>
                           <div className="resumenCitaSeparadoInfo">
-                            {selectedCitaData.peso_resumen_cita !== null ? 
-                              selectedCitaData.peso_resumen_cita : (selectedCitaData.peso_paciente !== null ? 
-                                `Registro anterior: ${selectedCitaData.peso_paciente}` : 'Sin registro')}
+                            {selectedCitaData.paciente.peso_resumen_cita !== null ? 
+                              selectedCitaData.paciente.peso_resumen_cita : (selectedCitaData.paciente.peso_paciente !== null ? 
+                                `Registro anterior: ${selectedCitaData.paciente.peso_paciente}` : 'Sin registro')}
                           </div>               
                           <p></p>
                           <p>Kg.</p>
+                        </div>
+                        <div className="resumenCitaSeparadoButton">                                                                                
+                          <button 
+                            style={{ color: 'black', marginLeft: '0vw', border: '0.2vw solid transparent', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+                            className="newCitaButton"
+                            onClick={() => navigate(`/cita/iniciar/${selectedCitaData.paciente.cita_id}`)}>
+                            Comenzar Cita
+                          </button>                           
                         </div>
                       </div>
                     </div>

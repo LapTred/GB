@@ -1,0 +1,84 @@
+.ModalMedicamento{
+    text-align: center;
+    width: 90%;
+    .ModalMedicamentoDato{
+        display: flex;
+        justify-content:space-between;
+        font-size: 1.2vw;
+        
+        padding:0.5vw;
+        align-items: center;
+        p{
+            display: flex;
+            align-items: center;
+        }
+        .MedicamentoSeparado {
+            display: flex;    
+            justify-content: space-between;
+            width: 100%;
+            .selectMedicamentos{             
+                border: 1px solid #ccc; /* Añade un borde */
+                padding-left: 0.5vw;   
+                font-size: 1.2vw;   
+                border-radius: 0.3vw;            
+            }
+            .react-datepicker-wrapper{
+                display: flex;
+            }
+            .datePickerCitas{
+                display: flex;
+                font-size: 1vw;
+                text-align: center;            
+                border: 0.1vw solid #ccc;            
+                border-radius: 0.3vw;
+                padding: 0.3vw;
+                width: 100%;
+            }
+            input{            
+                width: 50%;
+                border: 0.1vw solid #ccc;            
+                border-radius: 0.3vw;
+                padding: 0.2vw;
+                font-size: 1vw;
+            }
+    
+            textarea {
+                resize: none;
+                width: 80%;
+                margin-left: 1vw;
+                padding: 0.2vw;
+                border: 0.1vw solid #ccc;            
+                border-radius: 0.3vw;
+                font-size: 1vw;
+            }
+        }
+    }
+    .buttonsMedicamento{            
+        display: flex;  
+        justify-content: flex-end;
+        padding-top: 2vw;
+    
+        .newCitaButtonPatient{
+            font-size:1vw;
+            color:black;                      
+            background-color: transparent;   
+        }
+        .newCitaButtonFinish{
+            font-size:1vw;
+            color:black;       
+            background-color: #87CEFA;    
+        }
+        
+        .newCitaButtonPatient:hover {
+            background-color: #CCC; /* Azul más oscuro para el hover */
+        }
+    
+        .newCitaButtonFinish:hover {
+            background-color: #23A8FA; /* Azul más oscuro para el hover */
+        }   
+        .disabledButton {
+            cursor: not-allowed;
+            background-color: #cccccc; // Cambia el color de fondo si lo deseas
+          }         
+    }
+}

@@ -5,6 +5,107 @@
         display: flex;
         justify-content:space-between;
         font-size: 1.2vw;
+        
+        padding:0.5vw;
+        align-items: center;
+        gap:3vw;
+        p{
+            display: flex;
+            align-items: center;
+        }
+    }
+    .startCitaSeparadoPeso {
+        display: flex;    
+        width: 60%;
+        justify-content: space-between;
+        textarea {
+            resize: none;
+            width: 80%;
+            margin-left: 1vw;
+            padding: 0.1vw;
+            
+            font-size: 1vw;
+        }
+        .startCitaSeparadoPesoEnd{
+            display: flex;
+            justify-content: flex-end;
+        }
+        .startCitaSeparadoInput{
+            justify-content: flex-end;
+            display: flex;
+            .startCitaInput{
+                display: flex;
+                width: 20%;
+                height: 100%;
+                outline: none;
+                padding: 0.4vw;
+                font-size: 1vw;
+                border: 0.1vw solid lightgray; // Opcional, para un borde inferior
+                background-color: transparent;
+                border-radius: 0.4vw;
+            }
+        }
+        
+        .inputRadioContainer{
+            display: flex;
+            justify-content: center;
+            gap:1vw;
+        }
+    }
+    
+    .startCitaInfoSeparado{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5vw;
+        align-items: center;
+    }
+      
+      .startCitaSeparado p {
+        margin-right: 0.8vw;
+    }
+      
+      .startCitaSeparadoInfo {
+        background-color: #f0f0f0;
+        padding: 0.4vw 0.7vw;
+        border-radius: 0.4vw;
+        font-size: 1vw;
+    }
+    
+    
+    .TituloPequeñoStartCita{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+        font-size: 1.2vw;
+    }
+    
+    /* Estilo para las etiquetas de los botones de radio */
+    .startCitaSeparado label {
+        align-items: center;
+        font-size: 1.2vw;
+        /* Estilo del contenedor del botón de radio */
+        display: inline-block;
+        width: 2vw; /* Ancho del contenedor */
+        height: 2vw; /* Altura del contenedor */
+        border: 0.1vw solid #ccc; /* Borde del contenedor */
+        border-radius: 0.4vw; /* Bordes redondeados para formar un círculo */
+        text-align: center; /* Centrar el contenido */
+        cursor: pointer; /* Cambiar el cursor al pasar sobre el botón */
+        transition: background-color 0.3s, border-color 0.3s; /* Transición suave de los estilos */
+    }
+      
+    /* Estilo para las etiquetas de los botones de radio cuando están seleccionadas */
+    .startCitaSeparado input[type="radio"]:checked + label {
+        background-color: #007bff; /* Cambiar el color de fondo cuando está seleccionado */
+        border-color: #007bff; /* Cambiar el color del borde cuando está seleccionado */
+        color: #fff; /* Cambiar el color del texto cuando está seleccionado */
+    }
+    
+    .startCitaSeparado input[type="radio"] {
+        /* Ocultar los botones de radio */
+        display: none;
+        font-size: 1vw;
     }
     .patientTable {
         width: 100%;
