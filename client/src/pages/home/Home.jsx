@@ -240,18 +240,19 @@ const Home = () => {
                           <p></p>
                           <p>Kg.</p>
                         </div>
-                        <div className="resumenCitaSeparadoButton">                                                                                
-                          <button 
-                            style={{ color: 'black', marginLeft: '0vw', border: '0.2vw solid transparent', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}
-                            className="newCitaButton"
-                            onClick={() => navigate(`/cita/iniciar/${selectedCitaData.paciente.cita_id}`)}>
-                            Comenzar Cita
-                          </button>                           
-                        </div>
+                        
                       </div>
                     </div>
-                  )}
-                </div>
+                  )} 
+                    <div className="resumenCitaSeparadoButton">                                                                                
+                            <button 
+                              style={{ color: 'black', marginTop: '1vw', marginLeft: '0vw', border: '0.2vw solid transparent', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}
+                              className="newCitaButton"
+                              onClick={() => navigate(`/cita/iniciar/${selectedCitaData.paciente.cita_id}`)}>
+                              Comenzar Cita
+                            </button>                           
+                          </div>
+                    </div>
                 ) : (
                   <p>Selecciona una cita para ver los detalles</p>
                 )}

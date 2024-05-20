@@ -8,6 +8,8 @@ import 'react-datepicker/dist/react-datepicker.css'; // Import DatePicker CSS
 import Autosuggest from 'react-autosuggest';
 import { Link } from 'react-router-dom';
 import ErrorModal from "../../components/modal/ErrorModal"; // Asegúrate de tener la ruta correcta al componente
+import 'react-phone-number-input/style.css'
+import PhoneInput from 'react-phone-number-input/input'
 
 const Formulario = () => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -32,6 +34,7 @@ const Formulario = () => {
   const [customHeader, setCustomHeader] = useState("");
   const [customText, setCustomText] = useState("");
   const [redirectToCitas, setRedirectToCitas] = useState(false); // Nuevo estado para la redirección
+  const [telefono, setTelefono] = useState('');
   
 
 
@@ -41,6 +44,10 @@ const Formulario = () => {
     fetchHorario();
     fetchPropietarios();
   }, []);
+
+  useEffect(() => {
+    console.log(telefono);
+  }, [telefono]);
 
 
   useEffect(() => {
@@ -223,13 +230,13 @@ const Formulario = () => {
       const propietarioEncontrado = propietarios.find(propietario => propietario.Nombre.toLowerCase() === selectedPropietario.toLowerCase());
       if (propietarioEncontrado) {
         document.getElementById('telefonoInput').disabled = true; // Bloquear el campo de teléfono
-        document.getElementById('telefonoInput').value = propietarioEncontrado.Telefono; // Establecer el valor del teléfono del propietario
-      }
+        setTelefono(propietarioEncontrado.Telefono);
+       }
       else {
         console.error('El propietario ingresado no existe.');
         console.log("no encontrado");
+        setTelefono("");
         document.getElementById('telefonoInput').disabled = false;
-        document.getElementById('telefonoInput').value = "";
       }
       fetch(`http://localhost:3001/propietario/pacientes?propietario=${selectedPropietario}`)
         .then(response => response.json())
@@ -240,6 +247,7 @@ const Formulario = () => {
         .catch(error => console.error('Error fetching pacientes:', error));
     } else {
       console.error('Debe seleccionar un propietario antes de buscar pacientes.');
+      document.getElementById('telefonoInput').disabled = false;
     }
   };
   
@@ -262,7 +270,7 @@ const Formulario = () => {
       selectedHora &&
       selectedConsultorio &&
       selectedPropietario &&
-      document.getElementById('telefonoInput').value &&
+      telefono &&
       selectedPaciente // Verificar si se ha seleccionado un paciente
     ) {
         // Extraer partes de la fecha local
@@ -275,7 +283,7 @@ const Formulario = () => {
       
       // Crear una nueva fecha en UTC
       const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
-
+      
       const formData = {
         idServicio: selectedService.value,
         fecha: utcDate.toISOString(),
@@ -283,7 +291,7 @@ const Formulario = () => {
         hora: selectedHora.value,
         idConsultorio: selectedConsultorio.value,
         propietario: selectedPropietario,
-        telefono: document.getElementById('telefonoInput').value,
+        telefono: telefono,
         paciente: selectedPaciente.label 
       };
 
@@ -399,21 +407,35 @@ const Formulario = () => {
             <div className="containerB">
               <h2>Propietario</h2>
               <div className="containerBfirst">
-                <Autosuggest
-                  suggestions={suggestions}
-                  onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-                  onSuggestionsClearRequested={onSuggestionsClearRequested}
-                  getSuggestionValue={(suggestion) => suggestion.Nombre}
-                  renderSuggestion={renderSuggestion}
-                  inputProps={{
-                    placeholder: 'Ingrese un propietario',
-                    value: selectedPropietario || '',
-                    onChange: handlePropietarioChange,
-                    className: 'autosuggest-input' // Añade la clase para el input
-                  }}
-                  className="autosuggest-container" // Añade la clase para el contenedor              
-                  highlightFirstSuggestion={true} // Resaltar la primera sugerencia por defecto
-                />
+              <Autosuggest
+                suggestions={suggestions}
+                onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+                onSuggestionsClearRequested={onSuggestionsClearRequested}
+                getSuggestionValue={(suggestion) => suggestion.Nombre}
+                renderSuggestion={renderSuggestion}
+                inputProps={{
+                  placeholder: 'Ingrese un propietario',
+                  value: selectedPropietario || '',
+                  onChange: handlePropietarioChange,
+                  className: 'autosuggest-input', // Añade la clase para el input
+                  onKeyDown: (e) => {
+                    // Obtener el carácter presionado
+                    const char = e.key;
+
+                    // Permitir letras (A-Z y a-z) y la tecla de retroceso (Backspace)
+                    const regex = /^[a-zA-Z\b]+$/;
+
+                    // Verificar si el carácter coincide con la expresión regular
+                    if (!regex.test(char)) {
+                      // Prevenir la acción predeterminada si no es una letra o la tecla de retroceso
+                      e.preventDefault();
+                    }
+                  }
+                }}
+                className="autosuggest-container" // Añade la clase para el contenedor
+                highlightFirstSuggestion={true} // Resaltar la primera sugerencia por defecto
+              />
+
                 <div>                  
                   <button 
                   style={{ backgroundColor: '#f2f2f2', color: 'black', border: '0.2vw solid #f2f2f2', padding: '0.5vw 0.5vw', borderRadius: '0.5vw', cursor: 'pointer' }}                  
@@ -421,8 +443,15 @@ const Formulario = () => {
                 </div>
               </div>
               <h2>Teléfono</h2>
-              <div className="containerBsecondOne">                
-                <input id="telefonoInput" className='inputPaciente' type="text" placeholder="Ingrese un número..." />             
+              <div className="containerBsecondOne">    
+                <PhoneInput
+                  id="telefonoInput" 
+                  className="inputPaciente"
+                  value = {telefono}
+                  maxLength = {14}
+                  onChange={setTelefono}                  
+                  country='MX'
+                />                             
               </div>
               <h2>Paciente</h2>
               <div className="containerBsecond">
@@ -433,6 +462,21 @@ const Formulario = () => {
                       type="text"
                       placeholder="Ingrese un paciente..."
                       value={selectedPaciente ? selectedPaciente.label : ''}
+                      onKeyDown={(e) => {
+                        // Obtener el carácter presionado
+                        const char = e.key;
+                    
+                        // Permitir letras (A-Z y a-z) y la tecla de retroceso (Backspace)
+                        const regex = /^[a-zA-Z\b]+$/;
+                    
+                        // Verificar si el carácter coincide con la expresión regular
+                        if (regex.test(char)) {
+                          // Permitir la tecla
+                        } else {
+                          // Prevenir la acción predeterminada si no es una letra o la tecla de retroceso
+                          e.preventDefault();
+                        }
+                      }}
                       onChange={e => setSelectedPaciente({ value: '', label: e.target.value })}
                     />
                     <button 

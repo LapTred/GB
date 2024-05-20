@@ -63,10 +63,6 @@ const VerCita = ({ id }) => {
             <h3 className="TituloPequeño">Información General</h3>
             <div className="resumenCitaInfoSeparado">
               <div className="resumenCitaSeparado">
-                <p>Descripción:</p>
-                <div className="resumenCitaSeparadoInfo">{cita.paciente.descripcion_resumen_cita}</div>
-              </div>
-              <div className="resumenCitaSeparado">
                 <p>Paciente:</p>
                 <div className="resumenCitaSeparadoInfo">{cita.paciente.nombre_paciente}</div>
               </div>
@@ -89,12 +85,16 @@ const VerCita = ({ id }) => {
                 {cita.paciente.fecha_nacimiento ? (
                   <div className="resumenCitaSeparadoInfo">{formatDate(cita.paciente.fecha_nacimiento)}</div>
                 ) : (
-                  <div className="resumenCitaSeparadoInfo"></div>
+                  <div className="resumenCitaSeparadoInfo">Sin registro</div>
                 )}
               </div>              
               <div className="resumenCitaSeparado">
                 <p>Sexo:</p>
-                <div className="resumenCitaSeparadoInfo">{cita.paciente.sexo_paciente}</div>
+                {cita.paciente.sexo_paciente ? (
+                  <div className="resumenCitaSeparadoInfo">{cita.paciente.sexo_paciente}</div>
+                ) : (
+                  <div className="resumenCitaSeparadoInfo">Sin registro</div>
+                )}
               </div>
               <div className="resumenCitaSeparado">
                 <p>Peso:</p>

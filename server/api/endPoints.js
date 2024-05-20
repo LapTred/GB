@@ -37,6 +37,7 @@ router.get('/citas/horario', Cita.disponibilidad);
 router.post('/cita/create', Cita.create);
 router.put('/cita/delete/:id', Cita.delete);
 router.get('/cita/:id', Cita.getById);
+router.put('/cita/finalizar/:id', Cita.finalizar);
 
 ///////////////////////Pacientes&Expedientes////////////////////////
 router.get('/pacientes', Paciente.getAll);

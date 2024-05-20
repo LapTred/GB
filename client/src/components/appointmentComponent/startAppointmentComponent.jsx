@@ -18,6 +18,8 @@ const StartAppointmentComponent = ({ id }) => {
   const [medicamentos, setMedicamentos] = useState([]); // Estado para almacenar los medicamentos
   const [vacunas, setVacunas] = useState([]); // Estado para almacenar las vacunas
   const navigate = useNavigate();
+  const [sex, setSex] = useState(''); // Estado para el sexo del paciente  
+  const [notas, setNotas] = useState(''); // Estado para las notas
 
   useEffect(() => {
     fetch(`http://localhost:3001/cita/${id}`)
@@ -38,8 +40,58 @@ const StartAppointmentComponent = ({ id }) => {
     return `${day}-${month}-${year}`;
   };
 
+  const formatDateSave = (dateString) => {
+    const year = dateString.getFullYear();
+    const month = dateString.getMonth();
+    const day = dateString.getDate();
+    const hours = dateString.getHours();
+    const minutes = dateString.getMinutes();
+    const seconds = dateString.getSeconds();
+      
+      // Crear una nueva fecha en UTC
+    const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds)); 
+    return utcDate.toISOString(); 
+  };
+
   const handleFinishCita = () => {
-    // fetch para guardar el resumen de la cita
+    const data = {
+      peso: weight,
+      fechaNacimiento: cita.paciente.fecha_nacimiento ? cita.paciente.fecha_nacimiento : birthDate ? formatDateSave(birthDate) : null,
+      sexo: cita.paciente.sexo_paciente ? cita.paciente.sexo_paciente : sex ? sex : null,
+      notas: notas,
+      medicamentos: medicamentos,
+      vacunas: vacunas,
+    };
+    console.log(data);
+
+    if (!data.fechaNacimiento || !data.peso || !data.sexo) {
+      console.log('Por favor, complete todos los campos requeridos.');
+      return;
+    }
+
+    console.log(data);
+
+    fetch(`http://localhost:3001/cita/finalizar/${id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al finalizar la cita');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log('Cita finalizada:', data);
+      navigate('/citas'); // Navegar a la lista de citas o alguna otra página adecuada
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      console.log('Ocurrió un error al finalizar la cita. Por favor, inténtelo de nuevo.');
+    });
   };
 
   const handleCloseModal = () => {
@@ -121,6 +173,14 @@ const StartAppointmentComponent = ({ id }) => {
     }
   };
 
+  const handleNotasChange = (e) => {
+    setNotas(e.target.value);
+  };
+
+  const handleSexChange = (e) => {
+    setSex(e.target.value);
+  };
+
   return (
     <div className="startCitaComponent">
       <div className="startCitaContainerT">
@@ -188,16 +248,16 @@ const StartAppointmentComponent = ({ id }) => {
                 <div className="startCitaSeparado">
                   <p>Sexo:</p>
                   <div className="inputRadioContainer">
-                    <input type="radio" id="male" name="gender" value="male" />
-                    <label className="inputRadio" htmlFor="male">M</label>
-                    <input type="radio" id="female" name="gender" value="female" />
-                    <label className="inputRadio" htmlFor="female">F</label>
+                    <input type="radio" id="M" name="gender" value="M" onChange={handleSexChange}/>
+                    <label className="inputRadio" htmlFor="M">M</label>
+                    <input type="radio" id="H" name="gender" value="H" onChange={handleSexChange}/>
+                    <label className="inputRadio" htmlFor="H">H</label>
                   </div>
                 </div>
               )}
               <div className="startCitaSeparado">
                 <p>Notas:</p>
-                <textarea />
+                <textarea value={notas} onChange={handleNotasChange} />
               </div>
             </div>
           </div>

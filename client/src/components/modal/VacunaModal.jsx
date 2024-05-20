@@ -59,16 +59,28 @@ const VacunaModal = ({ isOpen, onClose, onAccept }) => {
   // Función para manejar la aceptación de la vacuna
   const handleAccept = () => {
     const descripcionValue = descripcion.trim() === '' ? "Vacuna" : descripcion;
+    const fechasiguienVacuna = formatDateSave(fechasiguientevacuna);
     const vacunaData = {
       nombre,
       dosis,
-      fechasiguientevacuna,
+      fechasiguienVacuna,
       descripcion: descripcionValue,     
-    };
-    console.log(vacunaData);
+    };    
     onAccept(vacunaData);
   };
-  
+
+  const formatDateSave = (dateString) => {
+    const year = dateString.getFullYear();
+    const month = dateString.getMonth();
+    const day = dateString.getDate();
+    const hours = dateString.getHours();
+    const minutes = dateString.getMinutes();
+    const seconds = dateString.getSeconds();
+      
+      // Crear una nueva fecha en UTC
+    const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds)); 
+    return utcDate.toISOString(); 
+  };  
 
   // Validación del formulario
   const isFormValid = () => {
@@ -78,6 +90,8 @@ const VacunaModal = ({ isOpen, onClose, onAccept }) => {
       fechasiguientevacuna 
     );
   };
+
+
   
   return (
     <Modal isOpen={isOpen} onRequestClose={onClose} style={customStyles} contentLabel="Modal de Vacuna">

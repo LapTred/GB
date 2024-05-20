@@ -320,4 +320,8 @@ Cita.getById = (req, res) => {
     });
 };
 
+Cita.finalizar = (req, res) => {
+
+}
+
 module.exports = Cita;
