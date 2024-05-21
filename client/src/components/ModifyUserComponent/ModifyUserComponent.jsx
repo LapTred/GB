@@ -68,7 +68,7 @@ const ModifyUserComponent = ({ user, onCancel, onSave }) => {
       return; // Stop execution if there are validation errors
     }
 
-    fetch(`http://localhost:3001/usuario/${modifiedUser.id}`, {
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/usuario/${modifiedUser.id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

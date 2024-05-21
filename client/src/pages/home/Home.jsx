@@ -15,7 +15,7 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3001/citas')
+    fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/citas')
       .then(response => {
         if (!response.ok) {
           throw new Error('Error al obtener las citas');
@@ -68,7 +68,7 @@ const Home = () => {
   .slice(0, 5);
 
   const handleViewCita = (id) => {
-    fetch(`http://localhost:3001/cita/${id}`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/cita/${id}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error al obtener la cita');

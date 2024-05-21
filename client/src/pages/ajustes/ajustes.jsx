@@ -31,11 +31,11 @@ const Ajustes = () => {
   const fetchData = (type) => {
     let url;
     if (type === 'consultorios') {
-      url = 'http://localhost:3001/consultorios';
+      url = 'https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/consultorios';
     } else if (type === 'usuarios') {
-      url = 'http://localhost:3001/usuarios';
+      url = 'https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/usuarios';
     } else if (type === 'clinica') {
-      url = 'http://localhost:3001/clinica';
+      url = 'https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/clinica';
     }
 
     fetch(url)
@@ -71,7 +71,7 @@ const Ajustes = () => {
 
   const handleDeleteUser = (id) => {
     if (deleteConfirmations[id]) {
-      fetch(`http://localhost:3001/usuario/delete/${id}`, {
+      fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/usuario/delete/${id}`, {
         method: 'PUT'
       })
       .then(response => response.json())
@@ -94,7 +94,7 @@ const Ajustes = () => {
 
   const handleDeleteRoom = (id) => {
     if (deleteConfirmations[id]) {
-      fetch(`http://localhost:3001/consultorio/delete/${id}`, {
+      fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/consultorio/delete/${id}`, {
         method: 'DELETE'
       })
       .then(response => response.json())

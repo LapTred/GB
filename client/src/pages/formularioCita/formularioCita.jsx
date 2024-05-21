@@ -70,7 +70,7 @@ const Formulario = () => {
   }, [consultorios, selectedService, selectedDate, duracion, selectedHora]);
 
   const fetchServices = () => {
-    fetch('http://localhost:3001/servicios')
+    fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/servicios')
       .then(response => response.json())
       .then(data => {
         setServicios(data.map(servicio => ({ value: servicio.id, label: servicio.Nombre })));
@@ -79,7 +79,7 @@ const Formulario = () => {
   };
 
   const fetchHorario = () => {
-    fetch('http://localhost:3001/clinica')
+    fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/clinica')
       .then(response => response.json())
       .then(data => {
         setHorario(data);
@@ -136,7 +136,7 @@ const Formulario = () => {
 
     console.log(utcDate.toISOString());
 
-    fetch(`http://localhost:3001/citas/horario?fecha=${formData.fecha}&horarioInicio=${formData.horarioInicio}&horarioFinal=${formData.horarioFinal}&duracion=${formData.duracion}&consultorios=${formData.consultorios.join(',')}`, {
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/citas/horario?fecha=${formData.fecha}&horarioInicio=${formData.horarioInicio}&horarioFinal=${formData.horarioFinal}&duracion=${formData.duracion}&consultorios=${formData.consultorios.join(',')}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -170,7 +170,7 @@ const Formulario = () => {
   };
 
   const fetchConsultorios = () => {
-    fetch(`http://localhost:3001/consultorio/servicio/${selectedService.value}`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/consultorio/servicio/${selectedService.value}`)
       .then(response => response.json())
       .then(data => {
         setConsultorios(data.map(consultorio => ({ value: consultorio.idConsultorio, label: consultorio.nombreConsultorio })));             
@@ -179,7 +179,7 @@ const Formulario = () => {
   };
 
   const fetchPropietarios = () => {
-    fetch('http://localhost:3001/propietarios')
+    fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/propietarios')
       .then(response => response.json())
       .then(data => {
         setPropietarios(data); // Almacena todos los propietarios
@@ -257,7 +257,7 @@ const Formulario = () => {
         setTelefono("");
         document.getElementById('telefonoInput').disabled = false;
       }
-      fetch(`http://localhost:3001/propietario/pacientes?propietario=${selectedPropietario}`)
+      fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/propietario/pacientes?propietario=${selectedPropietario}`)
         .then(response => response.json())
         .then(data => {
           setPacientes(data);
@@ -317,7 +317,7 @@ const Formulario = () => {
         estado: tipoCita.value
       };
 
-      fetch('http://localhost:3001/cita/create', {
+      fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/cita/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

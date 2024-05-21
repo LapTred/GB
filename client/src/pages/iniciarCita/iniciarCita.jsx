@@ -12,7 +12,7 @@ const IniciarCita = () => {
 
   useEffect(() => {
     // Fetch para obtener los detalles de la cita
-    fetch(`http://localhost:3001/cita/${id}`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/cita/${id}`)
       .then((response) => {
         if (!response.ok) {
           throw new Error("Error al obtener los detalles de la cita");

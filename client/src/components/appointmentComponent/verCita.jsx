@@ -8,7 +8,7 @@ const VerCita = ({ id }) => {
 
   useEffect(() => {
     // Lógica para cargar los detalles de la cita basada en el id
-    fetch(`http://localhost:3001/cita/${id}`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/cita/${id}`)
       .then(response => response.json())
       .then(data => setCita(data))
       .catch(error => console.error('Error:', error));

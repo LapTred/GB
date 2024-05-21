@@ -20,7 +20,7 @@ const PatientComponent = () => {
 
 
     useEffect(() => {
-        fetch('http://localhost:3001/pacientes')
+        fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/pacientes')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al obtener los pacientes');
@@ -63,7 +63,7 @@ const PatientComponent = () => {
         const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar este paciente?");
     
         if (confirmDelete) {
-            fetch(`http://localhost:3001/paciente/delete/${id}`, {
+            fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/paciente/delete/${id}`, {
                 method: 'PUT' // Cambiar a PUT
             })
             .then(response => {
@@ -90,7 +90,7 @@ const PatientComponent = () => {
         if(paciente.Estado === "ACTIVO")
         {
             
-            fetch(`http://localhost:3001/paciente/${id}`)
+            fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/paciente/${id}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al obtener el paciente');

@@ -25,7 +25,7 @@ const AppointmentComponent = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:3001/citas')
+        fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/citas')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al obtener las citas');
@@ -131,7 +131,7 @@ const handleEstadoChange = (estado) => {
         const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta cita?");
         console.log(citas);
         if (confirmDelete) {
-            fetch(`http://localhost:3001/cita/delete/${id_cita}`, {
+            fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/cita/delete/${id_cita}`, {
                 method: 'PUT' // Cambiar a PUT
             })
             .then(response => {

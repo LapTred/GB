@@ -79,14 +79,14 @@ const CreateUserComponent = ({ onCancel, onSave }) => {
     }
   
     // Verificar si el nombre de usuario ya existe
-    fetch(`http://localhost:3001/usuario/check-username/${modifiedUser.nombreUsuario}`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/usuario/check-username/${modifiedUser.nombreUsuario}`)
       .then(response => response.json())
       .then(data => {
         if (data.exists) {
           setUsernameExistsError(true); // Establecer el estado de error de nombre de usuario existente
         } else {
           // Si el nombre de usuario no existe, continuar con la creación del usuario
-          fetch('http://localhost:3001/usuario/create', {
+          fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/usuario/create', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

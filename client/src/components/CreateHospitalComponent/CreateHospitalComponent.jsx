@@ -47,7 +47,7 @@ const CreateHospitalComponent = ({ onSave, clinicaData }) => {
 
   const handleSave = () => {
     // Realizar la solicitud fetch para enviar los datos modificados al servidor
-    fetch('http://localhost:3001/clinica/update', {
+    fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/clinica/update', {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',

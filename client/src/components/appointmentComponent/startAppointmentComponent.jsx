@@ -22,7 +22,7 @@ const StartAppointmentComponent = ({ id }) => {
   const [notas, setNotas] = useState(''); // Estado para las notas
 
   useEffect(() => {
-    fetch(`http://localhost:3001/cita/${id}`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/cita/${id}`)
       .then(response => response.json())
       .then(data => setCita(data))
       .catch(error => console.error('Error:', error));
@@ -72,7 +72,7 @@ const StartAppointmentComponent = ({ id }) => {
 
     console.log(data);
 
-    fetch(`http://localhost:3001/cita/finalizar/${cita.paciente.id_Paciente}`, {
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/cita/finalizar/${cita.paciente.id_Paciente}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ const StartAppointmentComponent = ({ id }) => {
   };
 
   const handleViewPatient = (id) => {
-    fetch(`http://localhost:3001/paciente/${id}`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/paciente/${id}`)
       .then(response => {
         if (!response.ok) {
           throw new Error('Error al obtener el paciente');

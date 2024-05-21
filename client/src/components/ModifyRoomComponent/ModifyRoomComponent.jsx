@@ -19,14 +19,14 @@ const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
   }, []);
 
   const fetchServices = () => {
-    fetch('http://localhost:3001/servicios')
+    fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/servicios')
       .then(response => response.json())
       .then(data => {
         const allServices = data.map(servicio => ({ value: servicio.id, label: servicio.Nombre }));
         if (isMounted) {          
           setServicios(allServices);  
           setAvailableServices(allServices);
-          fetch(`http://localhost:3001/consultorio-servicio/${room.id}`)
+          fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/consultorio-servicio/${room.id}`)
           .then(response => response.json())
           .then(data => {
             const selectedServiceIds = data.map(servicio => servicio.idServicio);
@@ -54,7 +54,7 @@ const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
   };
   
   const handleSave = () => {
-    fetch(`http://localhost:3001/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/${modifiedRoom.id}`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/${modifiedRoom.id}`)
       .then(response => response.json())
       .then(data => {
         if (data.exists) {
@@ -65,7 +65,7 @@ const ModifyRoomComponent = ({ room, onCancel, onSave }) => {
             servicios: selectedServices.map(service => service.value) // Obtener solo los valores de los servicios seleccionados
           };
   
-          fetch(`http://localhost:3001/consultorio/${modifiedRoom.id}`, {
+          fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/consultorio/${modifiedRoom.id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

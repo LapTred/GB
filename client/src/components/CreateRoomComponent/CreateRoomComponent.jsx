@@ -16,7 +16,7 @@ const CreateRoomComponent = ({ onCancel, onSave }) => {
 
 
   const fetchServices = () => {
-    fetch('http://localhost:3001/servicios')
+    fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/servicios')
       .then(response => response.json())
       .then(data => {
         setServicios(data.map(servicio => ({ value: servicio.id, label: servicio.Nombre })));
@@ -47,13 +47,13 @@ const CreateRoomComponent = ({ onCancel, onSave }) => {
       return;
     }
 
-    fetch(`http://localhost:3001/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/null`)
+    fetch(`https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/consultorio/check-roomname/${modifiedRoom.nombreConsultorio}/null`)
       .then(response => response.json())
       .then(data => {
         if (data.exists) {
           setRoomNameExistsError(true);
         } else {
-          fetch('http://localhost:3001/consultorio/create', {
+          fetch('https://veternaria-gb-deploy-e24536ab4e1f.herokuapp.com/consultorio/create', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
