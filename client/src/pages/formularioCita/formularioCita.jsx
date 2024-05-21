@@ -125,6 +125,9 @@ const Formulario = () => {
     
     // Crear una nueva fecha en UTC
     const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
+    console.log(utcDate.toISOString());
+    console.log(selectedDate.toISOString());
+    console.log("\n");
 
     const formData = {
       fecha: utcDate.toISOString(),
@@ -133,8 +136,6 @@ const Formulario = () => {
       duracion: duracion.value,
       consultorios: consultorios.map(consultorio => consultorio.value)
     };
-
-    console.log(utcDate.toISOString());
 
     fetch(`http://localhost:3001/citas/horario?fecha=${formData.fecha}&horarioInicio=${formData.horarioInicio}&horarioFinal=${formData.horarioFinal}&duracion=${formData.duracion}&consultorios=${formData.consultorios.join(',')}`, {
       method: 'GET',
@@ -304,7 +305,8 @@ const Formulario = () => {
       
       // Crear una nueva fecha en UTC
       const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
-      
+      console.log(utcDate);
+      console.log(selectedDate);
       const formData = {
         idServicio: selectedService.value,
         fecha: utcDate.toISOString(),
