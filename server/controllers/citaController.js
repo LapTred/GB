@@ -321,7 +321,125 @@ Cita.getById = (req, res) => {
 };
 
 Cita.finalizar = (req, res) => {
+    const { id } = req.params;
+    try {
+        // Obtiene los datos de la cita
+        const { medicamentos, vacunas, peso, fechaNacimiento, sexo, descripcion, idCita } = req.body;
+        
+        // Convertir fecha a formato YYYY-MM-DD
+        const fechaFormato = new Date(fechaNacimiento).toISOString().split('T')[0];
+        const today = new Date().toISOString().split('T')[0];
 
-}
+        // Actualizar el expediente del paciente
+        db.query('UPDATE Expediente SET Peso = ?, Sexo = ?, fechaNacimiento = ? WHERE idPaciente = ?', [peso, sexo, fechaFormato, id], (error, results, fields) => {
+            if (error) {
+                console.error('Error al actualizar el expediente:', error);
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }            
+            if (results.affectedRows > 0) {
+                // Cambiar el estado del paciente a "ACTIVO"
+                db.query('UPDATE Paciente SET Estado = "ACTIVO" WHERE id = ?', [id], (error) => {
+                    if (error) {
+                        console.error('Error al actualizar el estado del paciente:', error);
+                        return res.status(500).json({ error: 'Error interno del servidor' });
+                    }
+
+                    // Cambiar el estado de la cita a "COMPLETADA"
+                    db.query('UPDATE Citas SET Estado = "COMPLETADA" WHERE id = ?', [idCita], (error) => {
+                        if (error) {
+                            console.error('Error al actualizar el estado de la cita:', error);
+                            return res.status(500).json({ error: 'Error interno del servidor' });
+                        }
+
+                        // Obtener el expediente actualizado
+                        db.query('SELECT id FROM Expediente WHERE idPaciente = ?', [id], (error, results) => {
+                            if (error) {
+                                console.error('Error al obtener el expediente actualizado:', error);
+                                return res.status(500).json({ error: 'Error interno del servidor' });
+                            }
+
+                            if (results.length > 0) {
+                                const expedienteId = results[0].id;
+                                console.log('Expediente actualizado, ID:', expedienteId);
+                                CrearResumen(expedienteId);
+                            } else {
+                                return res.status(404).json({ error: 'Expediente no encontrado después de la actualización' });
+                            }
+                        });
+                    });
+                });
+            } else {
+                console.log('No se encontró el expediente para actualizar');
+                return res.status(404).json({ error: 'Expediente no encontrado' });
+            }
+        });
+
+        // Insertar el resumen de la cita
+        function CrearResumen(idExpediente) {
+            db.query('INSERT INTO ResumenCita (idCita, idExpediente, Peso, Descripcion) VALUES (?, ?, ?, ?)', [idCita, idExpediente, peso, descripcion], (error, results, fields) => {
+                if (error) {
+                    console.error('Error al insertar el resumen:', error);
+                    return res.status(500).json({ error: 'Error interno del servidor' });
+                }
+                if (results.affectedRows > 0) {
+                    // Obtener el id del Resumen
+                    db.query('SELECT id FROM ResumenCita WHERE idExpediente = ?', [idExpediente], (error, results, fields) => {
+                        if (error) {
+                            console.error('Error al obtener el resumen:', error);
+                            return res.status(500).json({ error: 'Error interno del servidor' });
+                        }            
+                        if (results.length > 0) {
+                            const resumenId = results[0].id;
+                            console.log('Resumen creado, ID:', resumenId);
+                            InsertarMedicamentos(resumenId);
+                            InsertarVacunas(resumenId);
+                            return res.status(200).json({ message: 'Resumen encontrado exitosamente', id: idExpediente });
+                        } else {
+                            return res.status(404).json({ error: 'Resumen no encontrado' });
+                        }
+                    });
+                } else {
+                    console.log('No se pudo crear el resumen de la cita');
+                    return res.status(404).json({ error: 'Resumen no creado' });
+                }
+            });
+        }
+
+        // Función para insertar los medicamentos
+        function InsertarMedicamentos(resumenId) {
+            medicamentos.forEach(medicamento => {
+                db.query('INSERT INTO Medicamento (idResumenCita, nombreMedicamento, Descripcion) VALUES (?, ?, ?)', [resumenId, medicamento.nombre, medicamento.descripcion], (error, results) => {
+                    if (error) {
+                        console.error('Error al insertar en Medicamentos:', error);
+                    }
+                });
+            });
+        }
+
+        // Función para insertar las vacunas
+        function InsertarVacunas(resumenId) {
+            vacunas.forEach(vacuna => {
+                // Convertir fecha a formato YYYY-MM-DD
+                const fechaVacuna = new Date(vacuna.fechasiguienVacuna).toISOString().split('T')[0];
+                db.query('INSERT INTO Vacunas (idResumenCita, nombreVacuna, Dosis, fechaVacuna, fechaSiguienteVacuna) VALUES (?, ?, ?, ?, ?)', [resumenId, vacuna.nombre, vacuna.dosis, today, fechaVacuna], (error, results) => {
+                    if (error) {
+                        console.error('Error al insertar en Vacunas:', error);
+                    }
+                });
+            });
+        }       
+    } catch (error) {
+        // Maneja el error
+        console.error('Error al finalizar la cita:', error);
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
+
+
+//Recibo la id con const { id } = req.params;
+//Update Expediente Where idPaciente sea igual al idPaciente de Citas, aquí poner la fecha de nacimiento, el sexo, el peso y actualizar estado a ACTIVO
+//Insertar en resumen cita con el id del expediente creado y el de la cita, el peso y la descripción
+//Insertar en vacunas y medicamentos, el nombre y descripcion, fecha de siguiente vacuna en base a el resumen cita obtenido
+//Cambiar estado de la cita a "COMPLETADO" 
 
 module.exports = Cita;

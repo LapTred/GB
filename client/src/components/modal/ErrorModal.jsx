@@ -5,8 +5,8 @@ const ErrorModal = ({ isOpen, onClose, header, text }) => {
   // Estilos para el modal
   const customStyles = {
     content: {
-      width: '30%', // Ancho del modal
-      height: '30%', // Alto del modal
+      width: '40%', // Ancho del modal
+      height: '40%', // Alto del modal
       margin: 'auto', // Centrar el modal horizontalmente
       overflow: 'auto', // Permitir desplazamiento si el contenido es demasiado grande
       display: 'flex',

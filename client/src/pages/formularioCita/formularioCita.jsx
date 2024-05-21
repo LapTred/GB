@@ -448,7 +448,7 @@ const Formulario = () => {
                   id="telefonoInput" 
                   className="inputPaciente"
                   value = {telefono}
-                  maxLength = {14}
+                  maxLength = "12"
                   onChange={setTelefono}                  
                   country='MX'
                 />                             

@@ -1,6 +1,7 @@
 .ModalPaciente{
     text-align: center;
     width: 90%;
+    overflow: auto;
     .ModalPacienteDato{
         display: flex;
         justify-content:space-between;
@@ -107,19 +108,20 @@
         display: none;
         font-size: 1vw;
     }
-    .patientTable {
+    .patientTableModal {
         width: 100%;
         border-collapse: separate; // Permite aplicar bordes redondeados
         border-spacing: 0; // Elimina el espacio entre celdas
-        border: 1px solid #ccc; // Borde de la tabla
-        border-radius: 10px; // Borde redondeado de la tabla
+        border: 0.1vw solid #ccc; // Borde de la tabla
+        border-radius: 0.7vw; // Borde redondeado de la tabla
         overflow: hidden; // Asegura que las esquinas redondeadas se apliquen correctamente           
-
-        .tableHeader, .tableData {
-            padding: 0.5rem;
+        
+        .tableHeaderPatient, .tableDataPatient {
+            padding: 0.2vw;
+            font-size: 1vw;
             text-align: center; // Centramos los datos en la tabla
-            
-            border: 1px solid #ccc;
+            word-wrap: break-word; /* Permite que las palabras largas se envuelvan */
+            border: 0.1vw solid #ccc;
             .containerButtons{
                 display: flex;
                 justify-content: space-evenly;
@@ -132,22 +134,45 @@
             }
         }
         
-        .tableHeader {
+        .tableHeaderPatient {
             font-weight: bold;
             background-color: #f2f2f2;
         }
+
+        .tableDataPatient {
+            font-size: 1vw;
+            max-width: 5vw;
+        }
          // Bordes redondeados para las esquinas de la tabla
          thead tr:first-child th:first-child {
-            border-top-left-radius: 10px;
+            border-top-left-radius: 0.6vw;
         }
         thead tr:first-child th:last-child {
-            border-top-right-radius: 10px;
+            border-top-right-radius: 0.6vw;
         }
         tbody tr:last-child td:first-child {
-            border-bottom-left-radius: 10px;
+            border-bottom-left-radius: 0.6vw;
         }
         tbody tr:last-child td:last-child {
-            border-bottom-right-radius: 10px;
+            border-bottom-right-radius: 0.6vw;
         }
+        .descriptionColumn {
+            max-width: 7vw; /* Ancho máximo para la columna de descripción */
+        }
+
+        .medicationsColumn {
+            max-width: 4vw; /* Ancho máximo para las columnas de medicamentos y vacunas */
+        }
+        .vaccinesColumn{
+            
+            max-width: 5vw; /* Ancho máximo para las columnas de medicamentos y vacunas */
+        }
+        .vacunasPaciente{
+                
+            border-top: 0.1vw solid #ddd; /* Agrega un borde inferior a cada vacuna */
+            padding-bottom: 8px;
+
+        }
+        
     }
 }

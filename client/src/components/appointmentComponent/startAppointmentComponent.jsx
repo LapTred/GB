@@ -58,9 +58,10 @@ const StartAppointmentComponent = ({ id }) => {
       peso: weight,
       fechaNacimiento: cita.paciente.fecha_nacimiento ? cita.paciente.fecha_nacimiento : birthDate ? formatDateSave(birthDate) : null,
       sexo: cita.paciente.sexo_paciente ? cita.paciente.sexo_paciente : sex ? sex : null,
-      notas: notas,
+      descripcion: notas,
       medicamentos: medicamentos,
       vacunas: vacunas,
+      idCita: id
     };
     console.log(data);
 
@@ -71,8 +72,8 @@ const StartAppointmentComponent = ({ id }) => {
 
     console.log(data);
 
-    fetch(`http://localhost:3001/cita/finalizar/${id}`, {
-      method: 'POST',
+    fetch(`http://localhost:3001/cita/finalizar/${cita.paciente.id_Paciente}`, {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },

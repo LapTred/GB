@@ -16,24 +16,24 @@ const PacienteModal = ({ isOpen, onClose, pacienteDetails }) => {
       justifyContent: 'center',     
     },
     header: {
-      marginBottom: '20px',// Espaciado inferior del encabezado
-      fontSize: '32px', 
+      marginBottom: '1.5vw',// Espaciado inferior del encabezado
+      fontSize: '2vw', 
     },
     text: {
-      marginBottom: '20px', // Espaciado inferior del texto
+      marginBottom: '1.2vw', // Espaciado inferior del texto
     },
     button: {
       backgroundColor: '#007bff', // Color de fondo del botón
       border: 'none', // Borde del botón
       color: 'white', // Color del texto del botón
-      padding: '15px 32px', // Espaciado interno del botón
+      padding: '1vw 2vw', // Espaciado interno del botón
       textAlign: 'center', // Alineación del texto dentro del botón
       textDecoration: 'none', // Decoración de texto
       display: 'inline-block', // Mostrar como bloque en línea
-      fontSize: '16px', // Tamaño de fuente del botón
-      margin: '1vw 2px', // Margen del botón
+      fontSize: '1.2vw', // Tamaño de fuente del botón
+      margin: '1vw 0.2vw', // Margen del botón
       cursor: 'pointer', // Cursor al pasar sobre el botón
-      borderRadius: '12px', // Borde redondeado del botón
+      borderRadius: '1vw', // Borde redondeado del botón
     },
   };
 
@@ -50,7 +50,6 @@ const PacienteModal = ({ isOpen, onClose, pacienteDetails }) => {
               </div>
               <div className="startCitaSeparado">
                 <p>Fecha de Nacimiento:</p>
-                {/* Renderiza la fecha de nacimiento si existe, de lo contrario, renderiza un div vacío */}
                 {pacienteDetails.paciente.fechaNacimiento ? (
                   <div className="startCitaSeparadoInfo">{new Date(pacienteDetails.paciente.fechaNacimiento).toLocaleDateString()}</div>
                 ) : (
@@ -89,44 +88,51 @@ const PacienteModal = ({ isOpen, onClose, pacienteDetails }) => {
             </div>
             <h3 style={customStyles.header}>Citas Previas</h3>
             {pacienteDetails.citas.filter(cita => cita.EstadoCita === 'COMPLETADA').length > 0 ? (
-                <table className="patientTable">
+                <table className="patientTableModal">
                     <thead>
                     <tr>
-                        <th className="tableHeader">Descripción</th>
-                        <th className="tableHeader">Fecha</th>
-                        <th className="tableHeader">Hora</th>
-                        <th className="tableHeader">Servicio</th>
-                        <th className="tableHeader">Peso</th>
-                        <th className="tableHeader">Medicamentos</th>
-                        <th className="tableHeader">Vacunas</th>
+                        <th className="tableHeaderPatient serviceColumn">Servicio</th>
+                        {/*<th className="tableHeaderPatient descriptionColumn">Descripción</th>*/}
+                        <th className="tableHeaderPatient dateColumn">Fecha</th>
+                        {/*<th className="tableHeaderPatient timeColumn">Hora</th>*/}
+                        
+                        <th className="tableHeaderPatient weightColumn">Peso</th>
+                        <th className="tableHeaderPatient medicationsColumn">Medicamentos</th>
+                        <th className="tableHeaderPatient vaccinesColumn">Vacunas</th>
                     </tr>
                     </thead>
                     <tbody>
                     {pacienteDetails.citas.map((cita, index) => (
                         <tr key={index}>
-                        <td className="tableData">{cita.DescripcionResumenCita}</td>
-                        <td className="tableData">{new Date(cita.FechaCita).toLocaleDateString()}</td>
-                        <td className="tableData">{cita.HoraInicioCita} - {cita.HoraFinalCita}</td>
-                        <td className="tableData">{cita.NombreServicio}</td>
-                        <td className="tableData">{cita.PesoResumenCita}</td>
-                        <td className="tableData">
+                        <td className="tableDataPatient serviceColumn">{cita.NombreServicio}</td>
+                        {/*<td className="tableDataPatient descriptionColumn">{cita.DescripcionResumenCita}</td>*/}
+                        <td className="tableDataPatient dateColumn">{new Date(cita.FechaCita).toLocaleDateString()}</td>
+                        {/*<td className="tableDataPatient timeColumn">{cita.HoraInicioCita} - {cita.HoraFinalCita}</td>*/}
+                      
+                        <td className="tableDataPatient weightColumn">{cita.PesoResumenCita}</td>
+                        <td className="tableDataPatient medicationsColumn">
                             {pacienteDetails.medicamentos
                             .filter(medicamento => medicamento.idResumenCita === cita.idResumenCita)
-                            .map((medicamento, index) => (
+                            
+                            .map((medicamento, index) => (                              
                                 <div key={index}>
-                                <p>Medicamento: {medicamento.NombreMedicamento}</p>
-                                <p>Descripción: {medicamento.DescripcionMedicamento}</p>
+                                  <div className="vacunasPaciente">
+                                    <p>Medicamento: {medicamento.NombreMedicamento}</p>
+                                    <p>Descripción: {medicamento.DescripcionMedicamento}</p>
+                                  </div>                               
                                 </div>
                             ))}
                         </td>
-                        <td className="tableData">
+                        <td className="tableDataPatient vaccinesColumn">
                             {pacienteDetails.vacunas
                             .filter(vacuna => vacuna.idResumenCitaVacuna === cita.idResumenCita)
                             .map((vacuna, index) => (
                                 <div key={index}>
-                                <p>Vacuna: {vacuna.NombreVacuna}</p>
-                                <p>Fecha próxima vacuna: {new Date(vacuna.FechaSiguienteVacuna).toLocaleDateString()}</p>
-                                <p>Dosis: {vacuna.DosisVacuna}</p>
+                                  <div className="vacunasPaciente">
+                                    <p>Vacuna: {vacuna.NombreVacuna}</p>
+                                    <p>Fecha próxima vacuna: {new Date(vacuna.FechaSiguienteVacuna).toLocaleDateString()}</p>
+                                    <p>Dosis: {vacuna.DosisVacuna}</p>
+                                  </div>
                                 </div>
                             ))}
                         </td>
