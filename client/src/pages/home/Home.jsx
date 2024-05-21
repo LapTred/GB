@@ -59,12 +59,13 @@ const Home = () => {
   };
 
   const filteredCitas = citas 
-    .filter(cita =>
-      (!filteredConsultorio || cita.nombre_consultorio === filteredConsultorio) &&
-      (cita.estado === "AGENDADA") &&
-      isToday(cita.fecha)
-    )
-    .slice(0, 5);
+  .filter(cita =>
+    (!filteredConsultorio || cita.nombre_consultorio === filteredConsultorio) &&
+    (cita.estado === "AGENDADA" || cita.estado === "FLEXIBLE") &&
+    isToday(cita.fecha)
+  )
+  .sort((a, b) => a.hora.localeCompare(b.hora))  // Ordenar por hora
+  .slice(0, 5);
 
   const handleViewCita = (id) => {
     fetch(`http://localhost:3001/cita/${id}`)

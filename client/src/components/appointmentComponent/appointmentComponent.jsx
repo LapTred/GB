@@ -10,7 +10,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 const AppointmentComponent = () => {
     const [citas, setCitas] = useState([]);
-    const [pageSize] = useState(10); // Tamaño de la página
+    const [pageSize] = useState(8); // Tamaño de la página
     const [currentPage, setCurrentPage] = useState(1); // Página actual
     const [showFilterModal, setShowFilterModal] = useState(false);
     const [filteredConsultorio, setFilteredConsultorio] = useState('');
@@ -102,6 +102,14 @@ const handleEstadoChange = (estado) => {
     const handleSearchChange = (event) => {
         setSearchTerm(event.target.value);
     };
+    
+    // Función para convertir una hora en formato HH:MM a un objeto Date
+    const parseTime = (timeString) => {
+        const [hours, minutes] = timeString.split(':').map(Number);
+        const date = new Date();
+        date.setHours(hours, minutes, 0, 0);
+        return date;
+    };
 
     // Filtrar citas en función del término de búsqueda, consultorio y estado
     const filteredCitas = citas
@@ -111,7 +119,13 @@ const handleEstadoChange = (estado) => {
         (!filteredConsultorio || cita.nombre_consultorio === filteredConsultorio) &&
         (!filteredEstado || cita.estado === filteredEstado)
     )
-    .sort((a, b) => new Date(a.fecha) - new Date(b.fecha));
+    .sort((a, b) => {
+        const dateComparison = new Date(a.fecha) - new Date(b.fecha);
+        if (dateComparison !== 0) return dateComparison;
+        return parseTime(a.hora) - parseTime(b.hora);
+    });
+
+    
     
     const handleDeleteCita = (id_cita, nombre_dueño) => {
         const confirmDelete = window.confirm("¿Estás seguro de que deseas eliminar esta cita?");

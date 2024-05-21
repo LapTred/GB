@@ -35,6 +35,7 @@ const Formulario = () => {
   const [customText, setCustomText] = useState("");
   const [redirectToCitas, setRedirectToCitas] = useState(false); // Nuevo estado para la redirección
   const [telefono, setTelefono] = useState('');
+  const [tipoCita, settipoCita] = useState (null); 
   
 
 
@@ -54,13 +55,13 @@ const Formulario = () => {
     if (selectedService && selectedDate && duracion) {
       fetchConsultorios();
     }
-  }, [selectedService, selectedDate, duracion]);
+  }, [selectedService, selectedDate, duracion, tipoCita]);
 
   useEffect(() => {
     if (consultorios.length > 0 && selectedService && selectedDate && duracion) {
       fetchHorarioCitas();
     }
-  }, [consultorios, selectedService, selectedDate, duracion]);
+  }, [consultorios, selectedService, selectedDate, duracion, tipoCita]);
 
   useEffect(() => {
     if (selectedHora) {
@@ -121,6 +122,7 @@ const Formulario = () => {
     const minutes = selectedDate.getMinutes();
     const seconds = selectedDate.getSeconds();
     
+    
     // Crear una nueva fecha en UTC
     const utcDate = new Date(Date.UTC(year, month, day, hours, minutes, seconds));
 
@@ -139,13 +141,30 @@ const Formulario = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-    })
+      })
       .then(response => response.json())
       .then(data => {
-        const availableHours = data.filter(item => item[2] === true); // Filtrar por disponibilidad true
-        const uniqueHours = [...new Set(availableHours.map(item => item[1]))]; // Extraer horas únicas
-        setHorasDisponibles(uniqueHours.map(hour => ({ value: hour, label: hour })));
-        setConsultoriosDisponibles(data);
+        setSelectedHora(null);
+        if (tipoCita.value === "FLEXIBLE"){
+          data = data.map(item => {
+            item[2] = true;
+            return item;
+          });  
+          const availableHours = data.filter(item => item[2] === true); // Filtrar por disponibilidad true
+          const uniqueHours = [...new Set(availableHours.map(item => item[1]))]; // Extraer horas únicas
+          setHorasDisponibles(uniqueHours.map(hour => ({ value: hour, label: hour })));
+          setConsultoriosDisponibles(data);
+          
+          console.log(data);
+        }
+        else{
+          const availableHours = data.filter(item => item[2] === true); // Filtrar por disponibilidad true
+          const uniqueHours = [...new Set(availableHours.map(item => item[1]))]; // Extraer horas únicas
+          setHorasDisponibles(uniqueHours.map(hour => ({ value: hour, label: hour })));
+          setConsultoriosDisponibles(data);
+          
+
+        }
       })
       .catch(error => console.error('Error fetching horario de citas:', error));
   };
@@ -264,6 +283,7 @@ const Formulario = () => {
 
   const handleGuardarClick = () => {
     if (
+      tipoCita &&
       selectedService &&
       selectedDate &&
       duracion &&
@@ -273,6 +293,7 @@ const Formulario = () => {
       telefono &&
       selectedPaciente // Verificar si se ha seleccionado un paciente
     ) {
+      document.getElementById('guardarCita').disabled = true;
         // Extraer partes de la fecha local
       const year = selectedDate.getFullYear();
       const month = selectedDate.getMonth();
@@ -292,7 +313,8 @@ const Formulario = () => {
         idConsultorio: selectedConsultorio.value,
         propietario: selectedPropietario,
         telefono: telefono,
-        paciente: selectedPaciente.label 
+        paciente: selectedPaciente.label,
+        estado: tipoCita.value
       };
 
       fetch('http://localhost:3001/cita/create', {
@@ -322,7 +344,8 @@ const Formulario = () => {
           setModalOpen(true);
           
         });
-    } else {   
+    } else {  
+      document.getElementById('guardarCita').disabled = false; 
       setCustomHeader("Error al guardar la cita");
       setCustomText("Por favor complete todos los campos o verifique los datos antes de crear una cita.");
       setModalOpen(true);
@@ -367,6 +390,16 @@ const Formulario = () => {
                 dateFormat="dd/MM/yyyy" // Date format
                 filterDate={isDateAvailable} // Function to filter available dates
               />
+              <h2>Tipo de cita</h2>
+              <Select
+                options={[
+                  { value: 'FLEXIBLE', label: 'FLEXIBLE' },
+                  { value: 'AGENDADA', label: 'NORMAL' }                  
+                ]}
+                value={tipoCita}
+                onChange={settipoCita}
+                placeholder="Seleccione el tipo de cita..."
+              />
               <h2>Duración</h2>
               <Select
                 options={[
@@ -384,14 +417,18 @@ const Formulario = () => {
                 onChange={setDuracion}
                 placeholder="Seleccione la duración..."
               />
+              
               <h2>Hora</h2>
               <Select
                 options={horasDisponibles}
                 value={selectedHora}
                 onChange={setSelectedHora}
                 placeholder="Seleccione una hora..."
-              />
-               {selectedHora && (
+              />              
+              
+            </div>
+            <div className="containerB">
+            {(selectedHora && tipoCita)  && (
                 <>
                   <h2>Consultorio</h2>
                   <Select
@@ -402,9 +439,6 @@ const Formulario = () => {
                   />
                 </>
               )}
-              
-            </div>
-            <div className="containerB">
               <h2>Propietario</h2>
               <div className="containerBfirst">
               <Autosuggest
@@ -512,6 +546,7 @@ const Formulario = () => {
                 </button>
               </Link>
                 <button
+                  id='guardarCita'
                   className='containerBsecondButtons'
                   style={{ backgroundColor: '#d8f3dc', color: 'black', marginTop:'1.5vw',marginLeft: '0vw', border: '0.2vw solid #d8f3dc', padding: '1vw 1vw', borderRadius: '0.5vw', cursor: 'pointer' }}
                   onClick={handleGuardarClick}

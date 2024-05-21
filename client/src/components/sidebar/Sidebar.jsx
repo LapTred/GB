@@ -10,7 +10,12 @@ import logoImage from './logo.jpg';
 import './sidebar.scss';
 
 
+
 const Sidebar = () => {  
+
+  const rol = sessionStorage.getItem('Acceso');
+
+
   return (
     <div className="sidebar">
       <div className="top">
@@ -39,16 +44,22 @@ const Sidebar = () => {
             </li>
           </Link>
         </ul>
-        <hr className="linea" />
-        <ul className="general">
-          <p className="title">General</p>          
-          <Link to="/ajustes" style={{ textDecoration: "none" }}>
-            <li>
-              <SettingsIcon className="icon" />
-              <span>Ajustes</span>
-            </li>
-          </Link>
-        </ul>
+        {rol === "Administrador" && (
+          <div>
+            <hr className="linea" />        
+            <ul className="general">
+              <p className="title">General</p>          
+              <Link to="/ajustes" style={{ textDecoration: "none" }}>
+                <li>
+                  <SettingsIcon className="icon" />
+                  <span>Ajustes</span>
+                </li>
+              </Link>
+            </ul>
+          </div>
+        )}
+        
+      
       </div>
     </div>
   );

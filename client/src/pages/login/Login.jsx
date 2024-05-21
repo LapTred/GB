@@ -34,25 +34,9 @@ const Login = () => {
             sessionStorage.setItem('token', result.token);
             sessionStorage.setItem('Acceso', result.Acceso);
             sessionStorage.setItem('nombre', result.Nombre);
-            // Redirige al usuario según su tipo de acceso
-            switch(result.Acceso) {
-              case 'Administrador':
-                console.log('Redirigiendo a homeAdministrador');
-                navigate('/home');
-                break;
-              case 'Veterinario':
-                console.log('Redirigiendo a homeVeterinario');
-                navigate('/homeAuditor');
-                break;
-              case 'Recepcionista':
-                console.log('Redirigiendo a homeRecepcionista');
-                navigate('/homeAuditado');
-                break;
-              default:
-                console.log('Acceso no reconocido, redirigiendo a login');
-                navigate('/login');
-                break;
-          }
+
+            // Redirige al usuario a la ruta /home independientemente del rol
+            navigate('/home');
         } else {
           // Manejo de error en el inicio de sesión
           console.error('Inicio de sesión fallido');

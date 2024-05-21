@@ -47,7 +47,7 @@ Cita.disponibilidad = async (req, res) => {
     // Convertir horarioInicio y horarioFinal a objetos moment
     const horarioInicioTime = moment(`1970-01-01T${horarioInicio}`);
     const horarioFinalTime = moment(`1970-01-01T${horarioFinal}`);
-
+  
     try {
         const disponibilidadPorConsultorio = [];
 
@@ -66,12 +66,17 @@ Cita.disponibilidad = async (req, res) => {
                 const horarioInicioFormat = hora.format('HH:mm:ss');
                 const horarioFinal = hora.clone().add(duracion, 'minutes');
                 const horarioFinalFormat = horarioFinal.format('HH:mm:ss');
+                
+                console.log("\n");
+                console.log(horarioInicioFormat);
+                console.log(horarioFinalFormat);
+
 
                 // Consultar si existe alguna cita para el consultorio en la fecha, hora y duración especificadas
                 try {
                     const result = await query(
-                        "SELECT COUNT(*) AS citas_programadas FROM Citas WHERE idConsultorio = ? AND Fecha = ? AND horaInicio <= ? AND horaFinal >= ?",
-                        [consultorioId, fechaFormato, horarioInicioFormat, horarioFinalFormat]
+                        "SELECT COUNT(*) AS citas_programadas FROM Citas WHERE idConsultorio = ? AND Fecha = ? AND horaInicio <= ? AND horaInicio >= ? OR idConsultorio = ? AND Fecha = ? AND horaFinal > ? AND horaFinal <= ? OR  idConsultorio = ? AND Fecha = ? AND horaFinal >= ? AND horaFinal >= ? AND horaInicio <= ? AND horaInicio <= ?",
+                        [consultorioId, fechaFormato, horarioFinalFormat, horarioInicioFormat, consultorioId, fechaFormato, horarioInicioFormat, horarioFinalFormat, consultorioId, fechaFormato, horarioFinalFormat, horarioInicioFormat, horarioFinalFormat, horarioInicioFormat]
                     );
 
                     if (Array.isArray(result) && result.length > 0 && result[0].citas_programadas > 0) {
@@ -118,7 +123,7 @@ Cita.delete = (req, res) => {
 Cita.create = (req, res) => {
     try {
         // Obtiene los datos del formulario
-        const { idServicio, fecha, duracion, hora, idConsultorio, propietario, telefono, paciente } = req.body;
+        const { idServicio, fecha, duracion, hora, idConsultorio, propietario, telefono, paciente, estado } = req.body;
         
         // Convertir fecha a formato YYYY-MM-DD
         const fechaFormato = new Date(fecha).toISOString().split('T')[0];
@@ -194,7 +199,7 @@ Cita.create = (req, res) => {
 
         // Función para insertar la cita en la tabla Citas
         function insertarCitaEnCitas(pacienteId) {
-            db.query('INSERT INTO Citas (idConsultorio, idPaciente, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (?, ?, ?, ?, ?, ?, "AGENDADA")', [idConsultorio, pacienteId, fechaFormato, hora, horarioFinalFormat, duracion], (error, results) => {
+            db.query('INSERT INTO Citas (idConsultorio, idPaciente, Fecha, horaInicio, horaFinal, Duracion, Estado) VALUES (?, ?, ?, ?, ?, ?, ?)', [idConsultorio, pacienteId, fechaFormato, hora, horarioFinalFormat, duracion, estado], (error, results) => {
                 if (error) {
                     console.error('Error al insertar la cita:', error);
                     return res.status(500).json({ error: 'Error interno del servidor' });

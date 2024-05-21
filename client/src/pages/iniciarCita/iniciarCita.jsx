@@ -20,7 +20,8 @@ const IniciarCita = () => {
         return response.json();
       })
       .then((data) => {
-        setCita(data);
+        setCita(data);        
+        console.log(data);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -35,7 +36,7 @@ const IniciarCita = () => {
         <Navbar />
         <div className="citaDetallecontainers">
           
-          {cita && cita.paciente && cita.paciente.estado_cita === "AGENDADA" && cita.paciente.cita_id.toString() === id ? (
+          {cita && cita.paciente && (cita.paciente.estado_cita === "AGENDADA" || cita.paciente.estado_cita === "FLEXIBLE") && cita.paciente.cita_id.toString() === id ? (
             <StartCita id={id} />
           ) : (
             <div className="citaDetalleContainer">
